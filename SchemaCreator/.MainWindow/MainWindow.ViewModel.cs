@@ -1,29 +1,48 @@
-﻿using SchemaCreator.UI.Base;
+﻿using GalaSoft.MvvmLight;
+using SchemaCreator.UI.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace SchemaCreator.UI.ViewModel
 {
-    internal class MainWindowViewModel : BaseViewModel
+    public class MainWindowViewModel : ViewModelBase
     {
         private BackgroundViewModel _backgroundViewModel;
         public BackgroundViewModel BackgroundViewModel
         {
-            get { return _backgroundViewModel; }
-            set { _backgroundViewModel = value; }
+            get => _backgroundViewModel;
+            set
+            {
+                _backgroundViewModel = value;
+                RaisePropertyChanged(nameof(BackgroundViewModel));
+            }
         }
 
         private MenuViewModel _menuViewModel;
         public MenuViewModel MenuViewModel
         {
-            get { return _menuViewModel; }
-            set { _menuViewModel = value; }
+            get => _menuViewModel;
+            set
+            {
+                _menuViewModel = value;
+                RaisePropertyChanged(nameof(BackgroundViewModel));
+            }
+        }
+
+        private ButtonRibbonViewModel _buttonRibbonViewModel;
+        public ButtonRibbonViewModel ButtonRibbonViewModel
+        {
+            get { return _buttonRibbonViewModel; }
+            set
+            {
+                _buttonRibbonViewModel = value;
+                RaisePropertyChanged(nameof(ButtonRibbonViewModel));
+            }
         }
 
         public MainWindowViewModel()
         {
             MenuViewModel = new MenuViewModel(Menu);
-            BackgroundViewModel = new BackgroundViewModel();
         }
 
         private ObservableCollection<MenuSection> _menu;
@@ -35,12 +54,13 @@ namespace SchemaCreator.UI.ViewModel
                 new MenuSection() { MenuText = "one"},
                 new MenuSeparator(),
                 new MenuSection() { MenuText = "other"} };
-            var fileSublemu = new ObservableCollection<MenuSection>() {
+            var backgroundSubmenu = new ObservableCollection<MenuSection>() {
                 new MenuSection() { MenuText = "Add Background image", Command = OpenImage},
                 new MenuSection() { MenuText = "Remove Background image", Command = RemoveImage, IsEnabled=false} };
             var menu = new ObservableCollection<MenuSection>() {
-                new MenuSection() { MenuText = "File", SubMenu = fileSublemu },
-                new MenuSection() { MenuText = "Edit", SubMenu = editSubmenu } };
+                new MenuSection() { MenuText = "File" },
+                new MenuSection() { MenuText = "Edit", SubMenu = editSubmenu },
+                new MenuSection() { MenuText = "Background", SubMenu = backgroundSubmenu },};
             return menu;
         }
 
@@ -58,17 +78,17 @@ namespace SchemaCreator.UI.ViewModel
                 dialog.Show.Execute(null);
 
                 if (string.IsNullOrEmpty(dialog.FilePath)) return;
-                BackgroundViewModel.ImagePath = dialog.FilePath;
-
+                BackgroundViewModel = new BackgroundViewModel() { ImagePath = dialog.FilePath };
+                ButtonRibbonViewModel = new ButtonRibbonViewModel(BackgroundViewModel);
                 MenuViewModel.EnableItems("Remove Background image");
             }));
 
-        ICommand _removeImage;
+        ICommand _removeImage; 
         ICommand RemoveImage => _removeImage ?? (_removeImage = new RelayCommand(
             (obj) =>
             {
-                BackgroundViewModel.ImagePath = string.Empty;
-                
+                BackgroundViewModel = null;
+                ButtonRibbonViewModel = null;
                 MenuViewModel.DisableItems("Remove Background image");
             }));
     }

@@ -11,24 +11,42 @@
     d:DesignWidth="513"
     mc:Ignorable="d">
     <UserControl.Resources>
-
+        <Style x:Key="SeparatorStyle" TargetType="Separator">
+            <Setter Property="OverridesDefaultStyle" Value="true" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Separator}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition
+                                    Width="Auto"
+                                    MinWidth="24"
+                                    SharedSizeGroup="MenuItemIconColumnGroup" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                Grid.Column="1"
+                                Height="0.75"
+                                Margin="2"
+                                Background="#B6848589" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style TargetType="{x:Type MenuItem}">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="White" />
             <Setter Property="Header" Value="{Binding Path=MenuText}" />
             <Setter Property="Command" Value="{Binding Path=Command}" />
             <Setter Property="Icon" Value="{Binding Path=IconPath}" />
             <Setter Property="IsEnabled" Value="{Binding Path=IsEnabled}" />
         </Style>
-
         <Style x:Key="styleMenuSeparator" TargetType="{x:Type MenuItem}">
             <Setter Property="IsHitTestVisible" Value="False" />
             <Setter Property="IsEnabled" Value="False" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type MenuItem}">
-                        <Separator HorizontalAlignment="Stretch" />
+                        <Separator Style="{StaticResource SeparatorStyle}" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -41,7 +59,6 @@
     <Grid>
         <Menu
             VerticalAlignment="Top"
-            Background="Transparent"
             ItemContainerStyleSelector="{StaticResource menuStyleSelector}"
             ItemsSource="{Binding MenuItems}" />
     </Grid>

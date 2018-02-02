@@ -12,7 +12,8 @@
     Width="525"
     Height="350"
     FontSize="16"
-    Icon="tools.ico"
+    Icon="../tools.ico"
+    DataContext="{Binding Path=Main, Source={StaticResource ViewModelLocator}}"
     mc:Ignorable="d">
     <Window.Resources>
 
@@ -21,25 +22,45 @@
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type viewmodels:BackgroundViewModel}">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                <Image
-                    Opacity="{Binding Opacity}"
-                    Source="{Binding ImagePath}"
-                    Stretch="None" />
-            </ScrollViewer>
+            <local:Background />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:ButtonRibbonViewModel}">
+            <local:ButtonRibbon />
         </DataTemplate>
 
     </Window.Resources>
     <Grid Margin="2">
-        <DockPanel>
+
+        <DockPanel Grid.Row="1" Grid.IsSharedSizeScope="True">
             <ContentPresenter Content="{Binding MenuViewModel}" DockPanel.Dock="Top" />
             <Grid
                 Width="200"
                 HorizontalAlignment="Left"
                 DockPanel.Dock="Left" />
             <Grid DockPanel.Dock="Right">
-                <ContentPresenter Content="{Binding BackgroundViewModel}" />
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <ContentPresenter Content="{Binding ButtonRibbonViewModel}" />
+
+                <ScrollViewer
+                    Grid.Row="1"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Auto">
+                    <Grid>
+                        <ContentPresenter Content="{Binding BackgroundViewModel}" />
+                        <Canvas Background="#7F910000" >
+                            <Rectangle Width="100" Height="100" Fill="blue"/>
+                            <Rectangle Width="100" Height="100" Fill="Green" Canvas.Left="100" Canvas.Top="100"/>
+                        </Canvas>
+                    </Grid>
+                </ScrollViewer>
+
             </Grid>
+
         </DockPanel>
     </Grid>
 </cc:CustomWindow>

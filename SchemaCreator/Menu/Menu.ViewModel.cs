@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SchemaCreator.UI.ViewModel
 {
-    class MenuViewModel : BaseViewModel
+    public class MenuViewModel : ViewModelBase
     {
         private ObservableCollection<MenuSection> _menuItems;
         public ObservableCollection<MenuSection> MenuItems

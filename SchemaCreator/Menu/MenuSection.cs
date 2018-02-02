@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace SchemaCreator.UI.ViewModel
 {
-    internal class MenuSection : BaseViewModel
+    public class MenuSection : ViewModelBase
     {
         public MenuSection()
         {
@@ -17,7 +18,11 @@ namespace SchemaCreator.UI.ViewModel
         public bool IsEnabled
         {
             get { return _isEnabled; }
-            set { _isEnabled = value; OnPropertyChanged(nameof(IsEnabled)); }
+            set
+            {
+                _isEnabled = value;
+                RaisePropertyChanged(nameof(IsEnabled));
+            }
         }
         private string _menutext;
         public string MenuText

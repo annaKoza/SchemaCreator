@@ -1,6 +1,4 @@
-﻿using CustomControls.Controls;
-using SchemaCreator.UI.ViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,15 +16,13 @@ using System.Windows.Shapes;
 namespace SchemaCreator.UI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ButtonRibbon.xaml
     /// </summary>
-    public partial class MainWindow : CustomWindow
+    public partial class ButtonRibbon : UserControl
     {
-        public MainWindow()
+        public ButtonRibbon()
         {
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel();
         }
-        
     }
 }
