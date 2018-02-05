@@ -93,6 +93,10 @@
     <Compile Include="ButtonRibbon\ButtonRibbon.xaml.cs">
       <DependentUpon>ButtonRibbon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DesignerPanel\DesignerPanel.ViewModel.cs" />
+    <Compile Include="DesignerPanel\DesignerPanel.xaml.cs">
+      <DependentUpon>DesignerPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Menu\Menu.ViewModel.cs" />
     <Compile Include="Menu\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
@@ -100,6 +104,12 @@
     <Compile Include="Menu\MenuSeparator.cs" />
     <Compile Include="Resources\Selectors\MenuStyleSelector.cs" />
     <Compile Include=".MainWindow\ViewModelLocator.cs" />
+    <Compile Include="ToolBoxItem\Circle.ViewModel.cs" />
+    <Compile Include="ToolBoxItem\Rectangle.ViewModel.cs" />
+    <Compile Include="ToolBox\ToolBox.ViewModel.cs" />
+    <Compile Include="ToolBox\ToolBox.xaml.cs">
+      <DependentUpon>ToolBox.xaml</DependentUpon>
+    </Compile>
     <Page Include="Background\Background.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -120,7 +130,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="DesignerPanel\DesignerPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Menu\Menu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ToolBox\ToolBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,5 +179,19 @@
     <Resource Include="tools.ico" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SchemaCreator.Designer\SchemaCreator.Designer.csproj">
+      <Project>{5fb863fd-89b6-44a7-a8c5-6f3ae6b0847b}</Project>
+      <Name>SchemaCreator.Designer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Persist.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\Setting.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

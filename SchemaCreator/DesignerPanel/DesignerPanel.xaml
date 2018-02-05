@@ -1,0 +1,38 @@
+﻿<UserControl
+    x:Class="SchemaCreator.UI.DesignerPanel"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:SchemaCreator.UI"
+    xmlns:main="clr-namespace:SchemaCreator.Designer;assembly=SchemaCreator.Designer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:SchemaCreator.UI.ViewModel"
+     xmlns:viewmodels="clr-namespace:SchemaCreator.UI.ViewModel"
+    d:DesignHeight="300"
+    d:DesignWidth="300"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:RectangleViewModel}">
+            <Ellipse
+                Fill="red"
+                IsHitTestVisible="false"
+                ToolTip="Ellipse" />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:CircleViewModel}">
+            <Ellipse
+                Fill="Blue"
+                IsHitTestVisible="false"
+                ToolTip="Ellipse" />
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <main:Designer
+            Width="900"
+            Height="800"
+            Background="Transparent"
+            BorderBrush="#E1454545"
+            BorderThickness="2"
+            DataContext="{Binding DesignerViewModel}" />
+    </Grid>
+</UserControl>

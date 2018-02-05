@@ -13,8 +13,8 @@ namespace SchemaCreator.UI.ViewModel
         private ObservableCollection<MenuSection> _menuItems;
         public ObservableCollection<MenuSection> MenuItems
         {
-            get { return _menuItems; }
-            set { _menuItems = value; }
+            get => _menuItems;
+            set => _menuItems = value;
         }
         public MenuViewModel(ObservableCollection<MenuSection> menuItems)
         {
@@ -46,12 +46,10 @@ namespace SchemaCreator.UI.ViewModel
         private static void GetMenuItems(string textToFind, MenuSection item, List<MenuSection> items)
         {
             if (textToFind.Equals(item.MenuText)) items.Add(item);
-            if (item.SubMenu?.Count != 0)
+            if (item.SubMenu?.Count == 0) return;
+            foreach (var subitem in item.SubMenu)
             {
-                foreach (var subitem in item.SubMenu)
-                {
-                    GetMenuItems(textToFind, subitem, items);
-                }
+                GetMenuItems(textToFind, subitem, items);
             }
         }
         

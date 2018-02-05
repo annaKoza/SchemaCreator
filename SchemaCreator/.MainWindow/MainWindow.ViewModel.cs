@@ -1,4 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
+using SchemaCreator.Designer.Interfaces;
+using SchemaCreator.Designer.UserControls;
 using SchemaCreator.UI.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -7,6 +9,17 @@ namespace SchemaCreator.UI.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        private DesignerPanelViewModel _designerPanelViewModel;
+        public DesignerPanelViewModel DesignerPanelViewModel
+        {
+            get => _designerPanelViewModel;
+            set
+            {
+                _designerPanelViewModel = value;
+                RaisePropertyChanged(nameof(DesignerPanelViewModel));
+            }
+        }
+        
         private BackgroundViewModel _backgroundViewModel;
         public BackgroundViewModel BackgroundViewModel
         {
@@ -14,6 +27,17 @@ namespace SchemaCreator.UI.ViewModel
             set
             {
                 _backgroundViewModel = value;
+                RaisePropertyChanged(nameof(BackgroundViewModel));
+            }
+        }
+
+        private ToolBoxViewModel _toolBoxViewModel;
+        public ToolBoxViewModel ToolBoxViewModel
+        {
+            get => _toolBoxViewModel;
+            set
+            {
+                _toolBoxViewModel = value;
                 RaisePropertyChanged(nameof(BackgroundViewModel));
             }
         }
@@ -43,6 +67,8 @@ namespace SchemaCreator.UI.ViewModel
         public MainWindowViewModel()
         {
             MenuViewModel = new MenuViewModel(Menu);
+            ToolBoxViewModel = new ToolBoxViewModel();
+            DesignerPanelViewModel = new DesignerPanelViewModel();
         }
 
         private ObservableCollection<MenuSection> _menu;

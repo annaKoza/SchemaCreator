@@ -63,7 +63,19 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachedProperties\DragDropAttachedProperty.cs" />
+    <Compile Include="Controls\DesignerItem.cs" />
     <Compile Include="Controls\DesignerCanvas.cs" />
+    <Compile Include="Common\DragObject.cs" />
+    <Compile Include="Controls\DesignerPanel.cs" />
+    <Compile Include="Controls\DragThumb.cs" />
+    <Compile Include="Interfaces\ISelectionPanel.cs" />
+    <Compile Include="Controls\ResizeThumb.cs" />
+    <Compile Include="Controls\ToolBox.cs" />
+    <Compile Include="Controls\ToolboxItem.cs" />
+    <Compile Include="Helpers\ExtensionMethods.cs" />
+    <Compile Include="Interfaces\IDesignerItem.cs" />
+    <Compile Include="Interfaces\ISelectable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -77,6 +89,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Services\SelectionService.cs" />
+    <Compile Include="UserControls\Designer.xaml.cs">
+      <DependentUpon>Designer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\BaseDesignerItem.ViewModel.cs" />
+    <Compile Include="Interfaces\IDesignerViewModel.cs" />
+    <Compile Include="ViewModels\Designer.ViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -87,5 +106,24 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ResizeThumb.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\ToolBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Designer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
