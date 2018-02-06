@@ -18,7 +18,7 @@ namespace SchemaCreator.UI.ViewModel
         }
         public CircleViewModel()
         {
-            ImageSource = @"pack://application:,,,/SchemaCreator;component/Resources/Images/Setting.png";
+            ImageSource = @"pack://application:,,,/SchemaCreator;component/Resources/Images/help.png";
         }
     }
 }

@@ -54,7 +54,6 @@
 
         <HierarchicalDataTemplate DataType="{x:Type viewmodels:MenuSection}" ItemsSource="{Binding SubMenu}" />
         <Selectors:MenuStyleSelector x:Key="menuStyleSelector" StyleMenuSeparator="{StaticResource styleMenuSeparator}" />
-
     </UserControl.Resources>
     <Grid>
         <Menu

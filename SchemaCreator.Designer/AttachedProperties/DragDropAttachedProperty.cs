@@ -50,8 +50,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                         element.Left = Math.Max(0, position.X);
                         element.Top = Math.Max(0, position.Y);
                     }
-
-                    element.ParentViewModel = (dataContext as IDesignerViewModel);
+                    
                     (dataContext as IDesignerViewModel).AddItem(element);
                 }
             }

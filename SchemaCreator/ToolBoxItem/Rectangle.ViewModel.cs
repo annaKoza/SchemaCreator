@@ -18,7 +18,7 @@ namespace SchemaCreator.UI.ViewModel
         }
         public RectangleViewModel()
         {
-            ImageSource = @"pack://application:,,,/SchemaCreator;component/Resources/Images/Persist.png";
+            ImageSource = @"pack://application:,,,/SchemaCreator;component/Resources/Images/settings.png";
         }
     }
 }

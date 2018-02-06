@@ -178,20 +178,15 @@
   <ItemGroup>
     <Resource Include="tools.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\help.png" />
+    <Resource Include="Resources\Images\settings.png" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SchemaCreator.Designer\SchemaCreator.Designer.csproj">
       <Project>{5fb863fd-89b6-44a7-a8c5-6f3ae6b0847b}</Project>
       <Name>SchemaCreator.Designer</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Persist.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Images\Setting.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

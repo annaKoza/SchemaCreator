@@ -21,7 +21,7 @@ namespace SchemaCreator.Designer.Controls
         public static readonly DependencyProperty IsSelectedProperty =
             DependencyProperty.Register("IsSelected", typeof(bool), typeof(DesignerItem), new PropertyMetadata(false));
 
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             var designer = this.FindParent<DesignerPanel>();
             
@@ -35,7 +35,7 @@ namespace SchemaCreator.Designer.Controls
                         {
                             designer.SelectionService.AddToSelection(this);
                         }
-                        else
+                        else 
                         {
                             designer.SelectionService.RemoveFromSelection(this);
                         }
@@ -48,7 +48,7 @@ namespace SchemaCreator.Designer.Controls
                         {
                             designer.SelectionService.AddToSelection(this);
                         }
-                        else
+                        else 
                         {
                             designer.SelectionService.RemoveFromSelection(this);
                         }

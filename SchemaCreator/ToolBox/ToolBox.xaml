@@ -11,45 +11,42 @@
     d:DesignWidth="300"
     mc:Ignorable="d">
     <Grid>
-        <Expander Header="Flow Chart" IsExpanded="True">
-            <ctr:ToolBox ItemsSource="{Binding ToolItems}">
-                <ctr:ToolBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ctr:ToolboxItem}">
-                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                        <Setter Property="Control.Padding" Value="10" />
-                        <Setter Property="ContentControl.HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="ContentControl.VerticalContentAlignment" Value="Stretch" />
-                        <Setter Property="ToolTip" Value="{Binding ToolTip}" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ctr:ToolboxItem}">
-                                    <Grid>
-                                        <Rectangle
+        <ctr:ToolBox ItemsSource="{Binding ToolItems}">
+            <ctr:ToolBox.ItemContainerStyle>
+                <Style TargetType="{x:Type ctr:ToolboxItem}">
+                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                    <Setter Property="Control.Padding" Value="10" />
+                    <Setter Property="ContentControl.HorizontalContentAlignment" Value="Stretch" />
+                    <Setter Property="ContentControl.VerticalContentAlignment" Value="Stretch" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ctr:ToolboxItem}">
+                                <Grid>
+                                    <Rectangle
                                             Name="Border"
                                             Fill="Gray"
                                             SnapsToDevicePixels="true"
                                             Stroke="Black"
                                             StrokeDashArray="2"
                                             StrokeThickness="1" />
-                                        <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}">
-                                            <ContentPresenter.Content>
-                                                <Grid>
-                                                    <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
-                                                </Grid>
-                                            </ContentPresenter.Content>
-                                        </ContentPresenter>
-                                    </Grid>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter TargetName="Border" Property="Stroke" Value="Gray" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ctr:ToolBox.ItemContainerStyle>
-            </ctr:ToolBox>
-        </Expander>
+                                    <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}">
+                                        <ContentPresenter.Content>
+                                            <Grid>
+                                                <Image Source="{Binding ImageSource}" Stretch="UniformToFill" />
+                                            </Grid>
+                                        </ContentPresenter.Content>
+                                    </ContentPresenter>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter TargetName="Border" Property="Stroke" Value="Gray" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ctr:ToolBox.ItemContainerStyle>
+        </ctr:ToolBox>
     </Grid>
 </UserControl>

@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Controls
 {
@@ -17,6 +16,7 @@ namespace SchemaCreator.Designer.Controls
             DefaultStyleKeyProperty.OverrideMetadata(
                 typeof(ResizeThumb), new FrameworkPropertyMetadata(typeof(ResizeThumb)));
         }
+
         public ResizeThumb()
         {
             DragDelta += ResizeThumb_DragDelta;
@@ -27,13 +27,16 @@ namespace SchemaCreator.Designer.Controls
             var designerItem = this.DataContext as DesignerItem;
             var designer = designerItem.FindParent<DesignerPanel>();
 
+            var designerPanelWidth = designer.ActualWidth;
+            var designerPanelHeight = designer.ActualHeight;
+
             if (designerItem == null || designer == null || !designerItem.IsSelected ||
                 !(designer is ISelectionPanel)) return;
 
             var selectedDesignerItems = designer.SelectionService.SelectedItems.OfType<DesignerItem>();
 
             CalculateDragLimits(selectedDesignerItems, out var minLeft, out var minTop,
-                out var minDeltaHorizontal, out var minDeltaVertical);
+                out var minDeltaHorizontal, out var minDeltaVertical, out var maxTop, out var maxLeft);
 
             foreach (var item in selectedDesignerItems)
             {
@@ -43,33 +46,45 @@ namespace SchemaCreator.Designer.Controls
                 switch (VerticalAlignment)
                 {
                     case VerticalAlignment.Bottom:
+                        var maxVerticalChange = designerPanelHeight - maxTop;
                         dragDeltaVertical = Math.Min(-e.VerticalChange, minDeltaVertical);
-                        scale = (item.ActualHeight - dragDeltaVertical) / item.ActualHeight;
-                        DragBottom(scale, item, designer.SelectionService);
+                        if (maxVerticalChange > e.VerticalChange)
+                            scale = (item.ActualHeight - dragDeltaVertical) / item.ActualHeight;
+                        else
+                            scale = 1;
+                        DragBottom(scale, item, designerPanelHeight);
                         break;
+
                     case VerticalAlignment.Top:
                         dragDeltaVertical = Math.Min(Math.Max(-minTop, e.VerticalChange), minDeltaVertical);
                         scale = (item.ActualHeight - dragDeltaVertical) / item.ActualHeight;
-                        DragTop(scale, item, designer.SelectionService);
+                        DragTop(scale, item);
                         break;
+
                     case VerticalAlignment.Center:
                         break;
+
                     case VerticalAlignment.Stretch:
                         break;
                 }
                 double dragDeltaHorizontal;
-                
+
                 switch (HorizontalAlignment)
                 {
                     case HorizontalAlignment.Left:
                         dragDeltaHorizontal = Math.Min(Math.Max(-minLeft, e.HorizontalChange), minDeltaHorizontal);
                         scale = (item.ActualWidth - dragDeltaHorizontal) / item.ActualWidth;
-                        DragLeft(scale, item, designer.SelectionService);
+                        DragLeft(scale, item);
                         break;
+
                     case HorizontalAlignment.Right:
+                        var maxHorizontalChange = designerPanelWidth - maxLeft;
                         dragDeltaHorizontal = Math.Min(-e.HorizontalChange, minDeltaHorizontal);
-                        scale = (item.ActualWidth - dragDeltaHorizontal) / item.ActualWidth;
-                        DragRight(scale, item, designer.SelectionService);
+                        if (maxHorizontalChange > e.HorizontalChange)
+                            scale = (item.ActualWidth - dragDeltaHorizontal) / item.ActualWidth;
+                        else
+                            scale = 1;
+                        DragRight(scale, item, designerPanelWidth);
                         break;
                 }
             }
@@ -78,85 +93,81 @@ namespace SchemaCreator.Designer.Controls
 
         #region Helper methods
 
-        private void DragLeft(double scale, DesignerItem item, SelectionService selectionService)
+        private void DragLeft(double scale, DesignerItem item)
         {
-            IEnumerable<DesignerItem> groupItems = selectionService.SelectedItems.Cast<DesignerItem>();
+            var itemPositionWithWidth = Canvas.GetLeft(item) + item.Width;
+            var itemPosition = Canvas.GetLeft(item);
 
-            var groupLeft = Canvas.GetLeft(item) + item.Width;
-            foreach (var groupItem in groupItems)
-            {
-                var groupItemLeft = Canvas.GetLeft(groupItem);
-                var delta = (groupLeft - groupItemLeft) * (scale - 1);
-                Canvas.SetLeft(groupItem, groupItemLeft - delta);
-                groupItem.Width = groupItem.ActualWidth * scale;
-            }
+            var delta = (itemPositionWithWidth - itemPosition) * (scale - 1);
+            Canvas.SetLeft(item, itemPosition - delta);
+            item.Width = item.ActualWidth * scale;
         }
 
-        private void DragTop(double scale, DesignerItem item, SelectionService selectionService)
+        private void DragTop(double scale, DesignerItem item)
         {
-            IEnumerable<DesignerItem> groupItems = selectionService.SelectedItems.Cast<DesignerItem>();
-            var groupBottom = Canvas.GetTop(item) + item.Height;
-            foreach (var groupItem in groupItems)
-            {
-                var groupItemTop = Canvas.GetTop(groupItem);
-                var delta = (groupBottom - groupItemTop) * (scale - 1);
-                Canvas.SetTop(groupItem, groupItemTop - delta);
-                groupItem.Height = groupItem.ActualHeight * scale;
-            }
+            var itemPositionWithHeight = Canvas.GetTop(item) + item.Height;
+            var itemPosition = Canvas.GetTop(item);
+
+            var delta = (itemPositionWithHeight - itemPosition) * (scale - 1);
+            Canvas.SetTop(item, itemPosition - delta);
+            item.Height = item.ActualHeight * scale;
         }
 
-        private void DragRight(double scale, DesignerItem item, SelectionService selectionService)
+        private void DragRight(double scale, DesignerItem item, double maxHorizontalPosition)
         {
-            IEnumerable<DesignerItem> groupItems = selectionService.SelectedItems.Cast<DesignerItem>();
+            var itemPosition = Canvas.GetLeft(item);
+            var itemPositionWithWidth = Canvas.GetLeft(item) + item.Width;
 
-            var groupLeft = Canvas.GetLeft(item);
-            foreach (var groupItem in groupItems)
-            {
-                var groupItemLeft = Canvas.GetLeft(groupItem);
-                var delta = (groupItemLeft - groupLeft) * (scale - 1);
-
-                Canvas.SetLeft(groupItem, groupItemLeft + delta);
-                groupItem.Width = groupItem.ActualWidth * scale;
-            }
+            Canvas.SetLeft(item, itemPosition);
+            item.Width = item.ActualWidth * scale;
         }
 
-        private void DragBottom(double scale, DesignerItem item, SelectionService selectionService)
+        private void DragBottom(double scale, DesignerItem item, double maxVerticalPosition)
         {
-            IEnumerable<DesignerItem> groupItems = selectionService.SelectedItems.Cast<DesignerItem>();
-            var groupTop = Canvas.GetTop(item);
-            foreach (var groupItem in groupItems)
-            {
-                var groupItemTop = Canvas.GetTop(groupItem);
-                var delta = (groupItemTop - groupTop) * (scale - 1);
+            var itemPosition = Canvas.GetTop(item);
+            var itemPositionWithHeight = Canvas.GetTop(item) + item.Height;
+            var delta = (itemPositionWithHeight - itemPosition) * (scale - 1);
 
-                Canvas.SetTop(groupItem, groupItemTop + delta);
-                groupItem.Height = groupItem.ActualHeight * scale;
-            }
+            Canvas.SetTop(item, itemPosition);
+            item.Height = item.ActualHeight * scale;
         }
 
-        private void CalculateDragLimits(IEnumerable<DesignerItem> selectedItems, out double minLeft, out double minTop, out double minDeltaHorizontal, out double minDeltaVertical)
+        private void CalculateDragLimits(IEnumerable<DesignerItem> selectedItems, 
+            out double minLeft,
+            out double minTop,
+            out double minDeltaHorizontal, 
+            out double minDeltaVertical,
+            out double maxTop,
+            out double maxLeft)
         {
             minLeft = double.MaxValue;
             minTop = double.MaxValue;
+            maxLeft = double.MinValue;
+            maxTop = double.MinValue;
             minDeltaHorizontal = double.MaxValue;
             minDeltaVertical = double.MaxValue;
+            
 
-            // drag limits are set by these parameters: canvas top, canvas left, minHeight, minWidth
-            // calculate min value for each parameter for each item
             foreach (DesignerItem item in selectedItems)
             {
                 var left = Canvas.GetLeft(item);
                 var top = Canvas.GetTop(item);
 
+                var right = left + item.ActualWidth;
+                var bottom = top + item.ActualHeight;
+
                 minLeft = double.IsNaN(left) ? 0 : Math.Min(left, minLeft);
                 minTop = double.IsNaN(top) ? 0 : Math.Min(top, minTop);
+
+                maxLeft = double.IsNaN(left) ? 0 : Math.Max(right, maxLeft);
+                maxTop = double.IsNaN(top) ? 0 : Math.Max(bottom, maxTop);
+             
 
                 minDeltaVertical = Math.Min(minDeltaVertical, item.ActualHeight - item.MinHeight);
                 minDeltaHorizontal = Math.Min(minDeltaHorizontal, item.ActualWidth - item.MinWidth);
             }
         }
 
-        #endregion
+        #endregion Helper methods
     }
 }
-
