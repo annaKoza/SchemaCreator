@@ -12,19 +12,11 @@
     d:DesignWidth="300"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <DataTemplate DataType="{x:Type viewmodels:RectangleViewModel}">
-            <Ellipse
-                Fill="red"
-                IsHitTestVisible="false"
-                ToolTip="Ellipse" />
-        </DataTemplate>
-
-        <DataTemplate DataType="{x:Type viewmodels:CircleViewModel}">
-            <Ellipse
-                Fill="Blue"
-                IsHitTestVisible="false"
-                ToolTip="Ellipse" />
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../DesignerItemView.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <main:Designer
