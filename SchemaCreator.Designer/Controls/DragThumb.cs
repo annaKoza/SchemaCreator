@@ -1,16 +1,21 @@
 ﻿using SchemaCreator.Designer.Helpers;
-using SchemaCreator.Designer.UserControls;
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Controls
 {
     public class DragThumb : Thumb
     {
+        private DesignerPanel _designer;
+        private RotateTransform _rotateTransform;
+        private DesignerItem _designerItem;
+        private IEnumerable<DesignerItem> _selectedItems;
+
         static DragThumb()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DragThumb),
@@ -19,63 +24,42 @@ namespace SchemaCreator.Designer.Controls
 
         public DragThumb()
         {
+            Loaded += DragThumb_Loaded;
             DragDelta += DragThumb_DragDelta;
+            DragStarted += DragThumb_DragStarted;
         }
 
+        private void DragThumb_DragStarted(object sender, DragStartedEventArgs e)
+        {
+            _selectedItems = _designer.SelectionService.SelectedItems.OfType<DesignerItem>();
+            _rotateTransform = _designerItem.RenderTransform as RotateTransform;
+          
+
+        }
+
+        private void DragThumb_Loaded(object sender, RoutedEventArgs e)
+        {
+            _designerItem = DataContext as DesignerItem;
+            _designer = _designerItem.FindParent<DesignerPanel>();
+        }
+        
         private void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            var designerItem = DataContext as DesignerItem;
-            var designer = designerItem.FindParent<DesignerPanel>();
-
-            if (!(designer is ISelectionPanel)) return;
-            var maxLeft = designer.ActualWidth;
-            var maxTop = designer.ActualHeight;
-
-            var minLeft = double.MaxValue;
-            var minTop = double.MaxValue;
-
-            var designerItems = designer.SelectionService.SelectedItems.OfType<DesignerItem>();
-
-            foreach (var item in designerItems)
+            if (_designerItem.IsSelected)
             {
-                var left = Canvas.GetLeft(item);
-                var top = Canvas.GetTop(item);
+                foreach (var designerItem in _selectedItems)
+                {
+                    Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
+                    if (_rotateTransform != null)
+                    {
+                        dragDelta = _rotateTransform.Transform(dragDelta);
+                    }
 
-                minLeft = double.IsNaN(left) ? 0 : Math.Min(left, minLeft);
-                minTop = double.IsNaN(top) ? 0 : Math.Min(top, minTop);
+                    Canvas.SetLeft(designerItem, Canvas.GetLeft(designerItem) + dragDelta.X);
+                    Canvas.SetTop(designerItem, Canvas.GetTop(designerItem) + dragDelta.Y);
+                }
+                e.Handled = true;
             }
-
-            var deltaHorizontal = Math.Max(-minLeft, e.HorizontalChange);
-            var deltaVertical = Math.Max(-minTop, e.VerticalChange);
-
-            foreach (var item in designerItems)
-            {
-                var left = Canvas.GetLeft(item);
-                var top = Canvas.GetTop(item);
-
-                if (double.IsNaN(left)) left = 0;
-                if (double.IsNaN(top)) top = 0;
-
-                if (left + deltaHorizontal + item.Width >= maxLeft) deltaHorizontal = 0;
-                if (top + deltaVertical + item.Height >= maxTop) deltaVertical = 0;
-            }
-
-            foreach (var item in designerItems)
-            {
-                var left = Canvas.GetLeft(item);
-                var top = Canvas.GetTop(item);
-
-                if (double.IsNaN(left)) left = 0;
-                if (double.IsNaN(top)) top = 0;
-
-                Canvas.SetLeft(item, left + deltaHorizontal);
-                Canvas.SetTop(item, top + deltaVertical);
-            }
-
-            designer.InvalidateMeasure();
-            e.Handled = true;
         }
-
-    
     }
 }

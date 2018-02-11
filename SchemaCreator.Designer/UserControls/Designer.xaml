@@ -17,23 +17,10 @@
     <Grid>
         <ctr:DesignerPanel ItemsSource="{Binding Items}">
             <ctr:DesignerPanel.Resources>
-                <!--  DragThumb Default Template  -->
-                <Style TargetType="{x:Type ctr:DragThumb}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ctr:DragThumb}">
-                                <Rectangle
-                                    Fill="Transparent"
-                                    Stroke="{TemplateBinding BorderBrush}"
-                                    StrokeThickness="{TemplateBinding BorderThickness}" />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
 
                 <!--  ResizeDecorator Default Template  -->
                 <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
-                    <Grid Opacity="0.7" SnapsToDevicePixels="true">
+                    <Grid SnapsToDevicePixels="true">
                         <ctr:ResizeThumb
                             Height="3"
                             Margin="0,-4,0,0"
@@ -97,13 +84,21 @@
             <ctr:DesignerPanel.ItemContainerStyle>
                 <!--  DesignerItem Style  -->
                 <Style TargetType="{x:Type ctr:DesignerItem}">
-                    <Setter Property="MinWidth" Value="10" />
-                    <Setter Property="Canvas.Top" Value="{Binding Top, Mode=TwoWay}" />
-                    <Setter Property="Canvas.Left" Value="{Binding Left, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}"/>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
                     <Setter Property="Width" Value="{Binding Width, Mode=TwoWay}" />
                     <Setter Property="Height" Value="{Binding Height, Mode=TwoWay}" />
+                    <Setter Property="Angle" Value="{Binding Angle, Mode=TwoWay}" />
+                    <Setter Property="MinWidth" Value="10" />
+                    <Setter Property="Canvas.Left" Value="{Binding Left, Mode=TwoWay}" />
+                    <Setter Property="Canvas.Top" Value="{Binding Top, Mode=TwoWay}" />
                     <Setter Property="MinHeight" Value="10" />
                     <Setter Property="SnapsToDevicePixels" Value="True" />
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <RotateTransform Angle="{Binding Angle, Mode=OneWay}" />
+                        </Setter.Value>
+                    </Setter>
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ctr:DesignerItem}">
@@ -115,21 +110,21 @@
                                         x:Name="PART_ResizeDecorator"
                                         Template="{StaticResource ResizeDecoratorTemplate}"
                                         Visibility="Collapsed" />
-                                    <!--  PART_ContentPresenter  -->
+                                    <!--  Content  -->
                                     <ContentPresenter
                                         x:Name="PART_ContentPresenter"
                                         Margin="{TemplateBinding ContentControl.Padding}"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         Content="{TemplateBinding ContentControl.Content}" />
+                                    <!--  PART_RotateThumb  -->
+                                    <ctr:RotateThumb />
                                 </Grid>
-
                                 <ControlTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
                                         <Setter TargetName="PART_ResizeDecorator" Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </ControlTemplate.Triggers>
-
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>

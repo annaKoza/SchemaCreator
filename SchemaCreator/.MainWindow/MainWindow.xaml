@@ -62,7 +62,7 @@
                     VerticalScrollBarVisibility="Auto">
                     <Grid>
                         <ContentPresenter Content="{Binding BackgroundViewModel}" />
-                        <ContentPresenter Content="{Binding DesignerPanelViewModel}"/>
+                        <ContentPresenter Content="{Binding DesignerPanelViewModel}" />
                     </Grid>
                 </ScrollViewer>
 

@@ -3,7 +3,6 @@ using SchemaCreator.Designer.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Controls
 {
@@ -12,6 +11,14 @@ namespace SchemaCreator.Designer.Controls
     [TemplatePart(Name = "PART_ContentPresenter", Type = typeof(ContentPresenter))]
     public class DesignerItem : ContentControl, ISelectable
     {
+        public static readonly DependencyProperty AngleProperty = DependencyProperty.Register("Angle", typeof(double), typeof(DesignerItem), new PropertyMetadata(0.0));
+
+        public double Angle
+        {
+            get { return (double)GetValue(AngleProperty); }
+            set { SetValue(AngleProperty, value); }
+        }
+        
         public bool IsSelected
         {
             get => (bool)GetValue(IsSelectedProperty);
@@ -24,18 +31,18 @@ namespace SchemaCreator.Designer.Controls
         protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             var designer = this.FindParent<DesignerPanel>();
-            
+
             if (designer is ISelectionPanel)
             {
                 if ((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) != ModifierKeys.None)
                 {
                     if ((Keyboard.Modifiers & (ModifierKeys.Shift)) != ModifierKeys.None)
                     {
-                        if(!IsSelected)
+                        if (!IsSelected)
                         {
                             designer.SelectionService.AddToSelection(this);
                         }
-                        else 
+                        else
                         {
                             designer.SelectionService.RemoveFromSelection(this);
                         }
@@ -43,12 +50,11 @@ namespace SchemaCreator.Designer.Controls
 
                     if ((Keyboard.Modifiers & (ModifierKeys.Control)) != ModifierKeys.None)
                     {
-
                         if (!IsSelected)
                         {
                             designer.SelectionService.AddToSelection(this);
                         }
-                        else 
+                        else
                         {
                             designer.SelectionService.RemoveFromSelection(this);
                         }

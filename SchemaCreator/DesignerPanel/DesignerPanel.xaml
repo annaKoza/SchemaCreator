@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:SchemaCreator.UI"
     xmlns:main="clr-namespace:SchemaCreator.Designer;assembly=SchemaCreator.Designer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:SchemaCreator.UI.ViewModel"
     xmlns:vm="clr-namespace:SchemaCreator.UI.ViewModel"
-     xmlns:viewmodels="clr-namespace:SchemaCreator.UI.ViewModel"
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">

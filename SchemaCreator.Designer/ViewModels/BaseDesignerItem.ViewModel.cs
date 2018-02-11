@@ -1,11 +1,29 @@
 ﻿using GalaSoft.MvvmLight;
-using SchemaCreator.Designer.Interfaces;
 
 namespace SchemaCreator.Designer.UserControls
 {
     public class BaseDesignerItemViewModel : ViewModelBase
     {
-    
+        public BaseDesignerItemViewModel()
+        {
+        }
+
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { _isSelected = value; RaisePropertyChanged(nameof(IsSelected)); }
+        }
+
+        private double _angle;
+
+        public double Angle
+        {
+            get { return _angle; }
+            set { _angle = value; RaisePropertyChanged(nameof(Angle)); }
+        }
+
         private double _top;
         private double _left;
         private double _width;
@@ -16,7 +34,7 @@ namespace SchemaCreator.Designer.UserControls
             get { return _top; }
             set { _top = value; RaisePropertyChanged(nameof(Top)); }
         }
-    
+
         public double Left
         {
             get { return _left; }

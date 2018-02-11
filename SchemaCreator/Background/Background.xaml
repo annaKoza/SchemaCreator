@@ -9,7 +9,7 @@
     d:DesignWidth="300"
     mc:Ignorable="d">
     <Image
-            Opacity="{Binding Opacity}"
-            Source="{Binding ImagePath}"
-            Stretch="None" />
+        Opacity="{Binding Opacity}"
+        Source="{Binding ImagePath}"
+        Stretch="None" />
 </UserControl>

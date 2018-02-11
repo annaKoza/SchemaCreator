@@ -23,12 +23,12 @@
                             <ControlTemplate TargetType="{x:Type ctr:ToolboxItem}">
                                 <Grid>
                                     <Rectangle
-                                            Name="Border"
-                                            Fill="Gray"
-                                            SnapsToDevicePixels="true"
-                                            Stroke="Black"
-                                            StrokeDashArray="2"
-                                            StrokeThickness="1" />
+                                        Name="Border"
+                                        Fill="Gray"
+                                        SnapsToDevicePixels="true"
+                                        Stroke="Black"
+                                        StrokeDashArray="2"
+                                        StrokeThickness="1" />
                                     <ContentPresenter Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}">
                                         <ContentPresenter.Content>
                                             <Grid>
