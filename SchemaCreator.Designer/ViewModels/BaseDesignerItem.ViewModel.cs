@@ -1,8 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
+using SchemaCreator.Designer.Interfaces;
 
 namespace SchemaCreator.Designer.UserControls
 {
-    public class BaseDesignerItemViewModel : ViewModelBase
+    public class BaseDesignerItemViewModel : ViewModelBase, IDesignerItem
     {
         public BaseDesignerItemViewModel()
         {

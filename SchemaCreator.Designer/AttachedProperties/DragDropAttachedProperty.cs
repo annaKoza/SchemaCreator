@@ -18,23 +18,35 @@ namespace SchemaCreator.Designer.AttachedProperties
         {
             var designer = (e.NewValue as Designer);
 
-            if (designer != null)
-                designer.Drop += OnDesignerDrop;
+            if (designer == null) return;
+            if (e.OldValue != null)
+            {
+                designer.Loaded -= OnDesignerLoaded;
+                designer.Drop -= OnDesignerDrop;
+            }
+            designer.Drop += OnDesignerDrop;
+            designer.Loaded += OnDesignerLoaded;
+
+        }
+
+        private static IDesignerViewModel _designerViewModel;
+        private static Canvas _itemsPanel;
+        private static void OnDesignerLoaded(object sender, RoutedEventArgs e)
+        {
+            var itemsPresenter = (sender as Designer).GetVisualChild<ItemsPresenter>();
+            _itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as Canvas;
+
+            var dataContext = (sender as Designer).DataContext;
+            _designerViewModel = dataContext as IDesignerViewModel ?? throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
         }
 
         private static  void OnDesignerDrop(object sender, DragEventArgs e)
         {
-            ItemsPresenter itemsPresenter = (sender as Designer).GetVisualChild<ItemsPresenter>();
-            Canvas itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as Canvas;
-
-            var dataContext = (sender as Designer).DataContext;
-            if (!(dataContext is IDesignerViewModel)) throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
-
             if (e.Data.GetData(typeof(DragObject)) is DragObject dragObject && dragObject.DataContextType != null)
             {
-                if (Activator.CreateInstance(dragObject.DataContextType) is BaseDesignerItemViewModel element)
+                if (Activator.CreateInstance(dragObject.DataContextType) is IDesignerItem element)
                 {
-                    Point position = e.GetPosition(itemsPanel);
+                    Point position = e.GetPosition(_itemsPanel);
 
                     if (dragObject.DesiredSize.HasValue)
                     {
@@ -50,8 +62,8 @@ namespace SchemaCreator.Designer.AttachedProperties
                         element.Left = Math.Max(0, position.X);
                         element.Top = Math.Max(0, position.Y);
                     }
-                    
-                    (dataContext as IDesignerViewModel).AddItem(element);
+
+                    _designerViewModel.AddItem(element);
                 }
             }
 

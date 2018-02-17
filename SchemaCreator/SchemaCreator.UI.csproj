@@ -95,6 +95,7 @@
     <Compile Include="DesignerPanel\DesignerPanel.xaml.cs">
       <DependentUpon>DesignerPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DrawableToolBoxItem\Line.ViewModel.cs" />
     <Compile Include="Menu\Menu.ViewModel.cs" />
     <Compile Include="Menu\Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>

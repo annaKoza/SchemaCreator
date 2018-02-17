@@ -6,8 +6,8 @@ namespace SchemaCreator.Designer.Interfaces
 {
     public interface IDesignerViewModel
     { 
-        void AddItem(BaseDesignerItemViewModel item);
+        IDrawableItem ItemToDraw { get; set; }
+        void AddItem(IDesignerItem item);
         ObservableCollection<BaseDesignerItemViewModel> Items { get; set; }
     }
-
 }

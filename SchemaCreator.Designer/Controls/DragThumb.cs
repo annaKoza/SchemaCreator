@@ -33,8 +33,6 @@ namespace SchemaCreator.Designer.Controls
         {
             _selectedItems = _designer.SelectionService.SelectedItems.OfType<DesignerItem>();
             _rotateTransform = _designerItem.RenderTransform as RotateTransform;
-          
-
         }
 
         private void DragThumb_Loaded(object sender, RoutedEventArgs e)
@@ -45,21 +43,19 @@ namespace SchemaCreator.Designer.Controls
         
         private void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            if (_designerItem.IsSelected)
+            if (!_designerItem.IsSelected) return;
+            foreach (var designerItem in _selectedItems)
             {
-                foreach (var designerItem in _selectedItems)
+                var dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
+                if (_rotateTransform != null)
                 {
-                    Point dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
-                    if (_rotateTransform != null)
-                    {
-                        dragDelta = _rotateTransform.Transform(dragDelta);
-                    }
-
-                    Canvas.SetLeft(designerItem, Canvas.GetLeft(designerItem) + dragDelta.X);
-                    Canvas.SetTop(designerItem, Canvas.GetTop(designerItem) + dragDelta.Y);
+                    dragDelta = _rotateTransform.Transform(dragDelta);
                 }
-                e.Handled = true;
+
+                Canvas.SetLeft(designerItem, Canvas.GetLeft(designerItem) + dragDelta.X);
+                Canvas.SetTop(designerItem, Canvas.GetTop(designerItem) + dragDelta.Y);
             }
+            e.Handled = true;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SchemaCreator.Designer.Interfaces
 {
-    internal interface ISelectable
+    public interface ISelectable
     {
         bool IsSelected { get; set; }
     }

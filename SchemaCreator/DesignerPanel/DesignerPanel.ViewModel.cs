@@ -9,6 +9,8 @@ namespace SchemaCreator.UI.ViewModel
         public DesignerPanelViewModel()
         {
             DesignerViewModel = new DesignerViewModel();
+            // TEST:
+            DesignerViewModel.ItemToDraw = new LineViewModel();
         }
 
         private IDesignerViewModel _designerViewModel;

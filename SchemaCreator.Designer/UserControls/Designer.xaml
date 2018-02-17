@@ -10,6 +10,7 @@
     xmlns:local="clr-namespace:SchemaCreator.Designer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     att:DragDropAttachedProperty.DragDropTarget="{Binding RelativeSource={RelativeSource Self}}"
+    att:DrawAttachedProperty.DrawTarget="{Binding RelativeSource={RelativeSource Self}}"
     d:DesignHeight="300"
     d:DesignWidth="300"
     AllowDrop="True"
@@ -84,7 +85,7 @@
             <ctr:DesignerPanel.ItemContainerStyle>
                 <!--  DesignerItem Style  -->
                 <Style TargetType="{x:Type ctr:DesignerItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}" />
                     <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
                     <Setter Property="Width" Value="{Binding Width, Mode=TwoWay}" />
                     <Setter Property="Height" Value="{Binding Height, Mode=TwoWay}" />

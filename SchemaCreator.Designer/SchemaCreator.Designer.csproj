@@ -65,11 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachedProperties\DragDropAttachedProperty.cs" />
+    <Compile Include="AttachedProperties\DrawAttachedProperty.cs" />
     <Compile Include="Controls\DesignerItem.cs" />
     <Compile Include="Common\DragObject.cs" />
     <Compile Include="Controls\DesignerPanel.cs" />
     <Compile Include="Controls\DragThumb.cs" />
     <Compile Include="Controls\RotateThumb.cs" />
+    <Compile Include="DrawingPart\DrawingItemViewModel.cs" />
+    <Compile Include="Interfaces\IDrawableItem.cs" />
     <Compile Include="Interfaces\ISelectionPanel.cs" />
     <Compile Include="Controls\ResizeThumb.cs" />
     <Compile Include="Controls\ToolBox.cs" />

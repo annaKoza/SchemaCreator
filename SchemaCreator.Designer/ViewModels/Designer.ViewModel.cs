@@ -18,9 +18,11 @@ namespace SchemaCreator.Designer.UserControls
             }
         }
 
-        public void AddItem(BaseDesignerItemViewModel item)
+        public IDrawableItem ItemToDraw { get; set; }
+
+        public void AddItem(IDesignerItem item)
         {
-            Items.Add(item);
+            Items.Add(item as BaseDesignerItemViewModel);
         }
 
         public DesignerViewModel()
