@@ -44,14 +44,8 @@ namespace SchemaCreator.UI.ViewModel
             SimpleIoc.Default.Register<MainWindowViewModel>();
         }
 
-        public MainWindowViewModel Main
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MainWindowViewModel>();
-            }
-        }
-        
+        public MainWindowViewModel Main => ServiceLocator.Current.GetInstance<MainWindowViewModel>();
+
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

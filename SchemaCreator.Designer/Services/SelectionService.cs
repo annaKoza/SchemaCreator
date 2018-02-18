@@ -10,12 +10,8 @@ namespace SchemaCreator.Designer.Services
     public class SelectionService
     {
         private IEnumerable<ISelectable> _selectedItems;
-        internal IEnumerable<ISelectable> SelectedItems
-        {
-            get => 
-                _selectedItems ?? (_selectedItems = new List<ISelectable>() );
-        }
-        
+        internal IEnumerable<ISelectable> SelectedItems => _selectedItems ?? (_selectedItems = new List<ISelectable>() );
+
         internal void SelectItem(ISelectable item)
         {
            ClearSelection();

@@ -1,4 +1,5 @@
 ﻿using SchemaCreator.Designer.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -27,6 +28,12 @@ namespace SchemaCreator.Designer.Controls
             Loaded += DragThumb_Loaded;
             DragDelta += DragThumb_DragDelta;
             DragStarted += DragThumb_DragStarted;
+            MouseLeftButtonDown += OnLeftButtonDown;
+        }
+
+        private void OnLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
         }
 
         private void DragThumb_DragStarted(object sender, DragStartedEventArgs e)

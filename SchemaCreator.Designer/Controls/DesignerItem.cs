@@ -15,8 +15,8 @@ namespace SchemaCreator.Designer.Controls
 
         public double Angle
         {
-            get { return (double)GetValue(AngleProperty); }
-            set { SetValue(AngleProperty, value); }
+            get => (double)GetValue(AngleProperty);
+            set => SetValue(AngleProperty, value);
         }
         
         public bool IsSelected

@@ -37,12 +37,12 @@ namespace SchemaCreator.Designer.AttachedProperties
             if (e.OldValue != null)
             {
                 designer.Loaded -= OnDesignerLoaded;
-                designer.PreviewMouseLeftButtonDown -= OnDesignerStartDraw;
-                designer.PreviewMouseLeftButtonUp -= OnDesignerStopDraw;
+                designer.MouseLeftButtonDown -= OnDesignerStartDraw;
+                designer.MouseLeftButtonUp -= OnDesignerStopDraw;
             }
             designer.Loaded += OnDesignerLoaded;
-            designer.PreviewMouseLeftButtonDown += OnDesignerStartDraw;
-            designer.PreviewMouseLeftButtonUp += OnDesignerStopDraw;
+            designer.MouseLeftButtonDown += OnDesignerStartDraw;
+            designer.MouseLeftButtonUp += OnDesignerStopDraw;
         }
 
         private static IDesignerViewModel _designerViewModel;

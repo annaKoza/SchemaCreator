@@ -14,11 +14,7 @@ namespace SchemaCreator.Designer.Controls
             Focusable = true;
         }
         private SelectionService _selectionService;
-        public SelectionService SelectionService
-        {
-            get =>
-                _selectionService ?? (_selectionService = new SelectionService());
-        }
+        public SelectionService SelectionService => _selectionService ?? (_selectionService = new SelectionService());
 
         protected override void OnItemsChanged(NotifyCollectionChangedEventArgs e)
         {
@@ -38,10 +34,10 @@ namespace SchemaCreator.Designer.Controls
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
-            if (e.Source != this) return;
+            if (!Equals(e.Source, this)) return;
             SelectionService.ClearSelection();
             Focus();
-            e.Handled = true;
+            e.Handled = false;
         }
     }
 

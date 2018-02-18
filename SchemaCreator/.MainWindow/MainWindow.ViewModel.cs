@@ -56,7 +56,7 @@ namespace SchemaCreator.UI.ViewModel
         private ButtonRibbonViewModel _buttonRibbonViewModel;
         public ButtonRibbonViewModel ButtonRibbonViewModel
         {
-            get { return _buttonRibbonViewModel; }
+            get => _buttonRibbonViewModel;
             set
             {
                 _buttonRibbonViewModel = value;

@@ -51,14 +51,8 @@ namespace SchemaCreator.UI.Base
 
         public ICommand CommandAfter
         {
-            get
-            {
-                return (ICommand)GetValue(CommandAfterProperty);
-            }
-            set
-            {
-                SetValue(CommandAfterProperty, value);
-            }
+            get => (ICommand)GetValue(CommandAfterProperty);
+            set => SetValue(CommandAfterProperty, value);
         }
     }
     public abstract class DialogBox : FrameworkElement, INotifyPropertyChanged
@@ -304,14 +298,8 @@ namespace SchemaCreator.UI.Base
 
 		public ICommand CommandFileOk
 		{
-			get
-			{
-				return (ICommand)GetValue(CommandFileOkProperty);
-			}
-			set
-			{
-				SetValue(CommandFileOkProperty, value);
-			}
+			get => (ICommand)GetValue(CommandFileOkProperty);
+		    set => SetValue(CommandFileOkProperty, value);
 		}
 	}
 	public class OpenFileDialogBox : FileDialogBox
@@ -417,38 +405,20 @@ namespace SchemaCreator.UI.Base
 
 		public ICommand CommandTrue
 		{
-			get
-			{
-				return (ICommand)GetValue(CommandTrueProperty);
-			}
-			set
-			{
-				SetValue(CommandTrueProperty, value);
-			}
+			get => (ICommand)GetValue(CommandTrueProperty);
+		    set => SetValue(CommandTrueProperty, value);
 		}
 
 		public ICommand CommandFalse
 		{
-			get
-			{
-				return (ICommand)GetValue(CommandFalseProperty);
-			}
-			set
-			{
-				SetValue(CommandFalseProperty, value);
-			}
+			get => (ICommand)GetValue(CommandFalseProperty);
+		    set => SetValue(CommandFalseProperty, value);
 		}
 
 		public ICommand CommandNull
 		{
-			get
-			{
-				return (ICommand)GetValue(CommandNullProperty);
-			}
-			set
-			{
-				SetValue(CommandNullProperty, value);
-			}
+			get => (ICommand)GetValue(CommandNullProperty);
+		    set => SetValue(CommandNullProperty, value);
 		}
 	}
 }

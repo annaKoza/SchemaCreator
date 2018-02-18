@@ -17,7 +17,7 @@ namespace SchemaCreator.UI.ViewModel
         private bool _isEnabled;
         public bool IsEnabled
         {
-            get { return _isEnabled; }
+            get => _isEnabled;
             set
             {
                 _isEnabled = value;
@@ -27,29 +27,29 @@ namespace SchemaCreator.UI.ViewModel
         private string _menutext;
         public string MenuText
         {
-            get { return _menutext; }
-            set { _menutext = value; }
+            get => _menutext;
+            set => _menutext = value;
         }
 
         private string _iconPath;
         public string IconPath
         {
-            get { return _iconPath; }
-            set { _iconPath = value; }
+            get => _iconPath;
+            set => _iconPath = value;
         }
 
         private ICommand _command;
         public ICommand Command
         {
-            get { return _command; }
-            set { _command = value; }
+            get => _command;
+            set => _command = value;
         }
 
         private ObservableCollection<MenuSection> _subMenu;
         public ObservableCollection<MenuSection> SubMenu
         {
-            get { return _subMenu; }
-            set { _subMenu = value; }
+            get => _subMenu;
+            set => _subMenu = value;
         }
 
     }

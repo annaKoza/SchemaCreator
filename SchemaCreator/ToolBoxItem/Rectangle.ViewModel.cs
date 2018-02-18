@@ -13,7 +13,7 @@ namespace SchemaCreator.UI.ViewModel
         private string _imageSource;
         public string ImageSource
         {
-            get { return _imageSource; }
+            get => _imageSource;
             set { _imageSource = value; RaisePropertyChanged(nameof(ImageSource)); }
         }
         public RectangleViewModel()

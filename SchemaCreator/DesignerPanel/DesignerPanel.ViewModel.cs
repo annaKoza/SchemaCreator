@@ -16,7 +16,7 @@ namespace SchemaCreator.UI.ViewModel
         private IDesignerViewModel _designerViewModel;
         public IDesignerViewModel DesignerViewModel
         {
-            get { return _designerViewModel; }
+            get => _designerViewModel;
             set { _designerViewModel = value; RaisePropertyChanged(nameof(DesignerViewModel)); }
         }
     }

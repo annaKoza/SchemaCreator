@@ -12,7 +12,7 @@ namespace SchemaCreator.UI.ViewModel
         private ViewModelBase _viewModelForButtons;
         public ViewModelBase ViewModelForButtons
         {
-            get { return _viewModelForButtons; }
+            get => _viewModelForButtons;
             set
             {
                 _viewModelForButtons = value;

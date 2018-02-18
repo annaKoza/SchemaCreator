@@ -8,7 +8,7 @@ namespace SchemaCreator.UI.ViewModel
         private ObservableCollection<ViewModelBase> _toolItems;
         public ObservableCollection<ViewModelBase> ToolItems
         {
-            get { return _toolItems; }
+            get => _toolItems;
             set { _toolItems = value; RaisePropertyChanged(nameof(ToolItems)); }
         }
         public ToolBoxViewModel()
