@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Adorners\SelectionAdorner.cs" />
     <Compile Include="AttachedProperties\DragDropAttachedProperty.cs" />
+    <Compile Include="Adorners\DrawAdorner.cs" />
     <Compile Include="AttachedProperties\DrawAttachedProperty.cs" />
     <Compile Include="AttachedProperties\SelectAttachedProperty.cs" />
     <Compile Include="Common\ItemType.cs" />
