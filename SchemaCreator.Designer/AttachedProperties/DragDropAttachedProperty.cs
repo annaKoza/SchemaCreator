@@ -1,6 +1,5 @@
 ﻿using SchemaCreator.Designer.Helpers;
 using SchemaCreator.Designer.Interfaces;
-using SchemaCreator.Designer.UserControls;
 using System;
 using System.Windows;
 using System.Windows.Controls;

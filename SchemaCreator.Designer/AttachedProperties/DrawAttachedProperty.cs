@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -58,18 +54,23 @@ namespace SchemaCreator.Designer.AttachedProperties
 
         private static void OnDesignerStopDraw(object sender, MouseButtonEventArgs e)
         {
+            if(_drawableInstance == null || _designerViewModel.ItemToDraw == null) return;
+            
             var position = e.GetPosition(_itemsPanel);
             _drawableInstance.Y2 = position.Y;
             _drawableInstance.X2 = position.X;
-
+            
             _drawableInstance.Left = Math.Min(_drawableInstance.X1, _drawableInstance.X2);
             _drawableInstance.Top = Math.Min(_drawableInstance.Y1, _drawableInstance.Y2);
 
             var width = Math.Abs(_drawableInstance.X1 - _drawableInstance.X2);
             var height = Math.Abs(_drawableInstance.Y1 - _drawableInstance.Y2);
+
             _drawableInstance.Width = width;
             _drawableInstance.Height = height;
+
             _designerViewModel.AddItem(_drawableInstance);
+            _designerViewModel.ItemToDraw = null;
             e.Handled = true;
         }
 

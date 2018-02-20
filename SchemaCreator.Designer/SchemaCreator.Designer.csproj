@@ -64,14 +64,18 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adorners\SelectionAdorner.cs" />
     <Compile Include="AttachedProperties\DragDropAttachedProperty.cs" />
     <Compile Include="AttachedProperties\DrawAttachedProperty.cs" />
+    <Compile Include="AttachedProperties\SelectAttachedProperty.cs" />
+    <Compile Include="Common\ItemType.cs" />
     <Compile Include="Controls\DesignerItem.cs" />
     <Compile Include="Common\DragObject.cs" />
     <Compile Include="Controls\DesignerPanel.cs" />
     <Compile Include="Controls\DragThumb.cs" />
     <Compile Include="Controls\RotateThumb.cs" />
-    <Compile Include="DrawingPart\DrawingItemViewModel.cs" />
+    <Compile Include="ViewModels\DrawingItem.ViewModel.cs" />
+    <Compile Include="Interfaces\IDrawableDesigner.cs" />
     <Compile Include="Interfaces\IDrawableItem.cs" />
     <Compile Include="Interfaces\ISelectionPanel.cs" />
     <Compile Include="Controls\ResizeThumb.cs" />
@@ -136,6 +140,8 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="BaseBehaviorItems\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

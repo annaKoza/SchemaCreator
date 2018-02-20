@@ -30,15 +30,7 @@ namespace SchemaCreator.Designer.Controls
         {
             return (item is DesignerItem);
         }
-
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseDown(e);
-            if (!Equals(e.Source, this)) return;
-            SelectionService.ClearSelection();
-            Focus();
-            e.Handled = false;
-        }
+        
     }
 
    

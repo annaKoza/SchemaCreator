@@ -4,9 +4,8 @@ using System.Collections.ObjectModel;
 
 namespace SchemaCreator.Designer.Interfaces
 {
-    public interface IDesignerViewModel
+    public interface IDesignerViewModel : IDrawableDesigner
     { 
-        IDrawableItem ItemToDraw { get; set; }
         void AddItem(IDesignerItem item);
         ObservableCollection<BaseDesignerItemViewModel> Items { get; set; }
     }

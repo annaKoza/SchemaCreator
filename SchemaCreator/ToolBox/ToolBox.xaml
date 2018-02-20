@@ -10,7 +10,22 @@
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">
-    <Grid>
+    <StackPanel Orientation="Vertical">
+        <ListBox ItemsSource="{Binding DrawableItems}" SelectedItem="{Binding SelectedDrawingItem}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Rectangle
+                        Width="30"
+                        Height="30"
+                        Fill="Red" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel></WrapPanel>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
         <ctr:ToolBox ItemsSource="{Binding ToolItems}">
             <ctr:ToolBox.ItemContainerStyle>
                 <Style TargetType="{x:Type ctr:ToolboxItem}">
@@ -48,5 +63,5 @@
                 </Style>
             </ctr:ToolBox.ItemContainerStyle>
         </ctr:ToolBox>
-    </Grid>
+    </StackPanel>
 </UserControl>

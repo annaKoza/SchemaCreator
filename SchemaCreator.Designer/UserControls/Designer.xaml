@@ -11,6 +11,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     att:DragDropAttachedProperty.DragDropTarget="{Binding RelativeSource={RelativeSource Self}}"
     att:DrawAttachedProperty.DrawTarget="{Binding RelativeSource={RelativeSource Self}}"
+    att:SelectAttachedProperty.SelectTarget="{Binding RelativeSource={RelativeSource Self}}"
     d:DesignHeight="300"
     d:DesignWidth="300"
     AllowDrop="True"

@@ -7,7 +7,6 @@ namespace SchemaCreator.Designer.UserControls
     public class DesignerViewModel : ViewModelBase, IDesignerViewModel
     {
         private ObservableCollection<BaseDesignerItemViewModel> _items;
-
         public ObservableCollection<BaseDesignerItemViewModel> Items
         {
             get => _items;
@@ -18,6 +17,7 @@ namespace SchemaCreator.Designer.UserControls
             }
         }
 
+        public IDrawableItem DefaultItemToDraw { get; set; }
         public IDrawableItem ItemToDraw { get; set; }
 
         public void AddItem(IDesignerItem item)
