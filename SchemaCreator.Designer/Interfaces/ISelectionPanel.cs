@@ -2,7 +2,7 @@
 
 namespace SchemaCreator.Designer.Controls
 {
-    internal interface ISelectionPanel
+    public interface ISelectionPanel
     {
         SelectionService SelectionService { get; }
     }

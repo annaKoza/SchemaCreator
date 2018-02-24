@@ -9,8 +9,10 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:SchemaCreator.Designer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Name="designer"
     att:DragDropAttachedProperty.DragDropTarget="{Binding RelativeSource={RelativeSource Self}}"
     att:DrawAttachedProperty.DrawTarget="{Binding RelativeSource={RelativeSource Self}}"
+    att:SelectAttachedProperty.SelectTarget="{Binding RelativeSource={RelativeSource Self}}"
     d:DesignHeight="300"
     d:DesignWidth="300"
     AllowDrop="True"
@@ -18,7 +20,6 @@
     <Grid>
         <ctr:DesignerPanel ItemsSource="{Binding Items}">
             <ctr:DesignerPanel.Resources>
-
                 <!--  ResizeDecorator Default Template  -->
                 <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
                     <Grid SnapsToDevicePixels="true">
@@ -85,15 +86,15 @@
             <ctr:DesignerPanel.ItemContainerStyle>
                 <!--  DesignerItem Style  -->
                 <Style TargetType="{x:Type ctr:DesignerItem}">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}" />
-                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+                    <Setter Property="RenderTransformOrigin" Value="{Binding TransformOrigin}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWay}" />
                     <Setter Property="Width" Value="{Binding Width, Mode=TwoWay}" />
                     <Setter Property="Height" Value="{Binding Height, Mode=TwoWay}" />
                     <Setter Property="Angle" Value="{Binding Angle, Mode=TwoWay}" />
-                    <Setter Property="MinWidth" Value="10" />
+                    <Setter Property="MinWidth" Value="{Binding MinWidth}" />
                     <Setter Property="Canvas.Left" Value="{Binding Left, Mode=TwoWay}" />
                     <Setter Property="Canvas.Top" Value="{Binding Top, Mode=TwoWay}" />
-                    <Setter Property="MinHeight" Value="10" />
+                    <Setter Property="MinHeight" Value="{Binding MinHeight}" />
                     <Setter Property="SnapsToDevicePixels" Value="True" />
                     <Setter Property="RenderTransform">
                         <Setter.Value>
@@ -120,6 +121,14 @@
                                         Content="{TemplateBinding ContentControl.Content}" />
                                     <!--  PART_RotateThumb  -->
                                     <ctr:RotateThumb />
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                            <command:EventToCommand
+                                                Command="{Binding DataContext.SelectCommand, Mode=OneWay}"
+                                                CommandParameter="{Binding ElementName=designer, Path=DataContext}"
+                                                PassEventArgsToCommand="True" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">

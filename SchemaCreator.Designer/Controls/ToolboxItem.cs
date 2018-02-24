@@ -1,5 +1,4 @@
-﻿using SchemaCreator.Designer.Helpers;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -9,7 +8,7 @@ namespace SchemaCreator.Designer.Controls
     public class ToolboxItem : ContentControl
     {
         private Point? dragStartPoint;
-        
+
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {
             base.OnPreviewMouseDown(e);

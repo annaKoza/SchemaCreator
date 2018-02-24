@@ -1,6 +1,4 @@
 ﻿using GalaSoft.MvvmLight;
-using SchemaCreator.Designer.Interfaces;
-using SchemaCreator.Designer.UserControls;
 using SchemaCreator.UI.Base;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -10,6 +8,7 @@ namespace SchemaCreator.UI.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private DesignerPanelViewModel _designerPanelViewModel;
+
         public DesignerPanelViewModel DesignerPanelViewModel
         {
             get => _designerPanelViewModel;
@@ -19,8 +18,9 @@ namespace SchemaCreator.UI.ViewModel
                 RaisePropertyChanged(nameof(DesignerPanelViewModel));
             }
         }
-        
+
         private BackgroundViewModel _backgroundViewModel;
+
         public BackgroundViewModel BackgroundViewModel
         {
             get => _backgroundViewModel;
@@ -32,6 +32,7 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private ToolBoxViewModel _toolBoxViewModel;
+
         public ToolBoxViewModel ToolBoxViewModel
         {
             get => _toolBoxViewModel;
@@ -43,6 +44,7 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private MenuViewModel _menuViewModel;
+
         public MenuViewModel MenuViewModel
         {
             get => _menuViewModel;
@@ -54,6 +56,7 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private ButtonRibbonViewModel _buttonRibbonViewModel;
+
         public ButtonRibbonViewModel ButtonRibbonViewModel
         {
             get => _buttonRibbonViewModel;
@@ -90,8 +93,9 @@ namespace SchemaCreator.UI.ViewModel
             return menu;
         }
 
-        ICommand _openImage;
-        ICommand OpenImage => _openImage ?? (_openImage = new RelayCommand(
+        private ICommand _openImage;
+
+        private ICommand OpenImage => _openImage ?? (_openImage = new RelayCommand(
             (obj) =>
             {
                 OpenFileDialogBox dialog = new OpenFileDialogBox()
@@ -109,8 +113,9 @@ namespace SchemaCreator.UI.ViewModel
                 MenuViewModel.EnableItems("Remove Background image");
             }));
 
-        ICommand _removeImage; 
-        ICommand RemoveImage => _removeImage ?? (_removeImage = new RelayCommand(
+        private ICommand _removeImage;
+
+        private ICommand RemoveImage => _removeImage ?? (_removeImage = new RelayCommand(
             (obj) =>
             {
                 BackgroundViewModel = null;

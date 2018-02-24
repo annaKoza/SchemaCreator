@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Helpers
 {
-   internal static class ExtensionMethods
+    internal static class ExtensionMethods
     {
         internal static T FindParent<T>(this DependencyObject child) where T : DependencyObject
         {

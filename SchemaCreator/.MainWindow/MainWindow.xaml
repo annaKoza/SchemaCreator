@@ -37,7 +37,6 @@
         <DataTemplate DataType="{x:Type viewmodels:DesignerPanelViewModel}">
             <local:DesignerPanel />
         </DataTemplate>
-
     </Window.Resources>
     <Grid Margin="2">
         <DockPanel Grid.Row="1" Grid.IsSharedSizeScope="True">
@@ -65,9 +64,7 @@
                         <ContentPresenter Content="{Binding DesignerPanelViewModel}" />
                     </Grid>
                 </ScrollViewer>
-
             </Grid>
-
         </DockPanel>
     </Grid>
 </cc:CustomWindow>

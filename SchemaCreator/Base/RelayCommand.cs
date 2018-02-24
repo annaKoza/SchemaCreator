@@ -5,11 +5,14 @@ using System.Windows.Input;
 public class RelayCommand : ICommand
 {
     #region Fields
-    readonly Action<object> _execute;
-    readonly Predicate<object> _canExecute;
-    #endregion // Fields
+
+    private readonly Action<object> _execute;
+    private readonly Predicate<object> _canExecute;
+
+    #endregion Fields
 
     #region Constructors
+
     public RelayCommand(Action<object> execute)
         : this(execute, null)
     {
@@ -20,9 +23,11 @@ public class RelayCommand : ICommand
         _execute = execute ?? throw new ArgumentNullException("execute");
         _canExecute = canExecute;
     }
-    #endregion // Constructors
+
+    #endregion Constructors
 
     #region ICommand Members
+
     [DebuggerStepThrough]
     public bool CanExecute(object parameter)
     {
@@ -45,5 +50,6 @@ public class RelayCommand : ICommand
     {
         _execute(parameter);
     }
-    #endregion // ICommand Members
+
+    #endregion ICommand Members
 }
