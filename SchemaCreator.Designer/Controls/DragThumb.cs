@@ -1,9 +1,8 @@
 ﻿using SchemaCreator.Designer.Helpers;
-using System;
+using SchemaCreator.Designer.UserControls;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -15,7 +14,7 @@ namespace SchemaCreator.Designer.Controls
         private DesignerPanel _designer;
         private RotateTransform _rotateTransform;
         private DesignerItem _designerItem;
-        private IEnumerable<DesignerItem> _selectedItems;
+        private IEnumerable<BaseDesignerItemViewModel> _selectedItems;
 
         static DragThumb()
         {
@@ -38,7 +37,7 @@ namespace SchemaCreator.Designer.Controls
 
         private void DragThumb_DragStarted(object sender, DragStartedEventArgs e)
         {
-            _selectedItems = _designer.SelectionService.SelectedItems.OfType<DesignerItem>();
+            _selectedItems = ((_designer.DataContext) as DesignerViewModel).SelectionService.SelectedItems.OfType<BaseDesignerItemViewModel>();
             _rotateTransform = _designerItem.RenderTransform as RotateTransform;
         }
 
@@ -47,7 +46,7 @@ namespace SchemaCreator.Designer.Controls
             _designerItem = DataContext as DesignerItem;
             _designer = _designerItem.FindParent<DesignerPanel>();
         }
-        
+
         private void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             if (!_designerItem.IsSelected) return;
@@ -59,8 +58,8 @@ namespace SchemaCreator.Designer.Controls
                     dragDelta = _rotateTransform.Transform(dragDelta);
                 }
 
-                Canvas.SetLeft(designerItem, Canvas.GetLeft(designerItem) + dragDelta.X);
-                Canvas.SetTop(designerItem, Canvas.GetTop(designerItem) + dragDelta.Y);
+                designerItem.Left += dragDelta.X;
+                designerItem.Top += dragDelta.Y;
             }
             e.Handled = true;
         }

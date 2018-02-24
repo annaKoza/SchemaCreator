@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 using SchemaCreator.Designer.DrawingPart;
 
 namespace SchemaCreator.UI.ViewModel
 {
     public class LineViewModel : DrawingItemViewModel
     {
-    
+        public override void DrawAdorner(DrawingContext drawingContext, Point startPoint, Point endPoint )
+        {
+            drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Black), 2), startPoint, endPoint);
+        }
     }
 }

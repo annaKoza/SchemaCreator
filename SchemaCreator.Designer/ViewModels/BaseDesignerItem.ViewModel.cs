@@ -1,5 +1,9 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using SchemaCreator.Designer.Controls;
 using SchemaCreator.Designer.Interfaces;
+using System.Windows;
+using System.Windows.Input;
 
 namespace SchemaCreator.Designer.UserControls
 {
@@ -17,6 +21,22 @@ namespace SchemaCreator.Designer.UserControls
             set { _isSelected = value; RaisePropertyChanged(nameof(IsSelected)); }
         }
 
+        private double _minWidth;
+
+        public double MinWidth
+        {
+            get { return _minWidth; }
+            set { _minWidth = value; RaisePropertyChanged(nameof(MinWidth)); }
+        }
+
+        private double _minHeight;
+
+        public double MinHeight
+        {
+            get { return _minHeight; }
+            set { _minHeight = value; RaisePropertyChanged(nameof(MinHeight)); }
+        }
+
         private double _angle;
 
         public double Angle
@@ -29,6 +49,14 @@ namespace SchemaCreator.Designer.UserControls
         private double _left;
         private double _width;
         private double _height;
+
+        private Point _transformOrigin;
+
+        public Point TransformOrigin
+        {
+            get { return _transformOrigin; }
+            set { _transformOrigin = value; RaisePropertyChanged(nameof(TransformOrigin)); }
+        }
 
         public double Top
         {
@@ -52,6 +80,62 @@ namespace SchemaCreator.Designer.UserControls
         {
             get => _height;
             set { _height = value; RaisePropertyChanged(nameof(Height)); }
+        }
+
+        private ICommand _selectCommand;
+
+        public ICommand SelectCommand
+        {
+            get
+            {
+                return _selectCommand ??
+                    (
+                    _selectCommand = new RelayCommand<object>
+                        (
+                            (designer) =>
+                            {
+                                SelectItem(designer as DesignerViewModel);
+                            }
+                        )
+                    );
+            }
+        }
+
+        private void SelectItem(DesignerViewModel designer)
+        {
+            if (designer is ISelectionPanel)
+            {
+                if ((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) != ModifierKeys.None)
+                {
+                    if ((Keyboard.Modifiers & (ModifierKeys.Shift)) != ModifierKeys.None)
+                    {
+                        if (!IsSelected)
+                        {
+                            designer.SelectionService.AddToSelection(this);
+                        }
+                        else
+                        {
+                            designer.SelectionService.RemoveFromSelection(this);
+                        }
+                    }
+
+                    if ((Keyboard.Modifiers & (ModifierKeys.Control)) != ModifierKeys.None)
+                    {
+                        if (!IsSelected)
+                        {
+                            designer.SelectionService.AddToSelection(this);
+                        }
+                        else
+                        {
+                            designer.SelectionService.RemoveFromSelection(this);
+                        }
+                    }
+                }
+                else if (!IsSelected)
+                {
+                    designer.SelectionService.SelectItem(this);
+                }
+            }
         }
     }
 }

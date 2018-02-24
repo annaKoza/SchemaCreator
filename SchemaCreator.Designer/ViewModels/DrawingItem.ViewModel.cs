@@ -1,9 +1,13 @@
-﻿using SchemaCreator.Designer.Interfaces;
+﻿using System;
+using System.Windows;
+using System.Windows.Media;
+using SchemaCreator.Designer.Common;
+using SchemaCreator.Designer.Interfaces;
 using SchemaCreator.Designer.UserControls;
 
 namespace SchemaCreator.Designer.DrawingPart
 {
-    public class DrawingItemViewModel : BaseDesignerItemViewModel, IDrawableItem
+    public abstract class DrawingItemViewModel : BaseDesignerItemViewModel, IDrawableItem
     {
         private double _x1;
         public double X1
@@ -14,6 +18,7 @@ namespace SchemaCreator.Designer.DrawingPart
                 _x1 = value; RaisePropertyChanged(nameof(X1));
             }
         }
+
         private double _x2;
         public double X2
         {
@@ -23,6 +28,7 @@ namespace SchemaCreator.Designer.DrawingPart
                 _x2 = value; RaisePropertyChanged(nameof(X2));
             }
         }
+
         private double _y1;
         public double Y1
         {
@@ -32,6 +38,7 @@ namespace SchemaCreator.Designer.DrawingPart
                 _y1 = value; RaisePropertyChanged(nameof(Y1));
             }
         }
+
         private double _y2;
         public double Y2
         {
@@ -41,5 +48,9 @@ namespace SchemaCreator.Designer.DrawingPart
                 _y2 = value; RaisePropertyChanged(nameof(Y2));
             }
         }
+
+        public SelectedItemType SelectedItemType => SelectedItemType.DrawItem;
+
+        public abstract void DrawAdorner(DrawingContext drawingContext, Point startPoint, Point endPoint);
     }
 }

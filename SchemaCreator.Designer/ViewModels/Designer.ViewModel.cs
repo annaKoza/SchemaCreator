@@ -1,12 +1,18 @@
 ﻿using GalaSoft.MvvmLight;
+using SchemaCreator.Designer.Controls;
 using SchemaCreator.Designer.Interfaces;
+using SchemaCreator.Designer.Services;
 using System.Collections.ObjectModel;
 
 namespace SchemaCreator.Designer.UserControls
 {
-    public class DesignerViewModel : ViewModelBase, IDesignerViewModel
+    public class DesignerViewModel : ViewModelBase, IDesignerViewModel, ISelectionPanel
     {
+        private SelectionService _selectionService;
+        public SelectionService SelectionService => _selectionService ?? (_selectionService = new SelectionService());
+
         private ObservableCollection<BaseDesignerItemViewModel> _items;
+
         public ObservableCollection<BaseDesignerItemViewModel> Items
         {
             get => _items;
@@ -17,8 +23,7 @@ namespace SchemaCreator.Designer.UserControls
             }
         }
 
-        public IDrawableItem DefaultItemToDraw { get; set; }
-        public IDrawableItem ItemToDraw { get; set; }
+        public IBaseChoosableItem ItemToDraw { get; set; }
 
         public void AddItem(IDesignerItem item)
         {

@@ -1,21 +1,19 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchemaCreator.UI.ViewModel
 {
     public class MenuViewModel : ViewModelBase
     {
         private ObservableCollection<MenuSection> _menuItems;
+
         public ObservableCollection<MenuSection> MenuItems
         {
             get => _menuItems;
             set => _menuItems = value;
         }
+
         public MenuViewModel(ObservableCollection<MenuSection> menuItems)
         {
             MenuItems = menuItems;
@@ -24,13 +22,13 @@ namespace SchemaCreator.UI.ViewModel
         public void DisableItems(string itemName)
         {
             var menuItem = GetMenuSectionsOfGivenMenuText(itemName, MenuItems);
-                menuItem?.ForEach(x => x.IsEnabled = false);
+            menuItem?.ForEach(x => x.IsEnabled = false);
         }
 
         public void EnableItems(string itemName)
         {
             var menuItem = GetMenuSectionsOfGivenMenuText(itemName, MenuItems);
-                menuItem?.ForEach(x=>x.IsEnabled = true);
+            menuItem?.ForEach(x => x.IsEnabled = true);
         }
 
         public List<MenuSection> GetMenuSectionsOfGivenMenuText(string menuText, ObservableCollection<MenuSection> menuItems)
@@ -52,6 +50,5 @@ namespace SchemaCreator.UI.ViewModel
                 GetMenuItems(textToFind, subitem, items);
             }
         }
-        
     }
 }

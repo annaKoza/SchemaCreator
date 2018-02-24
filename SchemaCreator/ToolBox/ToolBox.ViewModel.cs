@@ -1,21 +1,28 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
+using SchemaCreator.Designer.BaseDrawableItems;
+using SchemaCreator.Designer.Interfaces;
 using System.Collections.ObjectModel;
-using SchemaCreator.Designer.DrawingPart;
-using SchemaCreator.Designer.UserControls;
 
 namespace SchemaCreator.UI.ViewModel
 {
     public class ToolBoxViewModel : ViewModelBase
     {
-        private DrawingItemViewModel _selectedDrawingItem;
-        public DrawingItemViewModel SelectedDrawingItem
+        private IBaseChoosableItem _selectedDrawingItem;
+
+        public IBaseChoosableItem SelectedDrawingItem
         {
             get => _selectedDrawingItem;
-            set { _selectedDrawingItem = value; RaisePropertyChanged((nameof(SelectedDrawingItem)));}
+            set
+            {
+                _selectedDrawingItem = value;
+                Messenger.Default.Send<IBaseChoosableItem>(value);
+                RaisePropertyChanged(nameof(SelectedDrawingItem));
+            }
         }
 
-        public ObservableCollection<DrawingItemViewModel> DrawableItems
-        { 
+        public ObservableCollection<IBaseChoosableItem> DrawableItems
+        {
             get => _drawdableItems;
             set
             {
@@ -24,18 +31,19 @@ namespace SchemaCreator.UI.ViewModel
             }
         }
 
-        private ObservableCollection<BaseDesignerItemViewModel> _toolItems;
-        private ObservableCollection<DrawingItemViewModel> _drawdableItems;
+        private ObservableCollection<IDesignerItem> _toolItems;
+        private ObservableCollection<IBaseChoosableItem> _drawdableItems;
 
-        public ObservableCollection<BaseDesignerItemViewModel> ToolItems
+        public ObservableCollection<IDesignerItem> ToolItems
         {
             get => _toolItems;
             set { _toolItems = value; RaisePropertyChanged(nameof(ToolItems)); }
         }
+
         public ToolBoxViewModel()
         {
-            DrawableItems = new ObservableCollection<DrawingItemViewModel>(){ new LineViewModel()};
-            ToolItems = new ObservableCollection<BaseDesignerItemViewModel>() { new RectangleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new RectangleViewModel() };
+            DrawableItems = new ObservableCollection<IBaseChoosableItem>() { new SelectionViewModel(), new LineViewModel() };
+            ToolItems = new ObservableCollection<IDesignerItem>() { new RectangleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new RectangleViewModel() };
         }
     }
 }

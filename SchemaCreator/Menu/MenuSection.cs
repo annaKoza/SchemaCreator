@@ -1,8 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace SchemaCreator.UI.ViewModel
 {
@@ -13,8 +11,9 @@ namespace SchemaCreator.UI.ViewModel
             SubMenu = new ObservableCollection<MenuSection>();
             IsEnabled = true;
         }
- 
+
         private bool _isEnabled;
+
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -24,7 +23,9 @@ namespace SchemaCreator.UI.ViewModel
                 RaisePropertyChanged(nameof(IsEnabled));
             }
         }
+
         private string _menutext;
+
         public string MenuText
         {
             get => _menutext;
@@ -32,6 +33,7 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private string _iconPath;
+
         public string IconPath
         {
             get => _iconPath;
@@ -39,6 +41,7 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private ICommand _command;
+
         public ICommand Command
         {
             get => _command;
@@ -46,11 +49,11 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private ObservableCollection<MenuSection> _subMenu;
+
         public ObservableCollection<MenuSection> SubMenu
         {
             get => _subMenu;
             set => _subMenu = value;
         }
-
     }
 }

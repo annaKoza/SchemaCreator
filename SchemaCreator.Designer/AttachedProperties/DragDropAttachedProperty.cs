@@ -25,11 +25,11 @@ namespace SchemaCreator.Designer.AttachedProperties
             }
             designer.Drop += OnDesignerDrop;
             designer.Loaded += OnDesignerLoaded;
-
         }
 
         private static IDesignerViewModel _designerViewModel;
         private static Canvas _itemsPanel;
+
         private static void OnDesignerLoaded(object sender, RoutedEventArgs e)
         {
             var itemsPresenter = (sender as Designer).GetVisualChild<ItemsPresenter>();
@@ -39,14 +39,16 @@ namespace SchemaCreator.Designer.AttachedProperties
             _designerViewModel = dataContext as IDesignerViewModel ?? throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
         }
 
-        private static  void OnDesignerDrop(object sender, DragEventArgs e)
+        private static void OnDesignerDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetData(typeof(DragObject)) is DragObject dragObject && dragObject.DataContextType != null)
             {
                 if (Activator.CreateInstance(dragObject.DataContextType) is IDesignerItem element)
                 {
                     Point position = e.GetPosition(_itemsPanel);
-
+                    element.TransformOrigin = new Point(0.5, 0.5);
+                    element.MinHeight = 10;
+                    element.MinWidth = 10;
                     if (dragObject.DesiredSize.HasValue)
                     {
                         Size desiredSize = dragObject.DesiredSize.Value;
@@ -63,6 +65,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                     }
 
                     _designerViewModel.AddItem(element);
+                    _designerViewModel.SelectionService.SelectItem(element);
                 }
             }
 
@@ -73,6 +76,7 @@ namespace SchemaCreator.Designer.AttachedProperties
         {
             element.SetValue(DragDropTargetProperty, value);
         }
+
         public static Designer GetDragDropTarget(UIElement element)
         {
             return (Designer)element.GetValue(DragDropTargetProperty);

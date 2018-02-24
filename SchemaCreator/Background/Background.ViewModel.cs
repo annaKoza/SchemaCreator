@@ -1,13 +1,8 @@
 ﻿using GalaSoft.MvvmLight;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchemaCreator.UI.ViewModel
 {
-   public class BackgroundViewModel : ViewModelBase
+    public class BackgroundViewModel : ViewModelBase
     {
         private string _imagePath;
 
@@ -20,7 +15,9 @@ namespace SchemaCreator.UI.ViewModel
                 RaisePropertyChanged(nameof(ImagePath));
             }
         }
+
         private int _opacity;
+
         public int Opacity
         {
             get => _opacity;
@@ -30,6 +27,7 @@ namespace SchemaCreator.UI.ViewModel
                 RaisePropertyChanged(nameof(ImagePath));
             }
         }
+
         public BackgroundViewModel()
         {
             ImagePath = string.Empty;

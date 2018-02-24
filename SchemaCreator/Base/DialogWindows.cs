@@ -55,134 +55,143 @@ namespace SchemaCreator.UI.Base
             set => SetValue(CommandAfterProperty, value);
         }
     }
+
     public abstract class DialogBox : FrameworkElement, INotifyPropertyChanged
-	{
-		#region INotifyPropertyChanged
-		public event PropertyChangedEventHandler PropertyChanged;
+    {
+        #region INotifyPropertyChanged
 
-		protected void OnPropertyChanged(string nazwaWłasności)
-		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(nazwaWłasności));
-		}
-		#endregion
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		protected Action<object> execute = null;
+        protected void OnPropertyChanged(string nazwaWłasności)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(nazwaWłasności));
+        }
 
-		public string Caption { get; set; }// = null;
+        #endregion INotifyPropertyChanged
 
-		protected ICommand show;
+        protected Action<object> execute = null;
 
-		public virtual ICommand Show
-		{
-			get
-			{
-				if (show == null) show = new RelayCommand(execute);
-				return show;
-			}
-		}
-	}
-	public class SimpleMessageDialogBox : DialogBox
-	{
-		public SimpleMessageDialogBox()
-		{
-			execute =
-				o =>
-				{
-					MessageBox.Show((string)o, Caption);
-				};
-		}
-	}
-	public class NotificationDialogBox : CommandDialogBox
-	{
-		public NotificationDialogBox()
-		{
-			execute =
-				o =>
-				{
-					MessageBox.Show((string)o, Caption, MessageBoxButton.OK, MessageBoxImage.Information);
-				};
-		}
-	}
-	public class MessageDialogBox : CommandDialogBox
-	{
-		public MessageBoxResult? LastResult { get; protected set; }
-		public MessageBoxButton Buttons { get; set; }// = MessageBoxButton.OK;
-		public MessageBoxImage Icon { get; set; }// = MessageBoxImage.None;
+        public string Caption { get; set; }// = null;
 
-		public bool IsLastResultYes
-		{
-			get
-			{
-				if (!LastResult.HasValue) return false;
-				return LastResult.Value == MessageBoxResult.Yes;
-			}
-		}
+        protected ICommand show;
 
-		public bool IsLastResultNo
-		{
-			get
-			{
-				if (!LastResult.HasValue) return false;
-				return LastResult.Value == MessageBoxResult.No;
-			}
-		}
+        public virtual ICommand Show
+        {
+            get
+            {
+                if (show == null) show = new RelayCommand(execute);
+                return show;
+            }
+        }
+    }
 
-		public bool IsLastResultCancel
-		{
-			get
-			{
-				if (!LastResult.HasValue) return false;
-				return LastResult.Value == MessageBoxResult.Cancel;
-			}
-		}
+    public class SimpleMessageDialogBox : DialogBox
+    {
+        public SimpleMessageDialogBox()
+        {
+            execute =
+                o =>
+                {
+                    MessageBox.Show((string)o, Caption);
+                };
+        }
+    }
 
-		public bool IsLastResultOK
-		{
-			get
-			{
-				if (!LastResult.HasValue) return false;
-				return LastResult.Value == MessageBoxResult.OK;
-			}
-		}
+    public class NotificationDialogBox : CommandDialogBox
+    {
+        public NotificationDialogBox()
+        {
+            execute =
+                o =>
+                {
+                    MessageBox.Show((string)o, Caption, MessageBoxButton.OK, MessageBoxImage.Information);
+                };
+        }
+    }
 
-		public MessageDialogBox()
-		{
+    public class MessageDialogBox : CommandDialogBox
+    {
+        public MessageBoxResult? LastResult { get; protected set; }
+        public MessageBoxButton Buttons { get; set; }// = MessageBoxButton.OK;
+        public MessageBoxImage Icon { get; set; }// = MessageBoxImage.None;
+
+        public bool IsLastResultYes
+        {
+            get
+            {
+                if (!LastResult.HasValue) return false;
+                return LastResult.Value == MessageBoxResult.Yes;
+            }
+        }
+
+        public bool IsLastResultNo
+        {
+            get
+            {
+                if (!LastResult.HasValue) return false;
+                return LastResult.Value == MessageBoxResult.No;
+            }
+        }
+
+        public bool IsLastResultCancel
+        {
+            get
+            {
+                if (!LastResult.HasValue) return false;
+                return LastResult.Value == MessageBoxResult.Cancel;
+            }
+        }
+
+        public bool IsLastResultOK
+        {
+            get
+            {
+                if (!LastResult.HasValue) return false;
+                return LastResult.Value == MessageBoxResult.OK;
+            }
+        }
+
+        public MessageDialogBox()
+        {
             Buttons = MessageBoxButton.OK;
-		    Icon = MessageBoxImage.None;
+            Icon = MessageBoxImage.None;
 
-			execute = o =>
-			{
-				LastResult = MessageBox.Show((string)o, Caption, Buttons, Icon);
-				OnPropertyChanged("LastResult");				
-				switch (LastResult)
-				{
-					case MessageBoxResult.Yes:
-						OnPropertyChanged("IsLastResultYes");
-						ExecuteCommand(CommandYes, CommandParameter);
-						break;
-					case MessageBoxResult.No:
-						OnPropertyChanged("IsLastResultNo");
-						ExecuteCommand(CommandNo, CommandParameter);
-						break;
-					case MessageBoxResult.Cancel:
-						OnPropertyChanged("IsLastResultCancel");
-						ExecuteCommand(CommandCancel, CommandParameter);
-						break;
-					case MessageBoxResult.OK:
-						OnPropertyChanged("IsLastResultOK");
-						ExecuteCommand(CommandOK, CommandParameter);
-						break;
-				}
-			};
-		}
+            execute = o =>
+            {
+                LastResult = MessageBox.Show((string)o, Caption, Buttons, Icon);
+                OnPropertyChanged("LastResult");
+                switch (LastResult)
+                {
+                    case MessageBoxResult.Yes:
+                        OnPropertyChanged("IsLastResultYes");
+                        ExecuteCommand(CommandYes, CommandParameter);
+                        break;
 
-		public static DependencyProperty CommandYesProperty = DependencyProperty.Register("CommandYes", typeof(ICommand), typeof(MessageDialogBox));
-		public static DependencyProperty CommandNoProperty = DependencyProperty.Register("CommandNo", typeof(ICommand), typeof(MessageDialogBox));
-		public static DependencyProperty CommandCancelProperty = DependencyProperty.Register("CommandCancel", typeof(ICommand), typeof(MessageDialogBox));
-		public static DependencyProperty CommandOKProperty = DependencyProperty.Register("CommandOK", typeof(ICommand), typeof(MessageDialogBox));
+                    case MessageBoxResult.No:
+                        OnPropertyChanged("IsLastResultNo");
+                        ExecuteCommand(CommandNo, CommandParameter);
+                        break;
 
-		public ICommand CommandYes
+                    case MessageBoxResult.Cancel:
+                        OnPropertyChanged("IsLastResultCancel");
+                        ExecuteCommand(CommandCancel, CommandParameter);
+                        break;
+
+                    case MessageBoxResult.OK:
+                        OnPropertyChanged("IsLastResultOK");
+                        ExecuteCommand(CommandOK, CommandParameter);
+                        break;
+                }
+            };
+        }
+
+        public static DependencyProperty CommandYesProperty = DependencyProperty.Register("CommandYes", typeof(ICommand), typeof(MessageDialogBox));
+        public static DependencyProperty CommandNoProperty = DependencyProperty.Register("CommandNo", typeof(ICommand), typeof(MessageDialogBox));
+        public static DependencyProperty CommandCancelProperty = DependencyProperty.Register("CommandCancel", typeof(ICommand), typeof(MessageDialogBox));
+        public static DependencyProperty CommandOKProperty = DependencyProperty.Register("CommandOK", typeof(ICommand), typeof(MessageDialogBox));
+
+        public ICommand CommandYes
         {
             get => (ICommand)GetValue(CommandYesProperty);
             set => SetValue(CommandYesProperty, value);
@@ -206,10 +215,12 @@ namespace SchemaCreator.UI.Base
             set => SetValue(CommandOKProperty, value);
         }
     }
-	public class ConditionalMessageDialogBox : MessageDialogBox
-	{
-		public static DependencyProperty IsDialogBypassedProperty = DependencyProperty.Register("IsDialogBypassed", typeof(bool), typeof(ConditionalMessageDialogBox));
-		public bool IsDialogBypassed
+
+    public class ConditionalMessageDialogBox : MessageDialogBox
+    {
+        public static DependencyProperty IsDialogBypassedProperty = DependencyProperty.Register("IsDialogBypassed", typeof(bool), typeof(ConditionalMessageDialogBox));
+
+        public bool IsDialogBypassed
         {
             get => (bool)GetValue(IsDialogBypassedProperty);
             set => SetValue(IsDialogBypassedProperty, value);
@@ -217,208 +228,218 @@ namespace SchemaCreator.UI.Base
 
         public MessageBoxResult DialogBypassButton { get; set; }// = MessageBoxResult.None;
 
-		public ConditionalMessageDialogBox()
-		{
+        public ConditionalMessageDialogBox()
+        {
             DialogBypassButton = MessageBoxResult.None;
 
-			execute = o =>
-			{
-				MessageBoxResult result;
-				if (!IsDialogBypassed)
-				{
-					LastResult = MessageBox.Show((string)o, Caption, Buttons, Icon);
-					OnPropertyChanged("LastResult");
-					result = LastResult.Value;
-				}
-				else
-				{
-					result = DialogBypassButton;
-				}
-				switch (result)
-				{
-					case MessageBoxResult.Yes:
-						if(!IsDialogBypassed) OnPropertyChanged("IsLastResultYes");
-						ExecuteCommand(CommandYes, CommandParameter);
-						break;
-					case MessageBoxResult.No:
-						if (!IsDialogBypassed) OnPropertyChanged("IsLastResultNo");
-						ExecuteCommand(CommandNo, CommandParameter);
-						break;
-					case MessageBoxResult.Cancel:
-						if (!IsDialogBypassed) OnPropertyChanged("IsLastResultCancel");
-						ExecuteCommand(CommandCancel, CommandParameter);
-						break;
-					case MessageBoxResult.OK:
-						if (!IsDialogBypassed) OnPropertyChanged("IsLastResultOK");
-						ExecuteCommand(CommandOK, CommandParameter);
-						break;
-				}
-			};
-		}
-	}
-	public abstract class FileDialogBox : CommandDialogBox
-	{
-		public bool? FileDialogResult { get; protected set; }
-		public string FilePath { get; set; }
-		public string Filter { get; set; }
-		public int FilterIndex { get; set; }
-		public string DefaultExt { get; set; }
+            execute = o =>
+            {
+                MessageBoxResult result;
+                if (!IsDialogBypassed)
+                {
+                    LastResult = MessageBox.Show((string)o, Caption, Buttons, Icon);
+                    OnPropertyChanged("LastResult");
+                    result = LastResult.Value;
+                }
+                else
+                {
+                    result = DialogBypassButton;
+                }
+                switch (result)
+                {
+                    case MessageBoxResult.Yes:
+                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultYes");
+                        ExecuteCommand(CommandYes, CommandParameter);
+                        break;
 
-		protected Microsoft.Win32.FileDialog fileDialog = null;
+                    case MessageBoxResult.No:
+                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultNo");
+                        ExecuteCommand(CommandNo, CommandParameter);
+                        break;
 
-		protected FileDialogBox()
-		{
-			execute =
-				o =>
-				{
-					fileDialog.Title = Caption;
-					fileDialog.Filter = Filter;
-					fileDialog.FilterIndex = FilterIndex;
-					fileDialog.DefaultExt = DefaultExt;
-					string filePath = "";
-					if (FilePath != null) filePath = FilePath; else FilePath = "";
-					if (o != null) filePath = (string)o;
-					if (!string.IsNullOrWhiteSpace(filePath))
-					{
-						fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(filePath);
-						fileDialog.FileName = System.IO.Path.GetFileName(filePath);
-					}
-					FileDialogResult = fileDialog.ShowDialog();
-					OnPropertyChanged("FileDialogResult");
-					if (FileDialogResult.HasValue && FileDialogResult.Value)
-					{
-						FilePath = fileDialog.FileName;
-						OnPropertyChanged("FilePath");
-						ExecuteCommand(CommandFileOk, FilePath);
-					};
-				};
-		}
+                    case MessageBoxResult.Cancel:
+                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultCancel");
+                        ExecuteCommand(CommandCancel, CommandParameter);
+                        break;
 
-		public static DependencyProperty CommandFileOkProperty = DependencyProperty.Register("CommandFileOk", typeof(ICommand), typeof(FileDialogBox));
+                    case MessageBoxResult.OK:
+                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultOK");
+                        ExecuteCommand(CommandOK, CommandParameter);
+                        break;
+                }
+            };
+        }
+    }
 
-		public ICommand CommandFileOk
-		{
-			get => (ICommand)GetValue(CommandFileOkProperty);
-		    set => SetValue(CommandFileOkProperty, value);
-		}
-	}
-	public class OpenFileDialogBox : FileDialogBox
-	{
-		public OpenFileDialogBox()
-		{
-			fileDialog = new Microsoft.Win32.OpenFileDialog();
-		}
-	}
-	public class SaveFileDialogBox : FileDialogBox
-	{
-		public SaveFileDialogBox()
-		{
-			fileDialog = new Microsoft.Win32.SaveFileDialog();
-		}
-	}
-	public class FileSavedNotificationDialogBox : CommandDialogBox
-	{
-		public FileSavedNotificationDialogBox()
-		{
-			execute =
-				o =>
-				{
-					MessageBox.Show("File " + (string)o + "Has been saved", Caption, MessageBoxButton.OK, MessageBoxImage.Information);
-				};
-		}
-	}
-	[ContentProperty("WindowContent")]
-	public class CustomContentDialogBox : CommandDialogBox
-	{
-		bool? LastResult;
+    public abstract class FileDialogBox : CommandDialogBox
+    {
+        public bool? FileDialogResult { get; protected set; }
+        public string FilePath { get; set; }
+        public string Filter { get; set; }
+        public int FilterIndex { get; set; }
+        public string DefaultExt { get; set; }
 
-		public double WindowWidth { get; set; }// = 640;
-		public double WindowHeight { get; set; }// = 480;		
-		public object WindowContent { get; set; }// = null;
+        protected Microsoft.Win32.FileDialog fileDialog = null;
 
-		private static Window window = null;
+        protected FileDialogBox()
+        {
+            execute =
+                o =>
+                {
+                    fileDialog.Title = Caption;
+                    fileDialog.Filter = Filter;
+                    fileDialog.FilterIndex = FilterIndex;
+                    fileDialog.DefaultExt = DefaultExt;
+                    string filePath = "";
+                    if (FilePath != null) filePath = FilePath; else FilePath = "";
+                    if (o != null) filePath = (string)o;
+                    if (!string.IsNullOrWhiteSpace(filePath))
+                    {
+                        fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(filePath);
+                        fileDialog.FileName = System.IO.Path.GetFileName(filePath);
+                    }
+                    FileDialogResult = fileDialog.ShowDialog();
+                    OnPropertyChanged("FileDialogResult");
+                    if (FileDialogResult.HasValue && FileDialogResult.Value)
+                    {
+                        FilePath = fileDialog.FileName;
+                        OnPropertyChanged("FilePath");
+                        ExecuteCommand(CommandFileOk, FilePath);
+                    };
+                };
+        }
 
-		public CustomContentDialogBox()
-		{			
+        public static DependencyProperty CommandFileOkProperty = DependencyProperty.Register("CommandFileOk", typeof(ICommand), typeof(FileDialogBox));
+
+        public ICommand CommandFileOk
+        {
+            get => (ICommand)GetValue(CommandFileOkProperty);
+            set => SetValue(CommandFileOkProperty, value);
+        }
+    }
+
+    public class OpenFileDialogBox : FileDialogBox
+    {
+        public OpenFileDialogBox()
+        {
+            fileDialog = new Microsoft.Win32.OpenFileDialog();
+        }
+    }
+
+    public class SaveFileDialogBox : FileDialogBox
+    {
+        public SaveFileDialogBox()
+        {
+            fileDialog = new Microsoft.Win32.SaveFileDialog();
+        }
+    }
+
+    public class FileSavedNotificationDialogBox : CommandDialogBox
+    {
+        public FileSavedNotificationDialogBox()
+        {
+            execute =
+                o =>
+                {
+                    MessageBox.Show("File " + (string)o + "Has been saved", Caption, MessageBoxButton.OK, MessageBoxImage.Information);
+                };
+        }
+    }
+
+    [ContentProperty("WindowContent")]
+    public class CustomContentDialogBox : CommandDialogBox
+    {
+        private bool? LastResult;
+
+        public double WindowWidth { get; set; }// = 640;
+        public double WindowHeight { get; set; }// = 480;
+        public object WindowContent { get; set; }// = null;
+
+        private static Window window = null;
+
+        public CustomContentDialogBox()
+        {
             WindowWidth = 640;
-		    WindowHeight = 480;		
+            WindowHeight = 480;
 
-			execute =
-				o =>
-				{
-					if (window == null)
-					{
-						window = new Window();
-						window.Width = WindowWidth;
-						window.Height = WindowHeight;
-						if (Caption != null) window.Title = Caption;
-						window.Content = WindowContent;						
-						LastResult = window.ShowDialog();
-						OnPropertyChanged("LastResult");
-						window = null;
-						switch (LastResult)
-						{
-							case true:								
-								ExecuteCommand(CommandTrue, CommandParameter);
-								break;
-							case false:								
-								ExecuteCommand(CommandFalse, CommandParameter);
-								break;
-							case null:
-								ExecuteCommand(CommandNull, CommandParameter);
-								break;
-						}
-					}
-				};
-		}
+            execute =
+                o =>
+                {
+                    if (window == null)
+                    {
+                        window = new Window();
+                        window.Width = WindowWidth;
+                        window.Height = WindowHeight;
+                        if (Caption != null) window.Title = Caption;
+                        window.Content = WindowContent;
+                        LastResult = window.ShowDialog();
+                        OnPropertyChanged("LastResult");
+                        window = null;
+                        switch (LastResult)
+                        {
+                            case true:
+                                ExecuteCommand(CommandTrue, CommandParameter);
+                                break;
 
-		public static bool? GetCustomContentDialogResult(DependencyObject d)
-		{
-			return (bool?)d.GetValue(DialogResultProperty);
-		}
+                            case false:
+                                ExecuteCommand(CommandFalse, CommandParameter);
+                                break;
 
-		public static void SetCustomContentDialogResult(DependencyObject d, bool? value)
-		{
-			d.SetValue(DialogResultProperty, value);
-		}
+                            case null:
+                                ExecuteCommand(CommandNull, CommandParameter);
+                                break;
+                        }
+                    }
+                };
+        }
 
-		public static readonly DependencyProperty DialogResultProperty =
-			DependencyProperty.RegisterAttached(
-				"DialogResult",
-				typeof(bool?),
-				typeof(CustomContentDialogBox),
-				new PropertyMetadata(null, DialogResultChanged));
+        public static bool? GetCustomContentDialogResult(DependencyObject d)
+        {
+            return (bool?)d.GetValue(DialogResultProperty);
+        }
 
-		private static void DialogResultChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-		{
-			bool? dialogResult = (bool?)e.NewValue;
-			if (d is Button)
-			{
-				Button button = d as Button;
-				button.Click += (object sender, RoutedEventArgs _e) => { window.DialogResult = dialogResult; };
-			}
-		}
+        public static void SetCustomContentDialogResult(DependencyObject d, bool? value)
+        {
+            d.SetValue(DialogResultProperty, value);
+        }
 
-		public static DependencyProperty CommandTrueProperty = DependencyProperty.Register("CommandTrue", typeof(ICommand), typeof(CustomContentDialogBox));
-		public static DependencyProperty CommandFalseProperty = DependencyProperty.Register("CommandFalse", typeof(ICommand), typeof(CustomContentDialogBox));
-		public static DependencyProperty CommandNullProperty = DependencyProperty.Register("CommandNull", typeof(ICommand), typeof(CustomContentDialogBox));		
+        public static readonly DependencyProperty DialogResultProperty =
+            DependencyProperty.RegisterAttached(
+                "DialogResult",
+                typeof(bool?),
+                typeof(CustomContentDialogBox),
+                new PropertyMetadata(null, DialogResultChanged));
 
-		public ICommand CommandTrue
-		{
-			get => (ICommand)GetValue(CommandTrueProperty);
-		    set => SetValue(CommandTrueProperty, value);
-		}
+        private static void DialogResultChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            bool? dialogResult = (bool?)e.NewValue;
+            if (d is Button)
+            {
+                Button button = d as Button;
+                button.Click += (object sender, RoutedEventArgs _e) => { window.DialogResult = dialogResult; };
+            }
+        }
 
-		public ICommand CommandFalse
-		{
-			get => (ICommand)GetValue(CommandFalseProperty);
-		    set => SetValue(CommandFalseProperty, value);
-		}
+        public static DependencyProperty CommandTrueProperty = DependencyProperty.Register("CommandTrue", typeof(ICommand), typeof(CustomContentDialogBox));
+        public static DependencyProperty CommandFalseProperty = DependencyProperty.Register("CommandFalse", typeof(ICommand), typeof(CustomContentDialogBox));
+        public static DependencyProperty CommandNullProperty = DependencyProperty.Register("CommandNull", typeof(ICommand), typeof(CustomContentDialogBox));
 
-		public ICommand CommandNull
-		{
-			get => (ICommand)GetValue(CommandNullProperty);
-		    set => SetValue(CommandNullProperty, value);
-		}
-	}
+        public ICommand CommandTrue
+        {
+            get => (ICommand)GetValue(CommandTrueProperty);
+            set => SetValue(CommandTrueProperty, value);
+        }
+
+        public ICommand CommandFalse
+        {
+            get => (ICommand)GetValue(CommandFalseProperty);
+            set => SetValue(CommandFalseProperty, value);
+        }
+
+        public ICommand CommandNull
+        {
+            get => (ICommand)GetValue(CommandNullProperty);
+            set => SetValue(CommandNullProperty, value);
+        }
+    }
 }

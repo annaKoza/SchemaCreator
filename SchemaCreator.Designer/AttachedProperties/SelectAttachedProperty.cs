@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SchemaCreator.Designer.Adorners;
+using SchemaCreator.Designer.Common;
+using SchemaCreator.Designer.Helpers;
+using SchemaCreator.Designer.Interfaces;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using SchemaCreator.Designer.Adorners;
-using SchemaCreator.Designer.Controls;
-using SchemaCreator.Designer.Helpers;
-using SchemaCreator.Designer.Interfaces;
-using SchemaCreator.Designer.Services;
 
 namespace SchemaCreator.Designer.AttachedProperties
 {
@@ -28,6 +23,7 @@ namespace SchemaCreator.Designer.AttachedProperties
         {
             element.SetValue(SelectTargetProperty, value);
         }
+
         public static Designer GetSelectTarget(UIElement element)
         {
             return (Designer)element.GetValue(SelectTargetProperty);
@@ -47,11 +43,12 @@ namespace SchemaCreator.Designer.AttachedProperties
             designer.Loaded += OnDesignerLoaded;
             designer.MouseLeftButtonDown += OnDesignerStartSelect;
             designer.MouseMove += OnDesignerContinueSelect;
-
         }
 
         private static void OnDesignerContinueSelect(object sender, MouseEventArgs e)
         {
+            if (_selectedItemType != SelectedItemType.SelectItem) return;
+
             if (e.LeftButton != MouseButtonState.Pressed)
                 _rubberbandSelectionStartPoint = null;
 
@@ -60,33 +57,37 @@ namespace SchemaCreator.Designer.AttachedProperties
                 var adornerLayer = AdornerLayer.GetAdornerLayer(_itemsPanel);
                 if (adornerLayer != null)
                 {
-                    var adorner = new SelectionAdorner(_itemsPanel, _rubberbandSelectionStartPoint, _designerPanel);
+                    var adorner = new SelectionAdorner(_itemsPanel, _rubberbandSelectionStartPoint, _designerVewModel, _designerVewModel.ItemToDraw as ISelectionItem);
                     adornerLayer.Add(adorner);
                 }
             }
             e.Handled = true;
         }
 
-        private static ISelectionPanel _designerPanel;
         private static Canvas _itemsPanel;
         private static Point? _rubberbandSelectionStartPoint;
+        private static IDesignerViewModel _designerVewModel;
 
         private static void OnDesignerLoaded(object sender, RoutedEventArgs e)
         {
             var designer = sender as Designer;
+            _designerVewModel = designer.DataContext is IDesignerViewModel
+                ? designer.DataContext as IDesignerViewModel
+                : throw new ArgumentException("Designers datacontext must be IDesignerViewModel");
             var itemsPresenter = designer.GetVisualChild<ItemsPresenter>();
             var itemsControl = designer.GetVisualChild<ItemsControl>();
             _itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as Canvas;
-            _designerPanel = itemsControl is ISelectionPanel
-                ? itemsControl as ISelectionPanel
-                : throw new ArgumentException("ItemsControl must implement ISelectionPanel interface");
         }
 
-      
+        private static SelectedItemType _selectedItemType;
+
         private static void OnDesignerStartSelect(object sender, MouseButtonEventArgs e)
         {
+            _selectedItemType = _designerVewModel.ItemToDraw.SelectedItemType;
+            if (_selectedItemType != SelectedItemType.SelectItem) return;
+
             _rubberbandSelectionStartPoint = e.GetPosition(_itemsPanel);
-            _designerPanel.SelectionService.ClearSelection();
+            _designerVewModel.SelectionService.ClearSelection();
             _itemsPanel.Focus();
             e.Handled = true;
         }

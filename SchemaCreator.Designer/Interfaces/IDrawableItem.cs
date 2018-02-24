@@ -1,6 +1,10 @@
-﻿namespace SchemaCreator.Designer.Interfaces
+﻿using System;
+using System.Windows;
+using System.Windows.Media;
+
+namespace SchemaCreator.Designer.Interfaces
 {
-    public interface IDrawableItem : IDesignerItem
+    public interface IDrawableItem : IBaseChoosableItem, IDesignerItem
     {
         double X1 { get; set; }
         double X2 { get; set; }

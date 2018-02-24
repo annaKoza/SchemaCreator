@@ -2,7 +2,6 @@
 {
     public interface IDrawableDesigner
     {
-        IDrawableItem DefaultItemToDraw { get; set; }
-        IDrawableItem ItemToDraw { get; set; }
+        IBaseChoosableItem ItemToDraw { get; set; }
     }
 }

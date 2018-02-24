@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SchemaCreator.Designer.Controls;
+using SchemaCreator.Designer.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using SchemaCreator.Designer.Controls;
-using SchemaCreator.Designer.Interfaces;
 
 namespace SchemaCreator.Designer.Adorners
 {
@@ -17,20 +12,18 @@ namespace SchemaCreator.Designer.Adorners
     {
         private Point? _startPoint;
         private Point? _endPoint;
-        private Pen _rubberbandPen;
+        private ISelectionItem _selectionItem;
         private ISelectionPanel _designerPanel;
         private Canvas _designerCanvas;
 
-        public SelectionAdorner(Canvas panel, Point? dragStartPoint, ISelectionPanel designerPanel)
+        public SelectionAdorner(Canvas panel, Point? dragStartPoint, ISelectionPanel designerPanel, ISelectionItem selectionItem)
             : base(panel)
         {
+            _selectionItem = selectionItem;
             _designerCanvas = panel;
             _designerPanel = designerPanel;
             _startPoint = dragStartPoint;
-            _rubberbandPen = new Pen(Brushes.LightSlateGray, 1)
-            {
-                DashStyle = new DashStyle(new double[] { 2 }, 1)
-            };
+         
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -61,15 +54,14 @@ namespace SchemaCreator.Designer.Adorners
             e.Handled = true;
         }
 
-        protected override void OnRender(DrawingContext dc)
+        protected override void OnRender(DrawingContext drawingContext)
         {
-            base.OnRender(dc);
-
-            // without a background the OnMouseMove event would not be fired!
-            dc.DrawRectangle(Brushes.Transparent, null, new Rect(RenderSize));
+            base.OnRender(drawingContext);
+            
+            drawingContext.DrawRectangle(Brushes.Transparent, null, new Rect(RenderSize));
 
             if (_startPoint.HasValue && _endPoint.HasValue)
-                dc.DrawRectangle(Brushes.Transparent, _rubberbandPen, new Rect(_startPoint.Value, _endPoint.Value));
+                _selectionItem.DrawAdorner(drawingContext, _startPoint.Value, _endPoint.Value);
         }
 
         private void UpdateSelection()
@@ -83,10 +75,9 @@ namespace SchemaCreator.Designer.Adorners
                 var itemBounds = item.TransformToAncestor(_designerCanvas).TransformBounds(itemRect);
 
                 if (!rubberBand.Contains(itemBounds)) continue;
-                var di = item as DesignerItem;
+                var di = (item as DesignerItem).DataContext as ISelectable;
                 _designerPanel.SelectionService.AddToSelection(di);
             }
         }
     }
 }
-
