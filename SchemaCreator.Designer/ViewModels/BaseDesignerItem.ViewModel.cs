@@ -58,6 +58,13 @@ namespace SchemaCreator.Designer.UserControls
             set { _transformOrigin = value; RaisePropertyChanged(nameof(TransformOrigin)); }
         }
 
+        private int _zIndex;
+        public int ZIndex
+        {
+            get { return _zIndex; }
+            set { _zIndex = value; RaisePropertyChanged(nameof(ZIndex)); }
+        }
+
         public double Top
         {
             get => _top;

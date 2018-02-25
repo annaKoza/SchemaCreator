@@ -4,6 +4,7 @@ namespace SchemaCreator.Designer.Interfaces
 {
     public interface IDesignerItem : ISelectable
     {
+        int ZIndex { get; set; }
         double MinWidth { get; set; }
         double MinHeight { get; set; }
         Point TransformOrigin { get; set; }
