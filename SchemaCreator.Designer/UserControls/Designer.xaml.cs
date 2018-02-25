@@ -7,9 +7,6 @@ namespace SchemaCreator.Designer
     /// </summary>
     public partial class Designer : UserControl
     {
-        public Designer()
-        {
-            InitializeComponent();
-        }
+        public Designer() => InitializeComponent();
     }
 }

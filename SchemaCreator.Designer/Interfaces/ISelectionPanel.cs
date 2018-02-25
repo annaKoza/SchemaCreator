@@ -4,6 +4,9 @@ namespace SchemaCreator.Designer.Controls
 {
     public interface ISelectionPanel
     {
-        SelectionService SelectionService { get; }
+        SelectionService SelectionService
+        {
+            get;
+        }
     }
 }

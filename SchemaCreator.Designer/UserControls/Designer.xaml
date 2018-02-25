@@ -9,6 +9,7 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:local="clr-namespace:SchemaCreator.Designer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:SchemaCreator.Designer.ViewModels"
     Name="designer"
     att:DragDropAttachedProperty.DragDropTarget="{Binding RelativeSource={RelativeSource Self}}"
     att:DrawAttachedProperty.DrawTarget="{Binding RelativeSource={RelativeSource Self}}"
@@ -18,11 +19,7 @@
     AllowDrop="True"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Styles/ResizeThumb.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <HierarchicalDataTemplate DataType="{x:Type viewmodels:ContextMenuViewModel}" ItemsSource="{Binding ContextMenu}" />
     </UserControl.Resources>
     <Grid>
         <ctr:DesignerPanel ItemsSource="{Binding Items}">
@@ -113,6 +110,18 @@
                     <Setter Property="Canvas.Left" Value="{Binding Left, Mode=TwoWay}" />
                     <Setter Property="Canvas.Top" Value="{Binding Top, Mode=TwoWay}" />
                     <Setter Property="MinHeight" Value="{Binding MinHeight}" />
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu ItemsSource="{Binding ContextMenu}">
+                                <ContextMenu.ItemContainerStyle>
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Header" Value="{Binding Name}" />
+                                        <Setter Property="Command" Value="{Binding Action }" />
+                                    </Style>
+                                </ContextMenu.ItemContainerStyle>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
                     <Setter Property="SnapsToDevicePixels" Value="True" />
                     <Setter Property="RenderTransform">
                         <Setter.Value>
@@ -125,7 +134,6 @@
                                 <Grid Background="Transparent" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                     <!--  PART_DragThumb  -->
                                     <ctr:DragThumb x:Name="PART_DragThumb" Cursor="SizeAll" />
-
                                     <!--  Content  -->
                                     <ContentPresenter
                                         x:Name="PART_ContentPresenter"
@@ -133,18 +141,7 @@
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         Content="{TemplateBinding ContentControl.Content}" />
-                                    <!--  PART_RotateThumb  -->
-                                    <ctr:RotateThumb
-                                        x:Name="PART_RotateThumb"
-                                        Margin="0,-40,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Visibility="Collapsed" />
-                                    <!--  PART_ResizeDecorator  -->
-                                    <Control
-                                        x:Name="PART_ResizeDecorator"
-                                        Template="{StaticResource ResizeDecoratorTemplate}"
-                                        Visibility="Collapsed" />
+                                    <ctr:DesignerItemDecorator x:Name="ItemDecorator" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                             <command:EventToCommand
@@ -156,8 +153,7 @@
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
-                                        <Setter TargetName="PART_ResizeDecorator" Property="Visibility" Value="Visible" />
-                                        <Setter TargetName="PART_RotateThumb" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="ItemDecorator" Property="ShowDecorator" Value="True" />
                                     </DataTrigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

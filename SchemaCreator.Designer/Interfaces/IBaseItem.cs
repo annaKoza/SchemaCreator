@@ -6,7 +6,13 @@ namespace SchemaCreator.Designer.Interfaces
 {
     public interface IBaseChoosableItem
     {
-        SelectedItemType SelectedItemType { get; }
-        void DrawAdorner(DrawingContext drawingContext, Point startPoint, Point endPoint);
+        SelectedItemType SelectedItemType
+        {
+            get;
+        }
+
+        void DrawAdorner(DrawingContext drawingContext,
+                         Point startPoint,
+                         Point endPoint);
     }
 }

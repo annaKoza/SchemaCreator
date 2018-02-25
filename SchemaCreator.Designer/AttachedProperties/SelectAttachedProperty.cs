@@ -19,22 +19,18 @@ namespace SchemaCreator.Designer.AttachedProperties
             typeof(SelectAttachedProperty),
             new FrameworkPropertyMetadata(OnTargetChanged));
 
-        public static void SetSelectTarget(UIElement element, Designer value)
-        {
-            element.SetValue(SelectTargetProperty, value);
-        }
+        public static void SetSelectTarget(UIElement element, Designer value) => element.SetValue(SelectTargetProperty,
+                                                                                                  value);
 
-        public static Designer GetSelectTarget(UIElement element)
-        {
-            return (Designer)element.GetValue(SelectTargetProperty);
-        }
+        public static Designer GetSelectTarget(UIElement element) => (Designer)element.GetValue(SelectTargetProperty);
 
-        private static void OnTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnTargetChanged(DependencyObject d,
+                                            DependencyPropertyChangedEventArgs e)
         {
             var designer = (e.NewValue as Designer);
 
-            if (designer == null) return;
-            if (e.OldValue != null)
+            if(designer == null) return;
+            if(e.OldValue != null)
             {
                 designer.Loaded -= OnDesignerLoaded;
                 designer.MouseLeftButtonDown -= OnDesignerStartSelect;
@@ -45,19 +41,23 @@ namespace SchemaCreator.Designer.AttachedProperties
             designer.MouseMove += OnDesignerContinueSelect;
         }
 
-        private static void OnDesignerContinueSelect(object sender, MouseEventArgs e)
+        private static void OnDesignerContinueSelect(object sender,
+                                                     MouseEventArgs e)
         {
-            if (_selectedItemType != SelectedItemType.SelectItem) return;
+            if(_selectedItemType != SelectedItemType.SelectItem) return;
 
-            if (e.LeftButton != MouseButtonState.Pressed)
+            if(e.LeftButton != MouseButtonState.Pressed)
                 _rubberbandSelectionStartPoint = null;
 
-            if (_rubberbandSelectionStartPoint.HasValue)
+            if(_rubberbandSelectionStartPoint.HasValue)
             {
                 var adornerLayer = AdornerLayer.GetAdornerLayer(_itemsPanel);
-                if (adornerLayer != null)
+                if(adornerLayer != null)
                 {
-                    var adorner = new SelectionAdorner(_itemsPanel, _rubberbandSelectionStartPoint, _designerVewModel, _designerVewModel.ItemToDraw as ISelectionItem);
+                    var adorner = new SelectionAdorner(_itemsPanel,
+                                                       _rubberbandSelectionStartPoint,
+                                                       _designerVewModel,
+                                                       _designerVewModel.ItemToDraw as ISelectionItem);
                     adornerLayer.Add(adorner);
                 }
             }
@@ -81,10 +81,11 @@ namespace SchemaCreator.Designer.AttachedProperties
 
         private static SelectedItemType _selectedItemType;
 
-        private static void OnDesignerStartSelect(object sender, MouseButtonEventArgs e)
+        private static void OnDesignerStartSelect(object sender,
+                                                  MouseButtonEventArgs e)
         {
             _selectedItemType = _designerVewModel.ItemToDraw.SelectedItemType;
-            if (_selectedItemType != SelectedItemType.SelectItem) return;
+            if(_selectedItemType != SelectedItemType.SelectItem) return;
 
             _rubberbandSelectionStartPoint = e.GetPosition(_itemsPanel);
             _designerVewModel.SelectionService.ClearSelection();

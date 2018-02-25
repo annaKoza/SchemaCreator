@@ -2,6 +2,9 @@
 {
     public interface IDrawablePanel
     {
-        IBaseChoosableItem ItemToDraw { get; set; }
+        IBaseChoosableItem ItemToDraw
+        {
+            get; set;
+        }
     }
 }

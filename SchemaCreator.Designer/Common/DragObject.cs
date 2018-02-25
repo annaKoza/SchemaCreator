@@ -5,7 +5,14 @@ namespace SchemaCreator.Designer
 {
     internal class DragObject
     {
-        internal Type DataContextType { get; set; }
-        internal Size? DesiredSize { get; set; }
+        internal Type DataContextType
+        {
+            get; set;
+        }
+
+        internal Size? DesiredSize
+        {
+            get; set;
+        }
     }
 }

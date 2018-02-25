@@ -29,6 +29,9 @@ namespace SchemaCreator.Designer.Controls
         }
 
         public static readonly DependencyProperty IsSelectedProperty =
-            DependencyProperty.Register("IsSelected", typeof(bool), typeof(DesignerItem), new PropertyMetadata(false));
+            DependencyProperty.Register("IsSelected",
+                                        typeof(bool),
+                                        typeof(DesignerItem),
+                                        new PropertyMetadata(false));
     }
 }

@@ -6,7 +6,10 @@ namespace SchemaCreator.Designer.Services
     public class SelectionService
     {
         private IEnumerable<ISelectable> _selectedItems;
-        internal IEnumerable<ISelectable> SelectedItems => _selectedItems ?? (_selectedItems = new List<ISelectable>());
+
+        internal IEnumerable<ISelectable> SelectedItems => _selectedItems ??
+            (_selectedItems =
+                new List<ISelectable>());
 
         internal void SelectItem(ISelectable item)
         {
@@ -16,7 +19,8 @@ namespace SchemaCreator.Designer.Services
 
         internal void ClearSelection()
         {
-            (SelectedItems as List<ISelectable>).ForEach(item => item.IsSelected = false);
+            (SelectedItems as List<ISelectable>).ForEach(item => item.IsSelected =
+                false);
             (_selectedItems as List<ISelectable>).Clear();
         }
 

@@ -10,15 +10,18 @@ namespace SchemaCreator.Designer.AttachedProperties
     public static class DragDropAttachedProperty
     {
         public static readonly DependencyProperty DragDropTargetProperty = DependencyProperty.RegisterAttached
-            ("DragDropTarget", typeof(Designer), typeof(DragDropAttachedProperty),
+            ("DragDropTarget",
+             typeof(Designer),
+             typeof(DragDropAttachedProperty),
             new FrameworkPropertyMetadata(OnDragDropTargetChanged));
 
-        private static void OnDragDropTargetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnDragDropTargetChanged(DependencyObject d,
+                                                    DependencyPropertyChangedEventArgs e)
         {
             var designer = (e.NewValue as Designer);
 
-            if (designer == null) return;
-            if (e.OldValue != null)
+            if(designer == null) return;
+            if(e.OldValue != null)
             {
                 designer.Loaded -= OnDesignerLoaded;
                 designer.Drop -= OnDesignerDrop;
@@ -36,29 +39,39 @@ namespace SchemaCreator.Designer.AttachedProperties
             _itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as Canvas;
 
             var dataContext = (sender as Designer).DataContext;
-            _designerViewModel = dataContext as IDesignerViewModel ?? throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
+            _designerViewModel = dataContext as IDesignerViewModel ??
+                throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
         }
 
         private static void OnDesignerDrop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetData(typeof(DragObject)) is DragObject dragObject && dragObject.DataContextType != null)
+            if(e.Data.GetData(typeof(DragObject)) is DragObject dragObject &&
+                dragObject.DataContextType !=
+                null)
             {
-                if (Activator.CreateInstance(dragObject.DataContextType) is IDesignerItem element)
+                if(Activator.CreateInstance(dragObject.DataContextType) is IDesignerItem element)
                 {
                     Point position = e.GetPosition(_itemsPanel);
+                    element.Parent = _designerViewModel;
+                    element.ZIndex = _designerViewModel.Items.Count;
                     element.TransformOrigin = new Point(0.5, 0.5);
                     element.MinHeight = 10;
                     element.MinWidth = 10;
-                    if (dragObject.DesiredSize.HasValue)
+                    if(dragObject.DesiredSize.HasValue)
                     {
                         Size desiredSize = dragObject.DesiredSize.Value;
                         element.Width = desiredSize.Width;
                         element.Height = desiredSize.Height;
 
-                        element.Left = Math.Max(0, position.X - element.Width / 2);
-                        element.Top = Math.Max(0, position.Y - element.Height / 2);
-                    }
-                    else
+                        element.Left = Math.Max(0,
+                                                position.X -
+                            element.Width /
+                            2);
+                        element.Top = Math.Max(0,
+                                               position.Y -
+                            element.Height /
+                            2);
+                    } else
                     {
                         element.Left = Math.Max(0, position.X);
                         element.Top = Math.Max(0, position.Y);
@@ -72,14 +85,9 @@ namespace SchemaCreator.Designer.AttachedProperties
             e.Handled = true;
         }
 
-        public static void SetDragDropTarget(UIElement element, Designer value)
-        {
-            element.SetValue(DragDropTargetProperty, value);
-        }
+        public static void SetDragDropTarget(UIElement element, Designer value) => element.SetValue(DragDropTargetProperty,
+                                                                                                    value);
 
-        public static Designer GetDragDropTarget(UIElement element)
-        {
-            return (Designer)element.GetValue(DragDropTargetProperty);
-        }
+        public static Designer GetDragDropTarget(UIElement element) => (Designer)element.GetValue(DragDropTargetProperty);
     }
 }

@@ -1,16 +1,29 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using SchemaCreator.Designer.Controls;
 using SchemaCreator.Designer.Interfaces;
+using SchemaCreator.Designer.ViewModels;
+using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
 namespace SchemaCreator.Designer.UserControls
 {
-    public class BaseDesignerItemViewModel : ViewModelBase, IDesignerItem
+    public abstract class BaseDesignerItemViewModel : ViewModelBase, IDesignerItem
     {
-        public BaseDesignerItemViewModel()
+        protected BaseDesignerItemViewModel() => ContextMenu =
+            new ObservableCollection<ContextMenuViewModel>();
+
+        private ObservableCollection<ContextMenuViewModel> _contextMenu;
+
+        public ObservableCollection<ContextMenuViewModel> ContextMenu
         {
+            get => _contextMenu;
+            protected set
+            {
+                _contextMenu = value;
+                RaisePropertyChanged(nameof(ContextMenu));
+            }
         }
 
         private bool _isSelected;
@@ -18,23 +31,32 @@ namespace SchemaCreator.Designer.UserControls
         public bool IsSelected
         {
             get => _isSelected;
-            set { _isSelected = value; RaisePropertyChanged(nameof(IsSelected)); }
+            set
+            {
+                _isSelected = value; RaisePropertyChanged(nameof(IsSelected));
+            }
         }
 
         private double _minWidth;
 
         public double MinWidth
         {
-            get { return _minWidth; }
-            set { _minWidth = value; RaisePropertyChanged(nameof(MinWidth)); }
+            get => _minWidth;
+            set
+            {
+                _minWidth = value; RaisePropertyChanged(nameof(MinWidth));
+            }
         }
 
         private double _minHeight;
 
         public double MinHeight
         {
-            get { return _minHeight; }
-            set { _minHeight = value; RaisePropertyChanged(nameof(MinHeight)); }
+            get => _minHeight;
+            set
+            {
+                _minHeight = value; RaisePropertyChanged(nameof(MinHeight));
+            }
         }
 
         private double _angle;
@@ -42,7 +64,10 @@ namespace SchemaCreator.Designer.UserControls
         public double Angle
         {
             get => _angle;
-            set { _angle = value; RaisePropertyChanged(nameof(Angle)); }
+            set
+            {
+                _angle = value; RaisePropertyChanged(nameof(Angle));
+            }
         }
 
         private double _top;
@@ -54,94 +79,140 @@ namespace SchemaCreator.Designer.UserControls
 
         public Point TransformOrigin
         {
-            get { return _transformOrigin; }
-            set { _transformOrigin = value; RaisePropertyChanged(nameof(TransformOrigin)); }
+            get => _transformOrigin;
+            set
+            {
+                _transformOrigin = value; RaisePropertyChanged(nameof(TransformOrigin));
+            }
         }
 
         private int _zIndex;
+
         public int ZIndex
         {
-            get { return _zIndex; }
-            set { _zIndex = value; RaisePropertyChanged(nameof(ZIndex)); }
+            get => _zIndex;
+            set
+            {
+                _zIndex = value; RaisePropertyChanged(nameof(ZIndex));
+            }
         }
 
         public double Top
         {
             get => _top;
-            set { _top = value; RaisePropertyChanged(nameof(Top)); }
+            set
+            {
+                _top = value; RaisePropertyChanged(nameof(Top));
+            }
         }
 
         public double Left
         {
             get => _left;
-            set { _left = value; RaisePropertyChanged(nameof(Left)); }
+            set
+            {
+                _left = value; RaisePropertyChanged(nameof(Left));
+            }
         }
 
         public double Width
         {
             get => _width;
-            set { _width = value; RaisePropertyChanged(nameof(Width)); }
+            set
+            {
+                _width = value; RaisePropertyChanged(nameof(Width));
+            }
         }
 
         public double Height
         {
             get => _height;
-            set { _height = value; RaisePropertyChanged(nameof(Height)); }
-        }
-
-        private ICommand _selectCommand;
-
-        public ICommand SelectCommand
-        {
-            get
+            set
             {
-                return _selectCommand ??
-                    (
-                    _selectCommand = new RelayCommand<object>
-                        (
-                            (designer) =>
-                            {
-                                SelectItem(designer as DesignerViewModel);
-                            }
-                        )
-                    );
+                _height = value; RaisePropertyChanged(nameof(Height));
             }
         }
 
-        private void SelectItem(DesignerViewModel designer)
-        {
-            if (designer is ISelectionPanel)
-            {
-                if ((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) != ModifierKeys.None)
-                {
-                    if ((Keyboard.Modifiers & (ModifierKeys.Shift)) != ModifierKeys.None)
-                    {
-                        if (!IsSelected)
-                        {
-                            designer.SelectionService.AddToSelection(this);
-                        }
-                        else
-                        {
-                            designer.SelectionService.RemoveFromSelection(this);
-                        }
-                    }
+        private ICommand _selectCommand;
+        private IDesignerViewModel _parent;
 
-                    if ((Keyboard.Modifiers & (ModifierKeys.Control)) != ModifierKeys.None)
+        public ICommand SelectCommand => _selectCommand ??
+                    (
+                    _selectCommand =
+                new RelayCommand
+                        (
+                            () =>
+                            {
+                                SelectItem();
+                            }
+                        )
+                    );
+
+        public IDesignerViewModel Parent
+        {
+            get => _parent;
+            set
+            {
+                _parent = value;
+                if(value != null)
+                    AddContextMenu(value);
+                RaisePropertyChanged(nameof(Parent));
+            }
+        }
+
+        public virtual void AddContextMenu(IDesignerViewModel parent) => ContextMenu =
+            new ObservableCollection<ContextMenuViewModel>()
+            {
+                new ContextMenuViewModel()
+                {
+                        Name = "Delete",
+                        Action =
+                                parent.RemoveItems
+                },
+                new ContextMenuViewModel()
+                {
+                    Name = "Order",
+                    ContextMenu = new ObservableCollection<ContextMenuViewModel>()
                     {
-                        if (!IsSelected)
-                        {
-                            designer.SelectionService.AddToSelection(this);
-                        }
-                        else
-                        {
-                            designer.SelectionService.RemoveFromSelection(this);
-                        }
+                         new ContextMenuViewModel()  { Name="Bring to Front", Action=Parent.BringToFront},
+                         new ContextMenuViewModel()  { Name="Send Forward", Action=Parent.SendForward},
+                         new ContextMenuViewModel()  { Name="Bring to Back", Action=Parent.BringToBack},
+                         new ContextMenuViewModel()  { Name="Send Backward", Action=Parent.SendBackward},
                     }
                 }
-                else if (!IsSelected)
+            };
+
+        private void SelectItem()
+        {
+            if((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) !=
+                ModifierKeys.None)
+            {
+                if((Keyboard.Modifiers & (ModifierKeys.Shift)) !=
+                    ModifierKeys.None)
                 {
-                    designer.SelectionService.SelectItem(this);
+                    if(!IsSelected)
+                    {
+                        Parent.SelectionService.AddToSelection(this);
+                    } else
+                    {
+                        Parent.SelectionService.RemoveFromSelection(this);
+                    }
                 }
+
+                if((Keyboard.Modifiers & (ModifierKeys.Control)) !=
+                    ModifierKeys.None)
+                {
+                    if(!IsSelected)
+                    {
+                        Parent.SelectionService.AddToSelection(this);
+                    } else
+                    {
+                        Parent.SelectionService.RemoveFromSelection(this);
+                    }
+                }
+            } else if(!IsSelected)
+            {
+                Parent.SelectionService.SelectItem(this);
             }
         }
     }

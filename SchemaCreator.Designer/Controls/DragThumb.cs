@@ -16,11 +16,8 @@ namespace SchemaCreator.Designer.Controls
         private DesignerItem _designerItem;
         private IEnumerable<BaseDesignerItemViewModel> _selectedItems;
 
-        static DragThumb()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(DragThumb),
+        static DragThumb() => DefaultStyleKeyProperty.OverrideMetadata(typeof(DragThumb),
                   new FrameworkPropertyMetadata(typeof(DragThumb)));
-        }
 
         public DragThumb()
         {
@@ -30,12 +27,11 @@ namespace SchemaCreator.Designer.Controls
             MouseLeftButtonDown += OnLeftButtonDown;
         }
 
-        private void OnLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-        }
+        private void OnLeftButtonDown(object sender, MouseButtonEventArgs e) => e.Handled =
+            true;
 
-        private void DragThumb_DragStarted(object sender, DragStartedEventArgs e)
+        private void DragThumb_DragStarted(object sender,
+                                           DragStartedEventArgs e)
         {
             _selectedItems = ((_designer.DataContext) as DesignerViewModel).SelectionService.SelectedItems.OfType<BaseDesignerItemViewModel>();
             _rotateTransform = _designerItem.RenderTransform as RotateTransform;
@@ -49,11 +45,11 @@ namespace SchemaCreator.Designer.Controls
 
         private void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            if (!_designerItem.IsSelected) return;
-            foreach (var designerItem in _selectedItems)
+            if(!_designerItem.IsSelected) return;
+            foreach(var designerItem in _selectedItems)
             {
                 var dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
-                if (_rotateTransform != null)
+                if(_rotateTransform != null)
                 {
                     dragDelta = _rotateTransform.Transform(dragDelta);
                 }

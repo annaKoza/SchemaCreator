@@ -64,6 +64,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adorners\ResizeRotateAdorner.cs" />
     <Compile Include="Adorners\SelectionAdorner.cs" />
     <Compile Include="AttachedProperties\DragDropAttachedProperty.cs" />
     <Compile Include="Adorners\DrawAdorner.cs" />
@@ -73,10 +74,13 @@
     <Compile Include="Common\SelectedItemType.cs" />
     <Compile Include="Controls\DesignerItem.cs" />
     <Compile Include="Common\DragObject.cs" />
+    <Compile Include="Controls\DesignerItemDecorator.cs" />
     <Compile Include="Controls\DesignerPanel.cs" />
     <Compile Include="Controls\DragThumb.cs" />
+    <Compile Include="Controls\ResizeRotateChrome.cs" />
     <Compile Include="Controls\RotateThumb.cs" />
     <Compile Include="Interfaces\ISelectionItem.cs" />
+    <Compile Include="ViewModels\ContextMenu.ViewModel.cs" />
     <Compile Include="ViewModels\DrawingItem.ViewModel.cs" />
     <Compile Include="Interfaces\IDrawableDesigner.cs" />
     <Compile Include="Interfaces\IDrawableItem.cs" />
@@ -131,6 +135,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ResizeRotateChrome.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Themes\RotateThumb.xaml">
       <SubType>Designer</SubType>

@@ -18,19 +18,21 @@ namespace SchemaCreator.Designer.Controls
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
-            if (e.LeftButton != MouseButtonState.Pressed)
+            if(e.LeftButton != MouseButtonState.Pressed)
                 dragStartPoint = null;
 
-            if (!dragStartPoint.HasValue) return;
+            if(!dragStartPoint.HasValue) return;
             var dataObject = new DragObject
             {
                 DataContextType = DataContext?.GetType()
             };
 
-            if (VisualTreeHelper.GetParent(this) is WrapPanel panel)
+            if(VisualTreeHelper.GetParent(this) is WrapPanel panel)
             {
                 var scale = 1.5;
-                dataObject.DesiredSize = new Size(panel.ItemWidth * scale, panel.ItemHeight * scale);
+                dataObject.DesiredSize = new Size(panel.ItemWidth * scale,
+                                                  panel.ItemHeight *
+                    scale);
             }
 
             DragDrop.DoDragDrop(this, dataObject, DragDropEffects.Copy);

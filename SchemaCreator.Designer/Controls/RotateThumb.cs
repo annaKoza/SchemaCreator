@@ -15,25 +15,25 @@ namespace SchemaCreator.Designer.Controls
         private Vector startVector;
         private double initialAngle;
 
-        static RotateThumb()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(RotateThumb), new FrameworkPropertyMetadata(typeof(RotateThumb)));
-        }
+        static RotateThumb() => DefaultStyleKeyProperty.OverrideMetadata(
+                typeof(RotateThumb),
+                new FrameworkPropertyMetadata(typeof(RotateThumb)));
 
         public void OnDragStarted(object sender, DragStartedEventArgs e)
         {
             designerItem = DataContext as DesignerItem;
 
-            if (designerItem != null)
+            if(designerItem != null)
             {
                 canvas = VisualTreeHelper.GetParent(designerItem) as Canvas;
 
-                if (canvas != null)
+                if(canvas != null)
                 {
                     centerPoint = designerItem.TranslatePoint(
-                        new Point(designerItem.Width * designerItem.RenderTransformOrigin.X,
-                                  designerItem.Height * designerItem.RenderTransformOrigin.Y),
+                        new Point(designerItem.Width *
+                        designerItem.RenderTransformOrigin.X,
+                                  designerItem.Height *
+                        designerItem.RenderTransformOrigin.Y),
                                   canvas);
 
                     Point startPoint = Mouse.GetPosition(canvas);

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media;
-using SchemaCreator.Designer.Common;
+﻿using SchemaCreator.Designer.Common;
 using SchemaCreator.Designer.Interfaces;
 using SchemaCreator.Designer.UserControls;
+using System.Windows;
+using System.Windows.Media;
 
 namespace SchemaCreator.Designer.DrawingPart
 {
     public abstract class DrawingItemViewModel : BaseDesignerItemViewModel, IDrawableItem
     {
         private double _x1;
+
         public double X1
         {
             get => _x1;
@@ -20,6 +20,7 @@ namespace SchemaCreator.Designer.DrawingPart
         }
 
         private double _x2;
+
         public double X2
         {
             get => _x2;
@@ -30,6 +31,7 @@ namespace SchemaCreator.Designer.DrawingPart
         }
 
         private double _y1;
+
         public double Y1
         {
             get => _y1;
@@ -40,6 +42,7 @@ namespace SchemaCreator.Designer.DrawingPart
         }
 
         private double _y2;
+
         public double Y2
         {
             get => _y2;
@@ -51,6 +54,8 @@ namespace SchemaCreator.Designer.DrawingPart
 
         public SelectedItemType SelectedItemType => SelectedItemType.DrawItem;
 
-        public abstract void DrawAdorner(DrawingContext drawingContext, Point startPoint, Point endPoint);
+        public abstract void DrawAdorner(DrawingContext drawingContext,
+                                         Point startPoint,
+                                         Point endPoint);
     }
 }

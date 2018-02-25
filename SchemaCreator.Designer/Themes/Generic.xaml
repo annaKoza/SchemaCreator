@@ -7,5 +7,6 @@
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/ToolBox.xaml" />
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/RotateThumb.xaml" />
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/DragThumb.xaml" />
+        <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/ResizeRotateChrome.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
