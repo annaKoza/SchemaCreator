@@ -2,6 +2,7 @@
 {
     public enum SelectedItemType
     {
+        None,
         DrawItem,
         SelectItem,
         ZoomItem,

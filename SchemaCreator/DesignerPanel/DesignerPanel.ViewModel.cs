@@ -18,7 +18,7 @@ namespace SchemaCreator.UI.ViewModel
             SelectItem(obj);
         }
 
-        public void SelectItem(IBaseChoosableItem item)
+        private void SelectItem(IBaseChoosableItem item)
         {
             DesignerViewModel.ItemToDraw = item;
         }

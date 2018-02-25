@@ -1,6 +1,6 @@
 ﻿namespace SchemaCreator.Designer.Interfaces
 {
-    public interface IDrawableDesigner
+    public interface IDrawablePanel
     {
         IBaseChoosableItem ItemToDraw { get; set; }
     }
