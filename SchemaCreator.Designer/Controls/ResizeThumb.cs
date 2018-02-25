@@ -17,8 +17,8 @@ namespace SchemaCreator.Designer.Controls
 
         static ResizeThumb()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(
-                typeof(ResizeThumb), new FrameworkPropertyMetadata(typeof(ResizeThumb)));
+    //        DefaultStyleKeyProperty.OverrideMetadata(
+    //            typeof(ResizeThumb), new FrameworkPropertyMetadata(typeof(ResizeThumb)));
         }
 
         public ResizeThumb()

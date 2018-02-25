@@ -17,64 +17,81 @@
     d:DesignWidth="300"
     AllowDrop="True"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/ResizeThumb.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
         <ctr:DesignerPanel ItemsSource="{Binding Items}">
             <ctr:DesignerPanel.Resources>
                 <!--  ResizeDecorator Default Template  -->
                 <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
                     <Grid SnapsToDevicePixels="true">
+                        <!--  LINES  -->
                         <ctr:ResizeThumb
-                            Height="3"
+                            Height="1"
                             Margin="0,-4,0,0"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Top"
-                            Cursor="SizeNS" />
+                            Cursor="SizeNS"
+                            Style="{StaticResource LineResizeThumb}" />
                         <ctr:ResizeThumb
-                            Width="3"
+                            Width="1"
                             Margin="-4,0,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Stretch"
-                            Cursor="SizeWE" />
+                            Cursor="SizeWE"
+                            Style="{StaticResource LineResizeThumb}" />
                         <ctr:ResizeThumb
-                            Width="3"
+                            Width="1"
                             Margin="0,0,-4,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Stretch"
-                            Cursor="SizeWE" />
+                            Cursor="SizeWE"
+                            Style="{StaticResource LineResizeThumb}" />
                         <ctr:ResizeThumb
-                            Height="3"
+                            Height="1"
                             Margin="0,0,0,-4"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Bottom"
-                            Cursor="SizeNS" />
+                            Cursor="SizeNS"
+                            Style="{StaticResource LineResizeThumb}" />
+                        <!--  RECTANGLES  -->
                         <ctr:ResizeThumb
                             Width="7"
                             Height="7"
                             Margin="-6,-6,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            Cursor="SizeNWSE" />
+                            Cursor="SizeNWSE"
+                            Style="{StaticResource RectangleResizeThumb}" />
                         <ctr:ResizeThumb
                             Width="7"
                             Height="7"
                             Margin="0,-6,-6,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            Cursor="SizeNESW" />
+                            Cursor="SizeNESW"
+                            Style="{StaticResource RectangleResizeThumb}" />
                         <ctr:ResizeThumb
                             Width="7"
                             Height="7"
                             Margin="-6,0,0,-6"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"
-                            Cursor="SizeNESW" />
+                            Cursor="SizeNESW"
+                            Style="{StaticResource RectangleResizeThumb}" />
                         <ctr:ResizeThumb
                             Width="7"
                             Height="7"
                             Margin="0,0,-6,-6"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
-                            Cursor="SizeNWSE" />
+                            Cursor="SizeNWSE"
+                            Style="{StaticResource RectangleResizeThumb}" />
                     </Grid>
                 </ControlTemplate>
             </ctr:DesignerPanel.Resources>
@@ -86,6 +103,7 @@
             <ctr:DesignerPanel.ItemContainerStyle>
                 <!--  DesignerItem Style  -->
                 <Style TargetType="{x:Type ctr:DesignerItem}">
+                    <Setter Property="Panel.ZIndex" Value="{Binding ZIndex}" />
                     <Setter Property="RenderTransformOrigin" Value="{Binding TransformOrigin}" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWay}" />
                     <Setter Property="Width" Value="{Binding Width, Mode=TwoWay}" />
@@ -107,11 +125,7 @@
                                 <Grid Background="Transparent" DataContext="{Binding RelativeSource={RelativeSource TemplatedParent}}">
                                     <!--  PART_DragThumb  -->
                                     <ctr:DragThumb x:Name="PART_DragThumb" Cursor="SizeAll" />
-                                    <!--  PART_ResizeDecorator  -->
-                                    <Control
-                                        x:Name="PART_ResizeDecorator"
-                                        Template="{StaticResource ResizeDecoratorTemplate}"
-                                        Visibility="Collapsed" />
+
                                     <!--  Content  -->
                                     <ContentPresenter
                                         x:Name="PART_ContentPresenter"
@@ -120,7 +134,17 @@
                                         VerticalAlignment="Stretch"
                                         Content="{TemplateBinding ContentControl.Content}" />
                                     <!--  PART_RotateThumb  -->
-                                    <ctr:RotateThumb />
+                                    <ctr:RotateThumb
+                                        x:Name="PART_RotateThumb"
+                                        Margin="0,-40,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Visibility="Collapsed" />
+                                    <!--  PART_ResizeDecorator  -->
+                                    <Control
+                                        x:Name="PART_ResizeDecorator"
+                                        Template="{StaticResource ResizeDecoratorTemplate}"
+                                        Visibility="Collapsed" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                             <command:EventToCommand
@@ -133,6 +157,7 @@
                                 <ControlTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
                                         <Setter TargetName="PART_ResizeDecorator" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="PART_RotateThumb" Property="Visibility" Value="Visible" />
                                     </DataTrigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

@@ -5,7 +5,6 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/ToolBox.xaml" />
-        <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/ResizeThumb.xaml" />
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/RotateThumb.xaml" />
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/DragThumb.xaml" />
     </ResourceDictionary.MergedDictionaries>
