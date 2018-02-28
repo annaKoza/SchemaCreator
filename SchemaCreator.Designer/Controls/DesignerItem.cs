@@ -4,9 +4,6 @@ using System.Windows.Controls;
 
 namespace SchemaCreator.Designer.Controls
 {
-    [TemplatePart(Name = "PART_DragThumb", Type = typeof(DragThumb))]
-    [TemplatePart(Name = "PART_ResizeDecorator", Type = typeof(Control))]
-    [TemplatePart(Name = "PART_ContentPresenter", Type = typeof(ContentPresenter))]
     public class DesignerItem : ContentControl, ISelectable
     {
         public static readonly DependencyProperty AngleProperty =

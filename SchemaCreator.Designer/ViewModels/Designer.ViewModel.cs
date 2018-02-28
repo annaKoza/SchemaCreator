@@ -14,180 +14,24 @@ namespace SchemaCreator.Designer.UserControls
 {
     public class DesignerViewModel : ViewModelBase, IDesignerViewModel
     {
-        private SelectionService _selectionService;
-
-        public SelectionService SelectionService => _selectionService ??
-            (_selectionService =
-                new SelectionService());
-
+        private ICommand _bringToBack;
+        private ICommand _bringToFront;
         private ObservableCollection<BaseDesignerItemViewModel> _items;
         private IBaseChoosableItem _itemToDraw;
-
-        public ObservableCollection<BaseDesignerItemViewModel> Items
-        {
-            get => _items;
-            set
-            {
-                _items = value;
-                RaisePropertyChanged(nameof(Items));
-            }
-        }
-
-        public IBaseChoosableItem ItemToDraw
-        {
-            get => _itemToDraw;
-            set => _itemToDraw = value;
-        }
-
-        private ICommand _bringToFront;
-        private ICommand _sendForward;
-        private ICommand _bringToBack;
-        private ICommand _sendBackward;
-        private ICommand _removeItems;
         private ICommand _removeAll;
+        private ICommand _removeItems;
+        private SelectionService _selectionService;
+        private ICommand _sendBackward;
+        private ICommand _sendForward;
 
-        public ICommand BringToFront => _bringToFront ??
-                   (
-                   _bringToFront =
-                new RelayCommand
-                       (
-                           () =>
-                           {
-                               BringSelectedItemsToFront();
-                           }
-                       )
-                   );
-
-        public ICommand SendForward => _sendForward ??
-                  (
-                  _sendForward =
-                new RelayCommand
-                      (
-                          () =>
-                          {
-                              SendSelectedItemsForward();
-                          }
-                      )
-                  );
-
-        public ICommand BringToBack => _bringToBack ??
-                 (
-                 _bringToBack =
-                new RelayCommand
-                     (
-                         () =>
-                         {
-                             BringsSelectedItemsToBack();
-                         }
-                     )
-                 );
-
-        public ICommand SendBackward => _sendBackward ??
-               (
-               _sendBackward =
-                new RelayCommand
-                   (
-                       () =>
-                       {
-                           SendSelectedItemsBackward();
-                       }
-                   )
-               );
-
-        public ICommand RemoveItems => _removeItems ??
-               (
-               _removeItems =
-                new RelayCommand
-                   (
-                       () =>
-                       {
-                           RemoveSelectedItems();
-                       }
-                   )
-               );
-
-        public ICommand RemoveAll => _removeAll ??
-             (
-             _removeAll =
-                new RelayCommand
-                 (
-                     () =>
-                     {
-                         RemoveAllItems();
-                     }
-                 )
-             );
+        public DesignerViewModel()
+        {
+            Items = new
+                 ObservableCollection<BaseDesignerItemViewModel>();
+            ItemToDraw = new NullChoosedItemViewModel();
+        }
 
         public void AddItem(IDesignerItem item) => Items.Add(item as BaseDesignerItemViewModel);
-
-        public void RemoveSelectedItems()
-        {
-            Items.RemoveAll(x => x.IsSelected);
-            SelectionService.ClearSelection();
-        }
-
-        public void RemoveAllItems()
-        {
-            Items.Clear();
-            SelectionService.ClearSelection();
-        }
-
-        public void SendSelectedItemsForward()
-        {
-            List<BaseDesignerItemViewModel> ordered = (from item in SelectionService.SelectedItems
-                                                       orderby (item as BaseDesignerItemViewModel).ZIndex descending
-                                                       select item as BaseDesignerItemViewModel).ToList();
-
-            int count = Items.Count;
-
-            for(int i = 0; i < ordered.Count; i++)
-            {
-                int currentIndex = ordered[i].ZIndex;
-                int newIndex = Math.Min(count - 1 - i, currentIndex + 1);
-                if(currentIndex != newIndex)
-                {
-                    ordered[i].ZIndex = newIndex;
-                    foreach(BaseDesignerItemViewModel elm in Items.Where(item => item.ZIndex
-                        == newIndex))
-                    {
-                        if(elm != ordered[i])
-                        {
-                            elm.ZIndex = currentIndex;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        public void SendSelectedItemsBackward()
-        {
-            List<BaseDesignerItemViewModel> ordered = (from item in SelectionService.SelectedItems
-                                                       orderby (item as BaseDesignerItemViewModel).ZIndex ascending
-                                                       select item as BaseDesignerItemViewModel).ToList();
-
-            int count = Items.Count;
-
-            for(int i = 0; i < ordered.Count; i++)
-            {
-                int currentIndex = ordered[i].ZIndex;
-                int newIndex = Math.Max(i, currentIndex - 1);
-                if(currentIndex != newIndex)
-                {
-                    ordered[i].ZIndex = newIndex;
-                    var it = Items.Where(item => item.ZIndex == newIndex);
-
-                    foreach(var elm in it)
-                    {
-                        if(elm != ordered[i])
-                        {
-                            elm.ZIndex = currentIndex;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
 
         public void BringSelectedItemsToFront()
         {
@@ -202,15 +46,16 @@ namespace SchemaCreator.Designer.UserControls
             int i = 0;
             int j = 0;
 
-            foreach(var item in childrenSorted)
+            foreach (var item in childrenSorted)
             {
-                if(selectionSorted.Contains(item))
+                if (selectionSorted.Contains(item))
                 {
                     int idx = item.ZIndex;
                     item.ZIndex = childrenSorted.Count -
                         selectionSorted.Count +
                         j++;
-                } else
+                }
+                else
                 {
                     item.ZIndex = i++;
                 }
@@ -228,24 +73,179 @@ namespace SchemaCreator.Designer.UserControls
                                                               select item).ToList();
             int i = 0;
             int j = 0;
-            foreach(var item in childrenSorted)
+            foreach (var item in childrenSorted)
             {
-                if(selectionSorted.Contains(item))
+                if (selectionSorted.Contains(item))
                 {
                     int idx = item.ZIndex;
                     item.ZIndex = j++;
-                } else
+                }
+                else
                 {
                     item.ZIndex = selectionSorted.Count + i++;
                 }
             }
         }
 
-        public DesignerViewModel()
+        public void RemoveAllItems()
         {
-            Items = new
-                 ObservableCollection<BaseDesignerItemViewModel>();
-            ItemToDraw = new NullChoosedItemViewModel();
+            Items.Clear();
+            SelectionService.ClearSelection();
         }
+
+        public void RemoveSelectedItems()
+        {
+            Items.RemoveAll(x => x.IsSelected);
+            SelectionService.ClearSelection();
+        }
+
+        public void SendSelectedItemsBackward()
+        {
+            List<BaseDesignerItemViewModel> ordered = (from item in SelectionService.SelectedItems
+                                                       orderby (item as BaseDesignerItemViewModel).ZIndex ascending
+                                                       select item as BaseDesignerItemViewModel).ToList();
+
+            int count = Items.Count;
+
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                int currentIndex = ordered[i].ZIndex;
+                int newIndex = Math.Max(i, currentIndex - 1);
+                if (currentIndex != newIndex)
+                {
+                    ordered[i].ZIndex = newIndex;
+                    var it = Items.Where(item => item.ZIndex == newIndex);
+
+                    foreach (var elm in it)
+                    {
+                        if (elm != ordered[i])
+                        {
+                            elm.ZIndex = currentIndex;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void SendSelectedItemsForward()
+        {
+            List<BaseDesignerItemViewModel> ordered = (from item in SelectionService.SelectedItems
+                                                       orderby (item as BaseDesignerItemViewModel).ZIndex descending
+                                                       select item as BaseDesignerItemViewModel).ToList();
+
+            int count = Items.Count;
+
+            for (int i = 0; i < ordered.Count; i++)
+            {
+                int currentIndex = ordered[i].ZIndex;
+                int newIndex = Math.Min(count - 1 - i, currentIndex + 1);
+                if (currentIndex != newIndex)
+                {
+                    ordered[i].ZIndex = newIndex;
+                    foreach (BaseDesignerItemViewModel elm in Items.Where(item => item.ZIndex
+                         == newIndex))
+                    {
+                        if (elm != ordered[i])
+                        {
+                            elm.ZIndex = currentIndex;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public ICommand BringToBack => _bringToBack ??
+                 (
+                 _bringToBack =
+                new RelayCommand
+                     (
+                         () =>
+                         {
+                             BringsSelectedItemsToBack();
+                         }
+                     )
+                 );
+
+        public ICommand BringToFront => _bringToFront ??
+                   (
+                   _bringToFront =
+                new RelayCommand
+                       (
+                           () =>
+                           {
+                               BringSelectedItemsToFront();
+                           }
+                       )
+                   );
+
+        public ObservableCollection<BaseDesignerItemViewModel> Items
+        {
+            get => _items;
+            set
+            {
+                _items = value;
+                RaisePropertyChanged(nameof(Items));
+            }
+        }
+
+        public IBaseChoosableItem ItemToDraw
+        {
+            get => _itemToDraw;
+            set => _itemToDraw = value;
+        }
+
+        public ICommand RemoveAll => _removeAll ??
+             (
+             _removeAll =
+                new RelayCommand
+                 (
+                     () =>
+                     {
+                         RemoveAllItems();
+                     }
+                 )
+             );
+
+        public ICommand RemoveItems => _removeItems ??
+               (
+               _removeItems =
+                new RelayCommand
+                   (
+                       () =>
+                       {
+                           RemoveSelectedItems();
+                       }
+                   )
+               );
+
+        public SelectionService SelectionService => _selectionService ??
+            (_selectionService =
+                new SelectionService());
+
+        public ICommand SendBackward => _sendBackward ??
+               (
+               _sendBackward =
+                new RelayCommand
+                   (
+                       () =>
+                       {
+                           SendSelectedItemsBackward();
+                       }
+                   )
+               );
+
+        public ICommand SendForward => _sendForward ??
+                  (
+                  _sendForward =
+                new RelayCommand
+                      (
+                          () =>
+                          {
+                              SendSelectedItemsForward();
+                          }
+                      )
+                  );
     }
 }

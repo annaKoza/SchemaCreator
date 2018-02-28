@@ -18,9 +18,9 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodels:LineViewModel}">
-        <Line
+        <Line SnapsToDevicePixels="False"
             Fill="White"
-            Stretch="Uniform"
+            Stretch="Fill"
             Stroke="White"
             StrokeThickness="2"
             X1="{Binding X1}"

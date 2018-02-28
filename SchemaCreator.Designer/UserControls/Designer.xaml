@@ -23,75 +23,6 @@
     </UserControl.Resources>
     <Grid>
         <ctr:DesignerPanel ItemsSource="{Binding Items}">
-            <ctr:DesignerPanel.Resources>
-                <!--  ResizeDecorator Default Template  -->
-                <ControlTemplate x:Key="ResizeDecoratorTemplate" TargetType="{x:Type Control}">
-                    <Grid SnapsToDevicePixels="true">
-                        <!--  LINES  -->
-                        <ctr:ResizeThumb
-                            Height="1"
-                            Margin="0,-4,0,0"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Top"
-                            Cursor="SizeNS"
-                            Style="{StaticResource LineResizeThumb}" />
-                        <ctr:ResizeThumb
-                            Width="1"
-                            Margin="-4,0,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Stretch"
-                            Cursor="SizeWE"
-                            Style="{StaticResource LineResizeThumb}" />
-                        <ctr:ResizeThumb
-                            Width="1"
-                            Margin="0,0,-4,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Stretch"
-                            Cursor="SizeWE"
-                            Style="{StaticResource LineResizeThumb}" />
-                        <ctr:ResizeThumb
-                            Height="1"
-                            Margin="0,0,0,-4"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNS"
-                            Style="{StaticResource LineResizeThumb}" />
-                        <!--  RECTANGLES  -->
-                        <ctr:ResizeThumb
-                            Width="7"
-                            Height="7"
-                            Margin="-6,-6,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Cursor="SizeNWSE"
-                            Style="{StaticResource RectangleResizeThumb}" />
-                        <ctr:ResizeThumb
-                            Width="7"
-                            Height="7"
-                            Margin="0,-6,-6,0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Cursor="SizeNESW"
-                            Style="{StaticResource RectangleResizeThumb}" />
-                        <ctr:ResizeThumb
-                            Width="7"
-                            Height="7"
-                            Margin="-6,0,0,-6"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNESW"
-                            Style="{StaticResource RectangleResizeThumb}" />
-                        <ctr:ResizeThumb
-                            Width="7"
-                            Height="7"
-                            Margin="0,0,-6,-6"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Bottom"
-                            Cursor="SizeNWSE"
-                            Style="{StaticResource RectangleResizeThumb}" />
-                    </Grid>
-                </ControlTemplate>
-            </ctr:DesignerPanel.Resources>
             <ctr:DesignerPanel.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Background="Transparent" />
@@ -116,7 +47,7 @@
                                 <ContextMenu.ItemContainerStyle>
                                     <Style TargetType="MenuItem">
                                         <Setter Property="Header" Value="{Binding Name}" />
-                                        <Setter Property="Command" Value="{Binding Action }" />
+                                        <Setter Property="Command" Value="{Binding Action}" />
                                     </Style>
                                 </ContextMenu.ItemContainerStyle>
                             </ContextMenu>
@@ -141,7 +72,7 @@
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         Content="{TemplateBinding ContentControl.Content}" />
-                                    <ctr:DesignerItemDecorator x:Name="ItemDecorator" />
+                                    <ctr:DesignerItemDecorator x:Name="PART_ItemDecorator" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                             <command:EventToCommand
@@ -153,7 +84,7 @@
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="True">
-                                        <Setter TargetName="ItemDecorator" Property="ShowDecorator" Value="True" />
+                                        <Setter TargetName="PART_ItemDecorator" Property="ShowDecorator" Value="True" />
                                     </DataTrigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

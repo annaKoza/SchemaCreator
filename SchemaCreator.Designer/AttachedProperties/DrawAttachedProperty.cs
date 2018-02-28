@@ -43,10 +43,10 @@ namespace SchemaCreator.Designer.AttachedProperties
         private static void OnDesignerContinueDraw(object sender,
                                                    MouseEventArgs e)
         {
-            if(_drawableInstance ==
-                null ||
-                _selectedItemType !=
-                SelectedItemType.DrawItem) return;
+            if(_drawableInstance
+                == null
+                || _selectedItemType
+                != SelectedItemType.DrawItem) return;
 
             if(e.LeftButton != MouseButtonState.Pressed)
                 _selectionStartPoint = null;

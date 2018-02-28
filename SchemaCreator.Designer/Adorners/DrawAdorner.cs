@@ -1,4 +1,5 @@
-﻿using SchemaCreator.Designer.Interfaces;
+﻿using SchemaCreator.Designer.Controls;
+using SchemaCreator.Designer.Interfaces;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +11,11 @@ namespace SchemaCreator.Designer.AttachedProperties
 {
     internal class DrawAdorner : Adorner
     {
+        private SizeChrome _chrome;
         private Canvas _itemsPanel;
         private Point? _selectionStartPoint;
         private IDesignerViewModel _designerPanel;
+        private VisualCollection _visuals;
         private Point? _endPoint;
         private IDrawableItem _drawableInstance;
 
@@ -21,12 +24,29 @@ namespace SchemaCreator.Designer.AttachedProperties
                            IDesignerViewModel designerPanel,
                            IDrawableItem drawableItem) : base(itemsPanel)
         {
+            _chrome = new SizeChrome() { };
             _itemsPanel = itemsPanel;
             _drawableInstance = drawableItem;
             _selectionStartPoint = selectionStartPoint;
             _designerPanel = designerPanel;
+            _visuals = new VisualCollection(this)
+            {
+               _chrome
+            };
+        }
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            var rectangle = new Rect(_selectionStartPoint.Value, _endPoint ?? _selectionStartPoint.Value);
+          
+            _chrome.Arrange(new Rect(rectangle.TopLeft, rectangle.Size));
+            _chrome.Width = rectangle.Width;
+            _chrome.Height = rectangle.Height;
+
+            return finalSize;
         }
 
+        protected override Visual GetVisualChild(int index) => _visuals[index];
+        protected override int VisualChildrenCount => _visuals.Count;
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if(e.LeftButton == MouseButtonState.Pressed)
@@ -43,7 +63,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                         currentPosition.X = _selectionStartPoint.Value.X; else
                         currentPosition.Y = _selectionStartPoint.Value.Y;
                 }
-
+                
                 _endPoint = currentPosition;
                 InvalidateVisual();
             } else
@@ -94,16 +114,15 @@ namespace SchemaCreator.Designer.AttachedProperties
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-
+            drawingContext.PushOpacity(1);
             drawingContext.DrawRectangle(Brushes.Transparent,
                                          null,
                                          new Rect(RenderSize));
+           
             if(_selectionStartPoint.HasValue && _endPoint.HasValue)
             {
-                drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Black),
-                                                2),
-                                        _selectionStartPoint.Value,
-                                        _endPoint.Value);
+                _drawableInstance.DrawAdorner(drawingContext, _selectionStartPoint.Value, _endPoint.Value);
+                drawingContext.DrawRectangle(Brushes.Transparent, new Pen(new SolidColorBrush(Colors.White), 0.1), new Rect(_selectionStartPoint.Value, _endPoint.Value));
             }
         }
     }

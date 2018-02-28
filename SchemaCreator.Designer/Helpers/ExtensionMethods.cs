@@ -21,7 +21,7 @@ namespace SchemaCreator.Designer.Helpers
             return itemsToRemove.Count;
         }
 
-        internal static T FindParent<T>(this DependencyObject child)
+        internal static T GetVisualParent<T>(this DependencyObject child)
             where T : DependencyObject
         {
             while(true)

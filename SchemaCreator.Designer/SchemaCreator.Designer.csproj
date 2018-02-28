@@ -65,7 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adorners\ResizeRotateAdorner.cs" />
+    <Compile Include="Adorners\RotateAdorner.cs" />
     <Compile Include="Adorners\SelectionAdorner.cs" />
+    <Compile Include="Adorners\SizeAdorner.cs" />
     <Compile Include="AttachedProperties\DragDropAttachedProperty.cs" />
     <Compile Include="Adorners\DrawAdorner.cs" />
     <Compile Include="AttachedProperties\DrawAttachedProperty.cs" />
@@ -79,6 +81,8 @@
     <Compile Include="Controls\DragThumb.cs" />
     <Compile Include="Controls\ResizeRotateChrome.cs" />
     <Compile Include="Controls\RotateThumb.cs" />
+    <Compile Include="Controls\RotateChrome.cs" />
+    <Compile Include="Controls\SizeChrome.cs" />
     <Compile Include="Interfaces\ISelectionItem.cs" />
     <Compile Include="ViewModels\ContextMenu.ViewModel.cs" />
     <Compile Include="ViewModels\DrawingItem.ViewModel.cs" />

@@ -3,8 +3,9 @@ using System.Windows.Controls;
 
 namespace SchemaCreator.Designer.Controls
 {
-    public class DesignerPanel : ItemsControl
+    public class DesignerPanel : ListBox
     {
+        
         public DesignerPanel() => Focusable = true;
 
         protected override DependencyObject GetContainerForItemOverride() => new DesignerItem();

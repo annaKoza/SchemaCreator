@@ -9,7 +9,7 @@ namespace SchemaCreator.UI.ViewModel
     {
         public override void DrawAdorner(DrawingContext drawingContext, Point startPoint, Point endPoint )
         {
-            drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.Black), 2), startPoint, endPoint);
+            drawingContext.DrawLine(new Pen(new SolidColorBrush(Colors.White), 2), startPoint, endPoint);
         }
     }
 }

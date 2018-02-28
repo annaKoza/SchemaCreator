@@ -40,7 +40,7 @@ namespace SchemaCreator.Designer.Controls
         private void DragThumb_Loaded(object sender, RoutedEventArgs e)
         {
             _designerItem = DataContext as DesignerItem;
-            _designer = _designerItem.FindParent<DesignerPanel>();
+            _designer = _designerItem.GetVisualParent<DesignerPanel>();
         }
 
         private void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)

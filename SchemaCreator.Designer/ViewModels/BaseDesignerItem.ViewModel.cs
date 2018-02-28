@@ -11,152 +11,65 @@ namespace SchemaCreator.Designer.UserControls
 {
     public abstract class BaseDesignerItemViewModel : ViewModelBase, IDesignerItem
     {
-        protected BaseDesignerItemViewModel() => ContextMenu =
-            new ObservableCollection<ContextMenuViewModel>();
+        private double _angle;
 
         private ObservableCollection<ContextMenuViewModel> _contextMenu;
-
-        public ObservableCollection<ContextMenuViewModel> ContextMenu
-        {
-            get => _contextMenu;
-            protected set
-            {
-                _contextMenu = value;
-                RaisePropertyChanged(nameof(ContextMenu));
-            }
-        }
+        private double _height;
 
         private bool _isSelected;
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value; RaisePropertyChanged(nameof(IsSelected));
-            }
-        }
-
-        private double _minWidth;
-
-        public double MinWidth
-        {
-            get => _minWidth;
-            set
-            {
-                _minWidth = value; RaisePropertyChanged(nameof(MinWidth));
-            }
-        }
+        private double _left;
 
         private double _minHeight;
 
-        public double MinHeight
-        {
-            get => _minHeight;
-            set
-            {
-                _minHeight = value; RaisePropertyChanged(nameof(MinHeight));
-            }
-        }
+        private double _minWidth;
+        private IDesignerViewModel _parent;
 
-        private double _angle;
-
-        public double Angle
-        {
-            get => _angle;
-            set
-            {
-                _angle = value; RaisePropertyChanged(nameof(Angle));
-            }
-        }
+        private ICommand _selectCommand;
 
         private double _top;
-        private double _left;
-        private double _width;
-        private double _height;
 
         private Point _transformOrigin;
-
-        public Point TransformOrigin
-        {
-            get => _transformOrigin;
-            set
-            {
-                _transformOrigin = value; RaisePropertyChanged(nameof(TransformOrigin));
-            }
-        }
+        private double _width;
 
         private int _zIndex;
 
-        public int ZIndex
+        protected BaseDesignerItemViewModel() => ContextMenu =
+            new ObservableCollection<ContextMenuViewModel>();
+
+        private void SelectItem()
         {
-            get => _zIndex;
-            set
+            if ((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) !=
+                ModifierKeys.None)
             {
-                _zIndex = value; RaisePropertyChanged(nameof(ZIndex));
+                if ((Keyboard.Modifiers & (ModifierKeys.Shift)) !=
+                    ModifierKeys.None)
+                {
+                    if (!IsSelected)
+                    {
+                        Parent.SelectionService.AddToSelection(this);
+                    }
+                    else
+                    {
+                        Parent.SelectionService.RemoveFromSelection(this);
+                    }
+                }
+
+                if ((Keyboard.Modifiers & (ModifierKeys.Control)) !=
+                    ModifierKeys.None)
+                {
+                    if (!IsSelected)
+                    {
+                        Parent.SelectionService.AddToSelection(this);
+                    }
+                    else
+                    {
+                        Parent.SelectionService.RemoveFromSelection(this);
+                    }
+                }
             }
-        }
-
-        public double Top
-        {
-            get => _top;
-            set
+            else if (!IsSelected)
             {
-                _top = value; RaisePropertyChanged(nameof(Top));
-            }
-        }
-
-        public double Left
-        {
-            get => _left;
-            set
-            {
-                _left = value; RaisePropertyChanged(nameof(Left));
-            }
-        }
-
-        public double Width
-        {
-            get => _width;
-            set
-            {
-                _width = value; RaisePropertyChanged(nameof(Width));
-            }
-        }
-
-        public double Height
-        {
-            get => _height;
-            set
-            {
-                _height = value; RaisePropertyChanged(nameof(Height));
-            }
-        }
-
-        private ICommand _selectCommand;
-        private IDesignerViewModel _parent;
-
-        public ICommand SelectCommand => _selectCommand ??
-                    (
-                    _selectCommand =
-                new RelayCommand
-                        (
-                            () =>
-                            {
-                                SelectItem();
-                            }
-                        )
-                    );
-
-        public IDesignerViewModel Parent
-        {
-            get => _parent;
-            set
-            {
-                _parent = value;
-                if(value != null)
-                    AddContextMenu(value);
-                RaisePropertyChanged(nameof(Parent));
+                Parent.SelectionService.SelectItem(this);
             }
         }
 
@@ -182,37 +95,127 @@ namespace SchemaCreator.Designer.UserControls
                 }
             };
 
-        private void SelectItem()
+        public double Angle
         {
-            if((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) !=
-                ModifierKeys.None)
+            get => _angle;
+            set
             {
-                if((Keyboard.Modifiers & (ModifierKeys.Shift)) !=
-                    ModifierKeys.None)
-                {
-                    if(!IsSelected)
-                    {
-                        Parent.SelectionService.AddToSelection(this);
-                    } else
-                    {
-                        Parent.SelectionService.RemoveFromSelection(this);
-                    }
-                }
+                _angle = value; RaisePropertyChanged(nameof(Angle));
+            }
+        }
 
-                if((Keyboard.Modifiers & (ModifierKeys.Control)) !=
-                    ModifierKeys.None)
-                {
-                    if(!IsSelected)
-                    {
-                        Parent.SelectionService.AddToSelection(this);
-                    } else
-                    {
-                        Parent.SelectionService.RemoveFromSelection(this);
-                    }
-                }
-            } else if(!IsSelected)
+        public ObservableCollection<ContextMenuViewModel> ContextMenu
+        {
+            get => _contextMenu;
+            protected set
             {
-                Parent.SelectionService.SelectItem(this);
+                _contextMenu = value;
+                RaisePropertyChanged(nameof(ContextMenu));
+            }
+        }
+
+        public double Height
+        {
+            get => _height;
+            set
+            {
+                _height = value; RaisePropertyChanged(nameof(Height));
+            }
+        }
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value; RaisePropertyChanged(nameof(IsSelected));
+            }
+        }
+
+        public double Left
+        {
+            get => _left;
+            set
+            {
+                _left = value; RaisePropertyChanged(nameof(Left));
+            }
+        }
+
+        public double MinHeight
+        {
+            get => _minHeight;
+            set
+            {
+                _minHeight = value; RaisePropertyChanged(nameof(MinHeight));
+            }
+        }
+
+        public double MinWidth
+        {
+            get => _minWidth;
+            set
+            {
+                _minWidth = value; RaisePropertyChanged(nameof(MinWidth));
+            }
+        }
+
+        public IDesignerViewModel Parent
+        {
+            get => _parent;
+            set
+            {
+                _parent = value;
+                if (value != null)
+                    AddContextMenu(value);
+                RaisePropertyChanged(nameof(Parent));
+            }
+        }
+
+        public ICommand SelectCommand => _selectCommand ??
+                    (
+                    _selectCommand =
+                new RelayCommand
+                        (
+                            () =>
+                            {
+                                SelectItem();
+                            }
+                        )
+                    );
+
+        public double Top
+        {
+            get => _top;
+            set
+            {
+                _top = value; RaisePropertyChanged(nameof(Top));
+            }
+        }
+
+        public Point TransformOrigin
+        {
+            get => _transformOrigin;
+            set
+            {
+                _transformOrigin = value; RaisePropertyChanged(nameof(TransformOrigin));
+            }
+        }
+
+        public double Width
+        {
+            get => _width;
+            set
+            {
+                _width = value; RaisePropertyChanged(nameof(Width));
+            }
+        }
+
+        public int ZIndex
+        {
+            get => _zIndex;
+            set
+            {
+                _zIndex = value; RaisePropertyChanged(nameof(ZIndex));
             }
         }
     }

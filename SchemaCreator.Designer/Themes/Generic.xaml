@@ -1,7 +1,8 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:SchemaCreator.Designer">
+    xmlns:local="clr-namespace:SchemaCreator.Designer"
+    xmlns:s="clr-namespace:SchemaCreator.Designer.Controls">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/ToolBox.xaml" />
@@ -9,4 +10,86 @@
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/DragThumb.xaml" />
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/ResizeRotateChrome.xaml" />
     </ResourceDictionary.MergedDictionaries>
+    <s:DoubleFormatConverter x:Key="doubleFormatConverter" />
+
+    <Style TargetType="{x:Type s:RotateChrome}">
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="Auto" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type s:RotateChrome}">
+                    <Grid
+                        Width="Auto"
+                        MinWidth="30"
+                        Margin="0,-45,-10,0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Background="White"
+                        SnapsToDevicePixels="True">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="Red"
+                            Text="{Binding Angle}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type s:SizeChrome}">
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="Auto" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type s:SizeChrome}">
+                    <Grid SnapsToDevicePixels="True">
+                        <Path
+                            Height="10"
+                            Margin="-2,0,-2,-15"
+                            VerticalAlignment="Bottom"
+                            Data="M0,0 0,10 M 0,5 100,5 M 100,0 100,10"
+                            Stretch="Fill"
+                            Stroke="Red"
+                            StrokeThickness="1" />
+                        <TextBlock
+                            Margin="0,0,0,-18"
+                            Padding="3,0,3,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            Background="White"
+                            FontSize="12"
+                            Foreground="Red"
+                            Text="{TemplateBinding ActualWidth,
+                                                   Converter={StaticResource doubleFormatConverter}}" />
+                        <Path
+                            Width="10"
+                            Margin="0,-2,-15,-2"
+                            HorizontalAlignment="Right"
+                            Data="M5,0 5,100 M 0,0 10,0 M 0,100 10,100"
+                            Stretch="Fill"
+                            Stroke="Red"
+                            StrokeThickness="1" />
+                        <TextBlock
+                            Margin="0,0,-18,0"
+                            Padding="3,0,3,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Background="White"
+                            FontSize="12"
+                            Foreground="Red"
+                            Text="{TemplateBinding ActualHeight,
+                                                   Converter={StaticResource doubleFormatConverter}}">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="90" CenterX="1" CenterY="0.5" />
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
