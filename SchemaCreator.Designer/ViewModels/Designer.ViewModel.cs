@@ -14,6 +14,13 @@ namespace SchemaCreator.Designer.UserControls
 {
     public class DesignerViewModel : ViewModelBase, IDesignerViewModel
     {
+        private BaseDesignerItemViewModel _selectedItem;
+        public BaseDesignerItemViewModel SelectedItem
+        {
+            get { return _selectedItem; }
+            set { _selectedItem = value; RaisePropertyChanged(nameof(SelectedItem)); }
+        }
+
         private ICommand _bringToBack;
         private ICommand _bringToFront;
         private ObservableCollection<BaseDesignerItemViewModel> _items;

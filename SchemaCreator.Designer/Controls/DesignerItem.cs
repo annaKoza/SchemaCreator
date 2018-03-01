@@ -1,11 +1,12 @@
 ﻿using SchemaCreator.Designer.Interfaces;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace SchemaCreator.Designer.Controls
 {
-    public class DesignerItem : ContentControl, ISelectable
-    {
+    public class DesignerItem : ListBoxItem
+    { 
         public static readonly DependencyProperty AngleProperty =
             DependencyProperty.Register
             ("Angle",
@@ -18,17 +19,6 @@ namespace SchemaCreator.Designer.Controls
             get => (double)GetValue(AngleProperty);
             set => SetValue(AngleProperty, value);
         }
-
-        public bool IsSelected
-        {
-            get => (bool)GetValue(IsSelectedProperty);
-            set => SetValue(IsSelectedProperty, value);
-        }
-
-        public static readonly DependencyProperty IsSelectedProperty =
-            DependencyProperty.Register("IsSelected",
-                                        typeof(bool),
-                                        typeof(DesignerItem),
-                                        new PropertyMetadata(false));
+    
     }
 }
