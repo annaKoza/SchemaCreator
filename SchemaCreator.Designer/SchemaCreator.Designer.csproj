@@ -92,6 +92,7 @@
     <Compile Include="Controls\RotateChrome.cs" />
     <Compile Include="Controls\SizeChrome.cs" />
     <Compile Include="Converters\SelectionChangedEventArgsToItemsViewModel.cs" />
+    <Compile Include="Interfaces\IDesignerPanelSettings.cs" />
     <Compile Include="Interfaces\ISelectionItem.cs" />
     <Compile Include="ViewModels\ContextMenu.ViewModel.cs" />
     <Compile Include="ViewModels\DrawingItem.ViewModel.cs" />
@@ -135,6 +136,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="ViewModels\PanelSettings.ViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Styles\ResizeThumb.xaml">

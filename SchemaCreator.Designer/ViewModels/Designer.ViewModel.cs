@@ -4,6 +4,7 @@ using SchemaCreator.Designer.BaseDrawableItems;
 using SchemaCreator.Designer.Helpers;
 using SchemaCreator.Designer.Interfaces;
 using SchemaCreator.Designer.Services;
+using SchemaCreator.Designer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -14,41 +15,22 @@ namespace SchemaCreator.Designer.UserControls
 {
     public class DesignerViewModel : ViewModelBase, IDesignerViewModel
     {
-        private ObservableCollection<BaseDesignerItemViewModel> _selectedItem;
-        public ObservableCollection<BaseDesignerItemViewModel> SelectedItem
-        {
-            get { return _selectedItem; }
-            set { _selectedItem = value; RaisePropertyChanged(nameof(SelectedItem)); }
-        }
-
-        private bool _snapItemToGrid;
-        public bool SnapItemToGrid
-        {
-            get { return _snapItemToGrid; }
-            set { _snapItemToGrid = value; RaisePropertyChanged(nameof(SnapItemToGrid)); }
-        }
-
-        private bool _isGridSnapVisible;
-        public bool IsGridSnapVisible
-        {
-            get { return _isGridSnapVisible; }
-            set { _isGridSnapVisible = value; RaisePropertyChanged(nameof(IsGridSnapVisible)); }
-        }
 
         private ICommand _bringToBack;
         private ICommand _bringToFront;
+        
         private ObservableCollection<BaseDesignerItemViewModel> _items;
         private IBaseChooseAbleItem _itemToDraw;
         private ICommand _removeAll;
         private ICommand _removeItems;
+        private ObservableCollection<BaseDesignerItemViewModel> _selectedItem;
         private SelectionService _selectionService;
         private ICommand _sendBackward;
         private ICommand _sendForward;
-
+        
         public DesignerViewModel()
         {
-            SnapItemToGrid = true;
-            IsGridSnapVisible = true;
+            PanelSettings = new PanelSettingsViewModel();
             Items = new
                  ObservableCollection<BaseDesignerItemViewModel>();
             ItemToDraw = new NullChoosedItemViewModel();
@@ -202,7 +184,7 @@ namespace SchemaCreator.Designer.UserControls
                            }
                        )
                    );
-
+     
         public ObservableCollection<BaseDesignerItemViewModel> Items
         {
             get => _items;
@@ -216,8 +198,10 @@ namespace SchemaCreator.Designer.UserControls
         public IBaseChooseAbleItem ItemToDraw
         {
             get => _itemToDraw;
-            set => _itemToDraw = value; 
+            set => _itemToDraw = value;
         }
+
+        public IDesignerPanelSettings PanelSettings { get; }
 
         public ICommand RemoveAll => _removeAll ??
              (
@@ -242,6 +226,11 @@ namespace SchemaCreator.Designer.UserControls
                        }
                    )
                );
+        public ObservableCollection<BaseDesignerItemViewModel> SelectedItem
+        {
+            get { return _selectedItem; }
+            set { _selectedItem = value; RaisePropertyChanged(nameof(SelectedItem)); }
+        }
 
         public SelectionService SelectionService => _selectionService ??
             (_selectionService =

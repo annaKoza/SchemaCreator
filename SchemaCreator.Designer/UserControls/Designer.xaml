@@ -30,7 +30,7 @@
             ClipToBounds="False"
             ItemsSource="{Binding Items}"
             SelectionMode="Multiple"
-            SnapItemToGrid="{Binding SnapItemToGrid}">
+            SnapItemToGrid="{Binding PanelSettings.SnapItemToGrid}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <command:EventToCommand
@@ -57,7 +57,7 @@
                     <ctr:DesignerCanvas
                         Background="Transparent"
                         ClipToBounds="False"
-                        IsSnapGidVisible="{Binding IsGridSnapVisible}" />
+                        IsSnapGidVisible="{Binding PanelSettings.IsGridSnapVisible}" />
                 </ItemsPanelTemplate>
             </ctr:DesignerPanel.ItemsPanel>
             <ctr:DesignerPanel.ItemContainerStyle>

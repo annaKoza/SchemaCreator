@@ -7,8 +7,8 @@ namespace SchemaCreator.Designer.Interfaces
 {
     public interface IDesignerViewModel : IDrawablePanel, ISelectionPanel
     {
-        bool SnapItemToGrid { get; set; }
-        bool IsGridSnapVisible { get; set; }
+        IDesignerPanelSettings PanelSettings { get; }
+      
         ICommand BringToFront
         {
             get;
