@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace SchemaCreator.Designer.BaseDrawableItems
 {
-    public class NullChoosedItemViewModel : IBaseChoosableItem
+    public class NullChoosedItemViewModel : IBaseChooseAbleItem
     {
         public SelectedItemType SelectedItemType => SelectedItemType.None;
 

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 
 namespace SchemaCreator.Designer.Interfaces
 {
-    public interface IDrawableItem : IBaseChoosableItem, IDesignerItem
+    public interface IDrawableItem : IBaseChooseAbleItem, IDesignerItem
     {
         double X1
         {

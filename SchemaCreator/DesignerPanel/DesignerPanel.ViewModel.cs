@@ -10,15 +10,15 @@ namespace SchemaCreator.UI.ViewModel
         public DesignerPanelViewModel()
         {
             DesignerViewModel = new DesignerViewModel();
-            Messenger.Default.Register<IBaseChoosableItem>(this, HandleBaseItemSelection);
+            Messenger.Default.Register<IBaseChooseAbleItem>(this, HandleBaseItemSelection);
         }
 
-        private void HandleBaseItemSelection(IBaseChoosableItem obj)
+        private void HandleBaseItemSelection(IBaseChooseAbleItem obj)
         {
             SelectItem(obj);
         }
 
-        private void SelectItem(IBaseChoosableItem item)
+        private void SelectItem(IBaseChooseAbleItem item)
         {
             DesignerViewModel.ItemToDraw = item;
         }

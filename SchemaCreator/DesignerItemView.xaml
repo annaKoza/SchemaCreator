@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:SchemaCreator.UI.Views"
     xmlns:viewmodels="clr-namespace:SchemaCreator.UI.ViewModel">
     <DataTemplate DataType="{x:Type viewmodels:RectangleViewModel}">
@@ -18,8 +19,9 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type viewmodels:LineViewModel}">
-        <Line SnapsToDevicePixels="False"
+        <Line
             Fill="White"
+            SnapsToDevicePixels="False"
             Stretch="Fill"
             Stroke="White"
             StrokeThickness="2"
@@ -27,5 +29,15 @@
             X2="{Binding X2}"
             Y1="{Binding Y1}"
             Y2="{Binding Y2}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type viewmodels:PolyLineViewModel}">
+        <Polyline
+            Fill="Red"
+            Points="{Binding DrawingPoints}"
+            SnapsToDevicePixels="False"
+            Stretch="Fill"
+            Stroke="White"
+            StrokeThickness="3" />
     </DataTemplate>
 </ResourceDictionary>

@@ -54,7 +54,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                 if(!IsMouseCaptured)
                     CaptureMouse();
                 var currentPosition = e.GetPosition(this);
-
+       
                 if(Keyboard.IsKeyDown(Key.LeftShift))
                 {
                     if(Math.Abs(currentPosition.X - _selectionStartPoint.Value.X) <

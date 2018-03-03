@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:att="clr-namespace:SchemaCreator.Designer.AttachedProperties"
     xmlns:command="http://www.galasoft.ch/mvvmlight"
+    xmlns:converters="clr-namespace:SchemaCreator.Designer.Converters"
     xmlns:ctr="clr-namespace:SchemaCreator.Designer.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -20,24 +21,32 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <HierarchicalDataTemplate DataType="{x:Type viewmodels:ContextMenuViewModel}" ItemsSource="{Binding ContextMenu}" />
+        <converters:SelectionChangedEventArgsToItemsViewModel x:Key="selectionChanged" />
     </UserControl.Resources>
     <Grid>
         <ctr:DesignerPanel
+            x:Name="designerPanel"
             Background="Transparent"
             ClipToBounds="False"
             ItemsSource="{Binding Items}"
-            SelectedItem="{Binding SelectedItem, Mode=OneWayToSource}"
-            SelectionMode="Multiple">
+            SelectionMode="Multiple"
+            SnapItemToGrid="{Binding SnapItemToGrid}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <command:EventToCommand
+                        Command="{Binding UpdateSelectedItemsList, Mode=OneWay}"
+                        EventArgsConverter="{StaticResource selectionChanged}"
+                        EventArgsConverterParameter="{Binding ElementName=designer}"
+                        PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <ctr:DesignerPanel.Style>
                 <Style TargetType="ctr:DesignerPanel">
                     <Setter Property="OverridesDefaultStyle" Value="True" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate>
-                                <Grid>
-                                    <Canvas Background="Transparent"/>
-                                    <ItemsPresenter/>
-                                </Grid>
+                                <ItemsPresenter />
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
@@ -45,7 +54,10 @@
             </ctr:DesignerPanel.Style>
             <ctr:DesignerPanel.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <Canvas Background="Transparent" ClipToBounds="False" />
+                    <ctr:DesignerCanvas
+                        Background="Transparent"
+                        ClipToBounds="False"
+                        IsSnapGidVisible="{Binding IsGridSnapVisible}" />
                 </ItemsPanelTemplate>
             </ctr:DesignerPanel.ItemsPanel>
             <ctr:DesignerPanel.ItemContainerStyle>

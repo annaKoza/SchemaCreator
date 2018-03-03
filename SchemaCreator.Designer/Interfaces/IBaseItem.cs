@@ -1,10 +1,11 @@
 ﻿using SchemaCreator.Designer.Common;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Interfaces
 {
-    public interface IBaseChoosableItem
+    public interface IBaseChooseAbleItem
     {
         SelectedItemType SelectedItemType
         {

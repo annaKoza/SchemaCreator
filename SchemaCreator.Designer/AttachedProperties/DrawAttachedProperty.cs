@@ -78,7 +78,7 @@ namespace SchemaCreator.Designer.AttachedProperties
             _designerViewModel = dataContext as IDesignerViewModel ??
                 throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
         }
-
+     
         private static IDrawableItem _drawableInstance;
         private static Point? _selectionStartPoint;
         private static SelectedItemType _selectedItemType;

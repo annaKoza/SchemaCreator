@@ -15,15 +15,14 @@
     <Style TargetType="{x:Type s:RotateChrome}">
         <Setter Property="Width" Value="Auto" />
         <Setter Property="Height" Value="Auto" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type s:RotateChrome}">
                     <Grid
                         Width="Auto"
                         MinWidth="30"
-                        Margin="0,-45,-10,0"
-                        HorizontalAlignment="Right"
+                        Margin="0,-45,55,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Background="White"
                         SnapsToDevicePixels="True">
@@ -31,7 +30,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             FontSize="12"
-                            Foreground="Red"
+                            Foreground="Black"
                             Text="{Binding Angle}" />
                     </Grid>
                 </ControlTemplate>
@@ -53,7 +52,7 @@
                             VerticalAlignment="Bottom"
                             Data="M0,0 0,10 M 0,5 100,5 M 100,0 100,10"
                             Stretch="Fill"
-                            Stroke="Red"
+                            Stroke="White"
                             StrokeThickness="1" />
                         <TextBlock
                             Margin="0,0,0,-18"
@@ -62,7 +61,7 @@
                             VerticalAlignment="Bottom"
                             Background="White"
                             FontSize="12"
-                            Foreground="Red"
+                            Foreground="Black"
                             Text="{TemplateBinding ActualWidth,
                                                    Converter={StaticResource doubleFormatConverter}}" />
                         <Path
@@ -71,7 +70,7 @@
                             HorizontalAlignment="Right"
                             Data="M5,0 5,100 M 0,0 10,0 M 0,100 10,100"
                             Stretch="Fill"
-                            Stroke="Red"
+                            Stroke="White"
                             StrokeThickness="1" />
                         <TextBlock
                             Margin="0,0,-18,0"
@@ -80,7 +79,7 @@
                             VerticalAlignment="Center"
                             Background="White"
                             FontSize="12"
-                            Foreground="Red"
+                            Foreground="Black"
                             Text="{TemplateBinding ActualHeight,
                                                    Converter={StaticResource doubleFormatConverter}}">
                             <TextBlock.LayoutTransform>

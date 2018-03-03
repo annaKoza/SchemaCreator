@@ -1,6 +1,6 @@
 ﻿namespace SchemaCreator.Designer.Interfaces
 {
-    public interface ISelectionItem : IBaseChoosableItem
+    public interface ISelectionItem : IBaseChooseAbleItem
     {
     }
 }

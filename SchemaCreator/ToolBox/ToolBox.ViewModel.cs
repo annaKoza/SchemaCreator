@@ -8,20 +8,20 @@ namespace SchemaCreator.UI.ViewModel
 {
     public class ToolBoxViewModel : ViewModelBase
     {
-        private IBaseChoosableItem _selectedDrawingItem;
+        private IBaseChooseAbleItem _selectedDrawingItem;
 
-        public IBaseChoosableItem SelectedDrawingItem
+        public IBaseChooseAbleItem SelectedDrawingItem
         {
             get => _selectedDrawingItem;
             set
             {
                 _selectedDrawingItem = value;
-                Messenger.Default.Send<IBaseChoosableItem>(value);
+                Messenger.Default.Send<IBaseChooseAbleItem>(value);
                 RaisePropertyChanged(nameof(SelectedDrawingItem));
             }
         }
 
-        public ObservableCollection<IBaseChoosableItem> DrawableItems
+        public ObservableCollection<IBaseChooseAbleItem> DrawableItems
         {
             get => _drawdableItems;
             set
@@ -32,7 +32,7 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private ObservableCollection<IDesignerItem> _toolItems;
-        private ObservableCollection<IBaseChoosableItem> _drawdableItems;
+        private ObservableCollection<IBaseChooseAbleItem> _drawdableItems;
 
         public ObservableCollection<IDesignerItem> ToolItems
         {
@@ -42,7 +42,7 @@ namespace SchemaCreator.UI.ViewModel
 
         public ToolBoxViewModel()
         {
-            DrawableItems = new ObservableCollection<IBaseChoosableItem>() { new SelectionViewModel(), new LineViewModel() };
+            DrawableItems = new ObservableCollection<IBaseChooseAbleItem>() { new SelectionViewModel(), new LineViewModel(), new PolyLineViewModel() };
             ToolItems = new ObservableCollection<IDesignerItem>() { new RectangleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new RectangleViewModel() };
         }
     }

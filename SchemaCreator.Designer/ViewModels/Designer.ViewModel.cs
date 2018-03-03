@@ -14,17 +14,31 @@ namespace SchemaCreator.Designer.UserControls
 {
     public class DesignerViewModel : ViewModelBase, IDesignerViewModel
     {
-        private BaseDesignerItemViewModel _selectedItem;
-        public BaseDesignerItemViewModel SelectedItem
+        private ObservableCollection<BaseDesignerItemViewModel> _selectedItem;
+        public ObservableCollection<BaseDesignerItemViewModel> SelectedItem
         {
             get { return _selectedItem; }
             set { _selectedItem = value; RaisePropertyChanged(nameof(SelectedItem)); }
         }
 
+        private bool _snapItemToGrid;
+        public bool SnapItemToGrid
+        {
+            get { return _snapItemToGrid; }
+            set { _snapItemToGrid = value; RaisePropertyChanged(nameof(SnapItemToGrid)); }
+        }
+
+        private bool _isGridSnapVisible;
+        public bool IsGridSnapVisible
+        {
+            get { return _isGridSnapVisible; }
+            set { _isGridSnapVisible = value; RaisePropertyChanged(nameof(IsGridSnapVisible)); }
+        }
+
         private ICommand _bringToBack;
         private ICommand _bringToFront;
         private ObservableCollection<BaseDesignerItemViewModel> _items;
-        private IBaseChoosableItem _itemToDraw;
+        private IBaseChooseAbleItem _itemToDraw;
         private ICommand _removeAll;
         private ICommand _removeItems;
         private SelectionService _selectionService;
@@ -33,6 +47,8 @@ namespace SchemaCreator.Designer.UserControls
 
         public DesignerViewModel()
         {
+            SnapItemToGrid = true;
+            IsGridSnapVisible = true;
             Items = new
                  ObservableCollection<BaseDesignerItemViewModel>();
             ItemToDraw = new NullChoosedItemViewModel();
@@ -197,10 +213,10 @@ namespace SchemaCreator.Designer.UserControls
             }
         }
 
-        public IBaseChoosableItem ItemToDraw
+        public IBaseChooseAbleItem ItemToDraw
         {
             get => _itemToDraw;
-            set => _itemToDraw = value;
+            set => _itemToDraw = value; 
         }
 
         public ICommand RemoveAll => _removeAll ??
