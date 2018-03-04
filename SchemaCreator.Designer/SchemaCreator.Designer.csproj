@@ -79,7 +79,6 @@
     <Compile Include="AttachedProperties\DrawAttachedProperty.cs" />
     <Compile Include="AttachedProperties\SelectAttachedProperty.cs" />
     <Compile Include="BaseDrawableItems\NullChoosedItem.ViewModel.cs" />
-    <Compile Include="Common\Extensions.cs" />
     <Compile Include="Common\SelectedItemType.cs" />
     <Compile Include="Controls\DesignerCanvas.cs" />
     <Compile Include="Controls\DesignerItem.cs" />
@@ -91,6 +90,9 @@
     <Compile Include="Controls\RotateThumb.cs" />
     <Compile Include="Controls\RotateChrome.cs" />
     <Compile Include="Controls\SizeChrome.cs" />
+    <Compile Include="Controls\ZoomBox.cs" />
+    <Compile Include="Converters\DoubleToPointConverter.cs" />
+    <Compile Include="Converters\GeneralTransformToTransformConverter.cs" />
     <Compile Include="Converters\SelectionChangedEventArgsToItemsViewModel.cs" />
     <Compile Include="Interfaces\IDesignerPanelSettings.cs" />
     <Compile Include="Interfaces\ISelectionItem.cs" />

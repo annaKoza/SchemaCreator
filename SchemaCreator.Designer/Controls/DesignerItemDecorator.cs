@@ -49,6 +49,7 @@ namespace SchemaCreator.Designer.Controls
 
                 var designerItem = DataContext as ContentControl;
                 adorner = new ResizeRotateAdorner(designerItem);
+                adorner.LayoutTransform = this.LayoutTransform;
                 adornerLayer.Add(adorner);
 
                 adorner.Visibility = ShowDecorator ? Visibility.Visible : Visibility.Hidden;

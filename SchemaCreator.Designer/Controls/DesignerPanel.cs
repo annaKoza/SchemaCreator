@@ -16,8 +16,11 @@ namespace SchemaCreator.Designer.Controls
         }
         public static readonly DependencyProperty SnapItemToGridProperty =
             DependencyProperty.Register("SnapItemToGrid", typeof(bool), typeof(DesignerPanel), new PropertyMetadata(true));
-        
-        public DesignerPanel() => Focusable = true;
+
+        public DesignerPanel()
+        {
+            Focusable = true;
+        }
 
         protected override DependencyObject GetContainerForItemOverride() => new DesignerItem();
 

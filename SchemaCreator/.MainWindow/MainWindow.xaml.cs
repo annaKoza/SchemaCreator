@@ -10,6 +10,9 @@ namespace SchemaCreator.UI
         public MainWindow()
         {
             InitializeComponent();
+            zoomBox.DesignerGrid = gr;
+            zoomBox.ScrollViewer = sc;
+            zoomBox.ParentPanel = par;
         }
     }
 }

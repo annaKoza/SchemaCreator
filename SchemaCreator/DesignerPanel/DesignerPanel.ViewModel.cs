@@ -2,6 +2,8 @@
 using GalaSoft.MvvmLight.Messaging;
 using SchemaCreator.Designer.Interfaces;
 using SchemaCreator.Designer.UserControls;
+using System.Windows;
+using System.Windows.Media;
 
 namespace SchemaCreator.UI.ViewModel
 {
@@ -22,6 +24,32 @@ namespace SchemaCreator.UI.ViewModel
         {
             DesignerViewModel.ItemToDraw = item;
         }
+
+        Point designerOffset;
+        public Point DesignerOffset
+        {
+            get
+            {
+                return designerOffset;
+            }
+            set
+            {
+                designerOffset = value;
+                DesignerViewModel.PanelSettings.SnapGridOffset = value;
+            }
+        }
+
+        private Transform _transform;
+        public Transform Transform
+        {
+            get => _transform;
+            set
+            {
+                _transform = value;
+                DesignerViewModel.PanelSettings.Transform = value;
+            }
+        }
+
 
         private IDesignerViewModel _designerViewModel;
 

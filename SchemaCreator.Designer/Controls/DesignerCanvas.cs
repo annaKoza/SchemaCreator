@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -6,6 +7,31 @@ namespace SchemaCreator.Designer.Controls
 {
     public class DesignerCanvas : Canvas
     {
+        public Point SnapGridOffset
+        {
+            get { return (Point)GetValue(SnapGridOffsetProperty); }
+            set { SetValue(SnapGridOffsetProperty, value); }
+        }
+        public static readonly DependencyProperty SnapGridOffsetProperty =
+            DependencyProperty.Register("SnapGridOffset", typeof(Point), typeof(DesignerCanvas), new FrameworkPropertyMetadata(new Point(5,5), FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OnIsSnapGidOffsetChanged)));
+
+        private int basexOffset = 5;
+        private int baseyOffset = 5;
+        private void SetOffset(Point point)
+        {
+            var modx = (int)point.X / 10 % 5;
+            var mody = (int)point.Y / 10 % 5;
+
+            xOffset = 55 - (int)point.X/10 - modx;
+            yOffset = 55 - (int)point.Y/10 - mody;
+        }
+        private static void OnIsSnapGidOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (!(d is DesignerCanvas canvas)) return;
+            var value = (Point)e.NewValue;
+            if (value.Y != 0.0 && value.X != 0.0)
+                canvas.SetOffset(value);
+        }
 
         public static readonly DependencyProperty IsSnapGidVisibleProperty =
             DependencyProperty.Register("IsSnapGidVisible", typeof(bool), typeof(DesignerCanvas), new FrameworkPropertyMetadata(
@@ -14,8 +40,8 @@ namespace SchemaCreator.Designer.Controls
                 new PropertyChangedCallback(OnIsSnapGidVisibleChanged)));
         private Pen darkPen;
         private Pen lightPen;
-        private int xOffset;
-        private int yOffset;
+        private int xOffset = 5;
+        private int yOffset = 5;
 
         static DesignerCanvas() => DefaultStyleKeyProperty.OverrideMetadata(
         typeof(DesignerCanvas),
@@ -40,21 +66,18 @@ namespace SchemaCreator.Designer.Controls
 
         private void SetGridColor(Color lightColor, Color darkColor)
         {
-           lightPen = new Pen(new SolidColorBrush(lightColor), 0.5);
+            lightPen = new Pen(new SolidColorBrush(lightColor), 0.5);
             darkPen = new Pen(new SolidColorBrush(darkColor), 1);
         }
 
         protected override void OnRender(DrawingContext dc)
         {
-            xOffset = 15;
-            yOffset = 15;
+            
             // TODO: yOffset and XOffset will depends on Zoom size;
             int rows = (int)(ActualHeight);
             int columns = (int)(ActualWidth);
             int alternate = yOffset == 5 ? yOffset : 1;
            
-           
-
             int j = 0;
             //Draw the horizontal lines        
             Point x = new Point(0, 0.5);

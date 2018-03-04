@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
 
 namespace SchemaCreator.Designer.ViewModels
 {
@@ -13,7 +15,7 @@ namespace SchemaCreator.Designer.ViewModels
         public PanelSettingsViewModel()
         {
             SnapItemToGrid = true;
-            IsGridSnapVisible = false;
+            IsGridSnapVisible = true;
         }
         private bool _snapItemToGrid;
         public bool SnapItemToGrid
@@ -22,6 +24,16 @@ namespace SchemaCreator.Designer.ViewModels
             set
             {
                 _snapItemToGrid = value;
+                RaisePropertyChanged();
+            }
+        }
+        private Point _snapGridOffset;
+        public Point SnapGridOffset
+        {
+            get => _snapGridOffset;
+            set
+            {
+                _snapGridOffset = value;
                 RaisePropertyChanged();
             }
         }
@@ -34,6 +46,13 @@ namespace SchemaCreator.Designer.ViewModels
                 _isGridSnapVisible = value;
                 RaisePropertyChanged();
             }
+        }
+
+        private Transform _transform;
+        public Transform Transform
+        {
+            get => _transform;
+            set { _transform = value;  RaisePropertyChanged(); }
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿<cc:CustomWindow
+﻿
+<cc:CustomWindow
     x:Class="SchemaCreator.UI.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cc="clr-namespace:CustomControls.Controls;assembly=Controls"
+    xmlns:conv="clr-namespace:SchemaCreator.Designer.Converters;assembly=SchemaCreator.Designer"
     xmlns:ctr="clr-namespace:SchemaCreator.Designer.Controls;assembly=SchemaCreator.Designer"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dialog="clr-namespace:SchemaCreator.UI.Base"
@@ -17,7 +19,7 @@
     Icon="../tools.ico"
     mc:Ignorable="d">
     <Window.Resources>
-
+        <conv:DoubleToPointConverter x:Key="doubletoPoint" />
         <DataTemplate DataType="{x:Type viewmodels:MenuViewModel}">
             <local:Menu />
         </DataTemplate>
@@ -45,21 +47,35 @@
                 Width="200"
                 HorizontalAlignment="Left"
                 DockPanel.Dock="Left">
+
                 <ContentPresenter Content="{Binding ToolBoxViewModel}" />
+                <ctr:ZoomBox
+                    x:Name="zoomBox"
+                    Width="180"
+                    Margin="0,0,20,20"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Panel.ZIndex="5"
+                    Background="Transparent"
+                    SliderValue="{Binding DesignerPanelViewModel.DesignerOffset, Mode=OneWayToSource, Converter={StaticResource doubletoPoint}}" />
             </Grid>
-            <Grid DockPanel.Dock="Right">
+            <Grid x:Name="par" DockPanel.Dock="Right">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <ContentPresenter Content="{Binding ButtonRibbonViewModel}" />
-
                 <ScrollViewer
+                    x:Name="sc"
                     Grid.Row="1"
                     HorizontalScrollBarVisibility="Auto"
                     VerticalScrollBarVisibility="Auto">
-                    <Grid>
+                    <Grid
+                        x:Name="gr"
+                        Width="1000"
+                        Height="1000"
+                        LayoutTransform="{Binding DesignerPanelViewModel.Transform, Mode=TwoWay}">
                         <ContentPresenter Content="{Binding BackgroundViewModel}" />
                         <ContentPresenter Content="{Binding DesignerPanelViewModel}" />
                     </Grid>

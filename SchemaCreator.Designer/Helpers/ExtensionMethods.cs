@@ -8,12 +8,17 @@ namespace SchemaCreator.Designer.Helpers
 {
     internal static class ExtensionMethods
     {
+        public static double NearestFactor(this double Value, double Factor)
+        {
+            return Math.Round(Value / Factor, MidpointRounding.AwayFromZero) * Factor;
+        }
+
         public static int RemoveAll<T>(this ObservableCollection<T> collection,
                                        Func<T, bool> condition)
         {
             var itemsToRemove = collection.Where(condition).ToList();
 
-            foreach(var itemToRemove in itemsToRemove)
+            foreach (var itemToRemove in itemsToRemove)
             {
                 collection.Remove(itemToRemove);
             }
@@ -24,13 +29,13 @@ namespace SchemaCreator.Designer.Helpers
         internal static T GetVisualParent<T>(this DependencyObject child)
             where T : DependencyObject
         {
-            while(true)
+            while (true)
             {
                 var parentObject = VisualTreeHelper.GetParent(child);
 
-                if(parentObject == null) return null;
+                if (parentObject == null) return null;
 
-                if(parentObject is T parent)
+                if (parentObject is T parent)
                     return parent;
 
                 child = parentObject;
@@ -43,12 +48,12 @@ namespace SchemaCreator.Designer.Helpers
             T child = default(T);
 
             var childrenCount = VisualTreeHelper.GetChildrenCount(parent);
-            for(var i = 0; i < childrenCount; i++)
+            for (var i = 0; i < childrenCount; i++)
             {
                 var v = (Visual)VisualTreeHelper.GetChild(parent, i);
                 child = v as T ?? GetVisualChild<T>(v);
 
-                if(child != null)
+                if (child != null)
                 {
                     break;
                 }

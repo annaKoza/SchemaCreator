@@ -11,6 +11,192 @@
         <ResourceDictionary Source="/SchemaCreator.Designer;component/Themes/ResizeRotateChrome.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <s:DoubleFormatConverter x:Key="doubleFormatConverter" />
+    <Style TargetType="{x:Type s:ZoomBox}">
+        <Style.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="#434343" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontFamily" Value="Segoe UI" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+
+            <Style x:Key="ToggleButtonStyle" TargetType="ToggleButton">
+                <Setter Property="SnapsToDevicePixels" Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border x:Name="Border" Background="gray">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Border" Property="Background" Value="#878787" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="Expander">
+                <Setter Property="SnapsToDevicePixels" Value="true" />
+                <Setter Property="OverridesDefaultStyle" Value="true" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Expander">
+                            <DockPanel>
+                                <ToggleButton
+                                    HorizontalContentAlignment="Left"
+                                    VerticalContentAlignment="Center"
+                                    DockPanel.Dock="Top"
+                                    IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Style="{StaticResource ToggleButtonStyle}">
+                                    <ToggleButton.Content>
+                                        <Grid Margin="4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="20" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <ContentPresenter
+                                                Name="HeaderContent"
+                                                Grid.Column="1"
+                                                ContentSource="Header" />
+                                        </Grid>
+                                    </ToggleButton.Content>
+                                </ToggleButton>
+                                <Border Name="Content">
+                                    <Border.LayoutTransform>
+                                        <ScaleTransform ScaleY="0" />
+                                    </Border.LayoutTransform>
+                                    <ContentPresenter Content="{TemplateBinding Content}" />
+                                </Border>
+                            </DockPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="Expander.IsExpanded" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard Timeline.DesiredFrameRate="20">
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Content"
+                                                    Storyboard.TargetProperty="LayoutTransform.ScaleY"
+                                                    To="1"
+                                                    Duration="0:0:0.3" />
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Content"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="1"
+                                                    Duration="0:0:0.3" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard Timeline.DesiredFrameRate="20">
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Content"
+                                                    Storyboard.TargetProperty="LayoutTransform.ScaleY"
+                                                    To="0"
+                                                    Duration="0:0:0.3" />
+                                                <DoubleAnimation
+                                                    Storyboard.TargetName="Content"
+                                                    Storyboard.TargetProperty="Opacity"
+                                                    To="0"
+                                                    Duration="0:0:0.3" />
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style.Resources>
+
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="Opacity" Value="0.5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type s:ZoomBox}">
+                    <Border
+                        Background="#C6C6C6"
+                        BorderBrush="DimGray"
+                        BorderThickness="1"
+                        CornerRadius="1">
+                        <Expander Background="Transparent" IsExpanded="False">
+                            <Border
+                                Height="150"
+                                Padding="0"
+                                BorderBrush="DimGray"
+                                BorderThickness="0,1,0,0">
+                                <Grid>
+                                    <Canvas Name="PART_ZoomCanvas" Margin="5">
+                                        <Canvas.Background>
+                                            <VisualBrush Stretch="Uniform" Visual="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=ScrollViewer.Content}" />
+                                        </Canvas.Background>
+                                        <Thumb Name="PART_ZoomThumb" Cursor="SizeAll">
+                                            <Thumb.Style>
+                                                <Style TargetType="Thumb">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Thumb">
+                                                                <Rectangle
+                                                                    Fill="#70C8C8C8"
+                                                                    Stroke="#FF9A9A9A"
+                                                                    StrokeThickness="1" />
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Thumb.Style>
+                                        </Thumb>
+                                    </Canvas>
+                                </Grid>
+                            </Border>
+                            <Expander.Header>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Slider
+                                        Name="PART_ZoomSlider"
+                                        MinWidth="104"
+                                        MinHeight="21"
+                                        Margin="0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        IsMoveToPointEnabled="False"
+                                        IsSnapToTickEnabled="True"
+                                        LargeChange="25"
+                                        Maximum="500"
+                                        Minimum="25"
+                                        SmallChange="1"
+                                        Value="100" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="0,0,14,0"
+                                        Text="{Binding ElementName=PART_ZoomSlider, Path=Value}" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="2,0"
+                                        Text="%" />
+                                </Grid>
+                            </Expander.Header>
+                        </Expander>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="1" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <Style TargetType="{x:Type s:RotateChrome}">
         <Setter Property="Width" Value="Auto" />

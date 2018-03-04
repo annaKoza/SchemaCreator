@@ -11,7 +11,7 @@
                 <ControlTemplate TargetType="{x:Type local:ResizeRotateChrome}">
                     <Grid SnapsToDevicePixels="true" UseLayoutRounding="True">
                         <!--  PART_RotateThumb  -->
-                        <local:RotateThumb
+                        <local:RotateThumb LayoutTransform="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:ResizeRotateChrome}},Path=LayoutTransform}"
                             x:Name="PART_RotateThumb"
                             Margin="0,-40,0,0"
                             HorizontalAlignment="Center"

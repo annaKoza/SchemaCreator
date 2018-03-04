@@ -16,12 +16,16 @@ namespace SchemaCreator.Designer.Adorners
             SnapsToDevicePixels = true;
             _chrome = new ResizeRotateChrome
             {
-                DataContext = designerItem
+                DataContext = designerItem,
+                LayoutTransform = this.LayoutTransform
             };
+            
             _visuals = new VisualCollection(this)
             {
                 _chrome
+                
             };
+          
         }
 
         protected override Size ArrangeOverride(Size finalSize)
