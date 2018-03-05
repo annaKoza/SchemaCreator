@@ -2,7 +2,6 @@
 using GalaSoft.MvvmLight.Command;
 using SchemaCreator.Designer.Interfaces;
 using SchemaCreator.Designer.ViewModels;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -38,36 +37,33 @@ namespace SchemaCreator.Designer.UserControls
 
         private void SelectItem()
         {
-            if ((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) !=
+            if((Keyboard.Modifiers & (ModifierKeys.Shift | ModifierKeys.Control)) !=
                 ModifierKeys.None)
             {
-                if ((Keyboard.Modifiers & (ModifierKeys.Shift)) !=
+                if((Keyboard.Modifiers & (ModifierKeys.Shift)) !=
                     ModifierKeys.None)
                 {
-                    if (!IsSelected)
+                    if(!IsSelected)
                     {
                         Parent.SelectionService.AddToSelection(this);
-                    }
-                    else
+                    } else
                     {
                         Parent.SelectionService.RemoveFromSelection(this);
                     }
                 }
 
-                if ((Keyboard.Modifiers & (ModifierKeys.Control)) !=
+                if((Keyboard.Modifiers & (ModifierKeys.Control)) !=
                     ModifierKeys.None)
                 {
-                    if (!IsSelected)
+                    if(!IsSelected)
                     {
                         Parent.SelectionService.AddToSelection(this);
-                    }
-                    else
+                    } else
                     {
                         Parent.SelectionService.RemoveFromSelection(this);
                     }
                 }
-            }
-            else if (!IsSelected)
+            } else if(!IsSelected)
             {
                 Parent.SelectionService.SelectItem(this);
             }
@@ -85,12 +81,33 @@ namespace SchemaCreator.Designer.UserControls
                 new ContextMenuViewModel()
                 {
                     Name = "Order",
-                    ContextMenu = new ObservableCollection<ContextMenuViewModel>()
+                    ContextMenu =
+                            new ObservableCollection<ContextMenuViewModel>()
                     {
-                         new ContextMenuViewModel()  { Name="Bring to Front", Action=Parent.BringToFront},
-                         new ContextMenuViewModel()  { Name="Send Forward", Action=Parent.SendForward},
-                         new ContextMenuViewModel()  { Name="Bring to Back", Action=Parent.BringToBack},
-                         new ContextMenuViewModel()  { Name="Send Backward", Action=Parent.SendBackward},
+                         new ContextMenuViewModel()
+                         {
+                                     Name = "Bring to Front",
+                                     Action =
+                                                 Parent.BringToFront
+                         },
+                         new ContextMenuViewModel()
+                         {
+                                     Name = "Send Forward",
+                                     Action =
+                                                 Parent.SendForward
+                         },
+                         new ContextMenuViewModel()
+                         {
+                                     Name = "Bring to Back",
+                                     Action =
+                                                 Parent.BringToBack
+                         },
+                         new ContextMenuViewModel()
+                         {
+                                     Name = "Send Backward",
+                                     Action =
+                                                 Parent.SendBackward
+                         },
                     }
                 }
             };
@@ -165,7 +182,7 @@ namespace SchemaCreator.Designer.UserControls
             set
             {
                 _parent = value;
-                if (value != null)
+                if(value != null)
                     AddContextMenu(value);
                 RaisePropertyChanged(nameof(Parent));
             }

@@ -7,9 +7,6 @@ namespace SchemaCreator.UI
     /// </summary>
     public partial class Menu : UserControl
     {
-        public Menu()
-        {
-            InitializeComponent();
-        }
+        public Menu() => InitializeComponent();
     }
 }

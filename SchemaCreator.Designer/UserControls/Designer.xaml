@@ -22,7 +22,6 @@
     <UserControl.Resources>
         <HierarchicalDataTemplate DataType="{x:Type viewmodels:ContextMenuViewModel}" ItemsSource="{Binding ContextMenu}" />
         <converters:SelectionChangedEventArgsToItemsViewModel x:Key="selectionChanged" />
-        <converters:GeneralTransformToTransformConverter x:Key="transform" />
     </UserControl.Resources>
     <Grid>
         <ctr:DesignerPanel
@@ -59,14 +58,12 @@
                         Background="Transparent"
                         ClipToBounds="False"
                         IsSnapGidVisible="{Binding PanelSettings.IsGridSnapVisible}"
-                        LayoutTransform="{Binding ElementName=designer, Path=DataContext.PanelSettings.Transform, Mode=OneWay}"
                         SnapGridOffset="{Binding PanelSettings.SnapGridOffset}" />
                 </ItemsPanelTemplate>
             </ctr:DesignerPanel.ItemsPanel>
             <ctr:DesignerPanel.ItemContainerStyle>
                 <!--  DesignerItem Style  -->
                 <Style TargetType="{x:Type ctr:DesignerItem}">
-                    <Setter Property="LayoutTransform" Value="{Binding ElementName=designer, Path=DataContext.PanelSettings.Transform, Mode=OneWay}" />
                     <Setter Property="Padding" Value="0" />
                     <Setter Property="Panel.ZIndex" Value="{Binding ZIndex}" />
                     <Setter Property="RenderTransformOrigin" Value="{Binding TransformOrigin}" />
@@ -109,7 +106,7 @@
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         Content="{TemplateBinding ContentControl.Content}" />
-                                    <ctr:DesignerItemDecorator x:Name="PART_ItemDecorator" LayoutTransform="{Binding ElementName=designer, Path=DataContext.PanelSettings.Transform, Converter={StaticResource transform}, Mode=OneWay}" />
+                                    <ctr:DesignerItemDecorator x:Name="PART_ItemDecorator" />
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                                             <command:EventToCommand
@@ -130,6 +127,5 @@
                 </Style>
             </ctr:DesignerPanel.ItemContainerStyle>
         </ctr:DesignerPanel>
-
     </Grid>
 </UserControl>

@@ -9,12 +9,13 @@ namespace SchemaCreator.UI.ViewModel
         public string ImageSource
         {
             get => _imageSource;
-            set { _imageSource = value; RaisePropertyChanged(nameof(ImageSource)); }
+            set
+            {
+                _imageSource = value; RaisePropertyChanged(nameof(ImageSource));
+            }
         }
 
-        public RectangleViewModel()
-        {
-            ImageSource = @"pack://application:,,,/SchemaCreator;component/Resources/Images/settings.png";
-        }
+        public RectangleViewModel() => ImageSource =
+            @"pack://application:,,,/SchemaCreator;component/Resources/Images/settings.png";
     }
 }

@@ -1,10 +1,6 @@
 ﻿using SchemaCreator.Designer.DrawingPart;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -18,6 +14,7 @@ namespace SchemaCreator.UI.ViewModel
         private bool _readFirstTime = true;
         private PointCollection _drawingPoints;
         readonly DrawingVisual drawingVisual = new DrawingVisual();
+
         public PointCollection DrawingPoints
         {
             get => _drawingPoints;
@@ -27,6 +24,7 @@ namespace SchemaCreator.UI.ViewModel
                 Set(ref _drawingPoints, value);
             }
         }
+
         public PolyLineViewModel() : base()
         {
             DrawingPoints = new PointCollection();
@@ -37,19 +35,21 @@ namespace SchemaCreator.UI.ViewModel
             _pen.StartLineCap = PenLineCap.Round;
             _pen.EndLineCap = PenLineCap.Round;
         }
-        public override void DrawAdorner(DrawingContext drawingContext, Point startPoint, Point endPoint)
+
+        public override void DrawAdorner(DrawingContext drawingContext,
+                                         Point startPoint,
+                                         Point endPoint)
         {
-            if (_readFirstTime)
+            if(_readFirstTime)
             {
                 DrawingPoints.Add(startPoint);
                 _lastPoint = startPoint;
                 _readFirstTime = false;
             }
             DrawingPoints.Add(endPoint);
-         
-                drawingContext.DrawLine(_pen, _lastPoint, endPoint);
-                _lastPoint = endPoint;
-            
+
+            drawingContext.DrawLine(_pen, _lastPoint, endPoint);
+            _lastPoint = endPoint;
         }
     }
 }

@@ -12,9 +12,9 @@ namespace SchemaCreator.Designer.BaseDrawableItems
         public SelectionViewModel() => _rubberbandPen =
             new Pen(Brushes.LightSlateGray,
                     1)
-        {
-            DashStyle = new DashStyle(new double[] { 2 }, 1)
-        };
+            {
+                DashStyle = new DashStyle(new double[] { 2 }, 1)
+            };
 
         public SelectedItemType SelectedItemType => SelectedItemType.SelectItem;
 

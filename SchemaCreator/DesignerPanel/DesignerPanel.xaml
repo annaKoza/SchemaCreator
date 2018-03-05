@@ -21,7 +21,7 @@
     </UserControl.Resources>
     <Grid>
         <main:Designer
-            Width="900"
+            Width="800"
             Height="800"
             Background="Transparent"
             BorderBrush="#E1454545"

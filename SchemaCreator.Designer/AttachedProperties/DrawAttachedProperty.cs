@@ -43,10 +43,10 @@ namespace SchemaCreator.Designer.AttachedProperties
         private static void OnDesignerContinueDraw(object sender,
                                                    MouseEventArgs e)
         {
-            if(_drawableInstance
-                == null
-                || _selectedItemType
-                != SelectedItemType.DrawItem) return;
+            if(_drawableInstance ==
+                null ||
+                _selectedItemType !=
+                SelectedItemType.DrawItem) return;
 
             if(e.LeftButton != MouseButtonState.Pressed)
                 _selectionStartPoint = null;
@@ -78,7 +78,7 @@ namespace SchemaCreator.Designer.AttachedProperties
             _designerViewModel = dataContext as IDesignerViewModel ??
                 throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
         }
-     
+
         private static IDrawableItem _drawableInstance;
         private static Point? _selectionStartPoint;
         private static SelectedItemType _selectedItemType;

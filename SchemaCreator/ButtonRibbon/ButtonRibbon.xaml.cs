@@ -7,9 +7,6 @@ namespace SchemaCreator.UI
     /// </summary>
     public partial class ButtonRibbon : UserControl
     {
-        public ButtonRibbon()
-        {
-            InitializeComponent();
-        }
+        public ButtonRibbon() => InitializeComponent();
     }
 }

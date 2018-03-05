@@ -7,9 +7,6 @@ namespace SchemaCreator.UI
     /// </summary>
     public partial class Background : UserControl
     {
-        public Background()
-        {
-            InitializeComponent();
-        }
+        public Background() => InitializeComponent();
     }
 }

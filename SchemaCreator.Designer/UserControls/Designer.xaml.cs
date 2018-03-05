@@ -1,5 +1,4 @@
-﻿using SchemaCreator.Designer.Helpers;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace SchemaCreator.Designer
 {
@@ -8,10 +7,6 @@ namespace SchemaCreator.Designer
     /// </summary>
     public partial class Designer : UserControl
     {
-        public Designer()
-        {
-            InitializeComponent();
-        }
-
+        public Designer() => InitializeComponent();
     }
 }

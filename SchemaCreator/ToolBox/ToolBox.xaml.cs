@@ -7,9 +7,6 @@ namespace SchemaCreator.UI
     /// </summary>
     public partial class ToolBox : UserControl
     {
-        public ToolBox()
-        {
-            InitializeComponent();
-        }
+        public ToolBox() => InitializeComponent();
     }
 }

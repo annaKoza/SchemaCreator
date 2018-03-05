@@ -1,5 +1,7 @@
 ﻿using SchemaCreator.Designer.Controls;
+using SchemaCreator.Designer.Helpers;
 using SchemaCreator.Designer.Interfaces;
+using SchemaCreator.Designer.UserControls;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +26,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                            IDesignerViewModel designerPanel,
                            IDrawableItem drawableItem) : base(itemsPanel)
         {
-            _chrome = new SizeChrome() { };
+            _chrome = new SizeChrome();
             _itemsPanel = itemsPanel;
             _drawableInstance = drawableItem;
             _selectionStartPoint = selectionStartPoint;
@@ -34,19 +36,46 @@ namespace SchemaCreator.Designer.AttachedProperties
                _chrome
             };
         }
+
+        public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
+        {
+            var scaleFactor = GetCurrentScaleFactor();
+
+            if(_visuals != null)
+            {
+                _chrome.LayoutTransform = scaleFactor.Inverse as Transform;
+            }
+            InvalidateArrange();
+            return base.GetDesiredTransform(transform);
+        }
+
+        private Transform GetCurrentScaleFactor()
+        {
+            var p = AdornedElement.GetVisualParent<DesignerPanel>();
+            var dc = p.DataContext as DesignerViewModel;
+
+            return dc.PanelSettings.Transform;
+        }
+
         protected override Size ArrangeOverride(Size finalSize)
         {
-            var rectangle = new Rect(_selectionStartPoint.Value, _endPoint ?? _selectionStartPoint.Value);
-          
+            var rectangle = new Rect(_selectionStartPoint.Value,
+                                     _endPoint ??
+                _selectionStartPoint.Value);
+
             _chrome.Arrange(new Rect(rectangle.TopLeft, rectangle.Size));
-            _chrome.Width = rectangle.Width;
-            _chrome.Height = rectangle.Height;
+            _chrome.Width = rectangle.Width *
+                (GetCurrentScaleFactor() as ScaleTransform).ScaleX;
+            _chrome.Height = rectangle.Height *
+                (GetCurrentScaleFactor() as ScaleTransform).ScaleY;
 
             return finalSize;
         }
 
         protected override Visual GetVisualChild(int index) => _visuals[index];
+
         protected override int VisualChildrenCount => _visuals.Count;
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
             if(e.LeftButton == MouseButtonState.Pressed)
@@ -54,7 +83,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                 if(!IsMouseCaptured)
                     CaptureMouse();
                 var currentPosition = e.GetPosition(this);
-       
+
                 if(Keyboard.IsKeyDown(Key.LeftShift))
                 {
                     if(Math.Abs(currentPosition.X - _selectionStartPoint.Value.X) <
@@ -63,7 +92,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                         currentPosition.X = _selectionStartPoint.Value.X; else
                         currentPosition.Y = _selectionStartPoint.Value.Y;
                 }
-                
+
                 _endPoint = currentPosition;
                 InvalidateVisual();
             } else
@@ -118,11 +147,17 @@ namespace SchemaCreator.Designer.AttachedProperties
             drawingContext.DrawRectangle(Brushes.Transparent,
                                          null,
                                          new Rect(RenderSize));
-           
+
             if(_selectionStartPoint.HasValue && _endPoint.HasValue)
             {
-                _drawableInstance.DrawAdorner(drawingContext, _selectionStartPoint.Value, _endPoint.Value);
-                drawingContext.DrawRectangle(Brushes.Transparent, new Pen(new SolidColorBrush(Colors.White), 0.1), new Rect(_selectionStartPoint.Value, _endPoint.Value));
+                _drawableInstance.DrawAdorner(drawingContext,
+                                              _selectionStartPoint.Value,
+                                              _endPoint.Value);
+                drawingContext.DrawRectangle(Brushes.Transparent,
+                                             new Pen(new SolidColorBrush(Colors.White),
+                                                     0.1),
+                                             new Rect(_selectionStartPoint.Value,
+                                                      _endPoint.Value));
             }
         }
     }

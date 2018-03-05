@@ -7,9 +7,6 @@ namespace SchemaCreator.UI
     /// </summary>
     public partial class DesignerPanel : UserControl
     {
-        public DesignerPanel()
-        {
-            InitializeComponent();
-        }
+        public DesignerPanel() => InitializeComponent();
     }
 }

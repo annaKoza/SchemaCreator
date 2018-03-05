@@ -1,10 +1,7 @@
 ﻿using SchemaCreator.Designer.Adorners;
-using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Controls
 {
@@ -16,6 +13,7 @@ namespace SchemaCreator.Designer.Controls
                                         typeof(DesignerItemDecorator),
             new FrameworkPropertyMetadata(false,
                                           new PropertyChangedCallback(ShowDecoratorProperty_Changed)));
+
         private Adorner adorner;
 
         public DesignerItemDecorator() => Unloaded +=
@@ -24,7 +22,7 @@ namespace SchemaCreator.Designer.Controls
         private void DesignerItemDecorator_Unloaded(object sender,
                                                     RoutedEventArgs e)
         {
-            if (adorner == null) return;
+            if(adorner == null) return;
 
             AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this);
             adornerLayer?.Remove(adorner);
@@ -33,7 +31,7 @@ namespace SchemaCreator.Designer.Controls
 
         private void HideAdorner()
         {
-            if (adorner != null)
+            if(adorner != null)
             {
                 adorner.Visibility = Visibility.Hidden;
             }
@@ -41,20 +39,20 @@ namespace SchemaCreator.Designer.Controls
 
         private void ShowAdorner()
         {
-            if (adorner == null)
+            if(adorner == null)
             {
                 AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(this);
 
-                if (adornerLayer == null) return;
+                if(adornerLayer == null) return;
 
                 var designerItem = DataContext as ContentControl;
                 adorner = new ResizeRotateAdorner(designerItem);
-                adorner.LayoutTransform = this.LayoutTransform;
                 adornerLayer.Add(adorner);
 
-                adorner.Visibility = ShowDecorator ? Visibility.Visible : Visibility.Hidden;
-            }
-            else
+                adorner.Visibility = ShowDecorator
+                    ? Visibility.Visible
+                    : Visibility.Hidden;
+            } else
             {
                 adorner.Visibility = Visibility.Visible;
             }
@@ -66,7 +64,7 @@ namespace SchemaCreator.Designer.Controls
             var decorator = (DesignerItemDecorator)d;
             var showDecorator = (bool)e.NewValue;
 
-            if (showDecorator)
+            if(showDecorator)
             {
                 decorator.ShowAdorner();
                 return;
@@ -81,4 +79,3 @@ namespace SchemaCreator.Designer.Controls
         }
     }
 }
-

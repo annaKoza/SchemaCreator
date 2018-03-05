@@ -14,10 +14,8 @@ namespace SchemaCreator.UI.ViewModel
             set => _menuItems = value;
         }
 
-        public MenuViewModel(ObservableCollection<MenuSection> menuItems)
-        {
-            MenuItems = menuItems;
-        }
+        public MenuViewModel(ObservableCollection<MenuSection> menuItems) => MenuItems =
+            menuItems;
 
         public void DisableItems(string itemName)
         {
@@ -31,21 +29,24 @@ namespace SchemaCreator.UI.ViewModel
             menuItem?.ForEach(x => x.IsEnabled = true);
         }
 
-        public List<MenuSection> GetMenuSectionsOfGivenMenuText(string menuText, ObservableCollection<MenuSection> menuItems)
+        public List<MenuSection> GetMenuSectionsOfGivenMenuText(string menuText,
+                                                                ObservableCollection<MenuSection> menuItems)
         {
-            List<MenuSection> foundItems = new List<MenuSection>();
-            foreach (var item in menuItems)
+            var foundItems = new List<MenuSection>();
+            foreach(var item in menuItems)
             {
                 GetMenuItems(menuText, item, foundItems);
             }
             return foundItems;
         }
 
-        private static void GetMenuItems(string textToFind, MenuSection item, List<MenuSection> items)
+        private static void GetMenuItems(string textToFind,
+                                         MenuSection item,
+                                         List<MenuSection> items)
         {
-            if (textToFind.Equals(item.MenuText)) items.Add(item);
-            if (item.SubMenu?.Count == 0) return;
-            foreach (var subitem in item.SubMenu)
+            if(textToFind.Equals(item.MenuText)) items.Add(item);
+            if(item.SubMenu?.Count == 0) return;
+            foreach(var subitem in item.SubMenu)
             {
                 GetMenuItems(textToFind, subitem, items);
             }

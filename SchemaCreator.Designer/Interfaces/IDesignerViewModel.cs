@@ -7,8 +7,11 @@ namespace SchemaCreator.Designer.Interfaces
 {
     public interface IDesignerViewModel : IDrawablePanel, ISelectionPanel
     {
-        IDesignerPanelSettings PanelSettings { get; }
-      
+        IDesignerPanelSettings PanelSettings
+        {
+            get;
+        }
+
         ICommand BringToFront
         {
             get;

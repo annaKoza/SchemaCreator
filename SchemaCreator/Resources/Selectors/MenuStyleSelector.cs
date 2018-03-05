@@ -6,11 +6,15 @@ namespace SchemaCreator.UI.Resources.Selectors
 {
     public class MenuStyleSelector : StyleSelector
     {
-        public Style StyleMenuSeparator { get; set; }
-
-        public override Style SelectStyle(object item, DependencyObject container)
+        public Style StyleMenuSeparator
         {
-            if (item is MenuSeparator)
+            get; set;
+        }
+
+        public override Style SelectStyle(object item,
+                                          DependencyObject container)
+        {
+            if(item is MenuSeparator)
             {
                 return StyleMenuSeparator;
             }

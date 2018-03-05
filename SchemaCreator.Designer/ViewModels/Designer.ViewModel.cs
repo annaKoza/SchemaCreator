@@ -15,10 +15,9 @@ namespace SchemaCreator.Designer.UserControls
 {
     public class DesignerViewModel : ViewModelBase, IDesignerViewModel
     {
-
         private ICommand _bringToBack;
         private ICommand _bringToFront;
-        
+
         private ObservableCollection<BaseDesignerItemViewModel> _items;
         private IBaseChooseAbleItem _itemToDraw;
         private ICommand _removeAll;
@@ -27,7 +26,7 @@ namespace SchemaCreator.Designer.UserControls
         private SelectionService _selectionService;
         private ICommand _sendBackward;
         private ICommand _sendForward;
-        
+
         public DesignerViewModel()
         {
             PanelSettings = new PanelSettingsViewModel();
@@ -51,16 +50,15 @@ namespace SchemaCreator.Designer.UserControls
             int i = 0;
             int j = 0;
 
-            foreach (var item in childrenSorted)
+            foreach(var item in childrenSorted)
             {
-                if (selectionSorted.Contains(item))
+                if(selectionSorted.Contains(item))
                 {
                     int idx = item.ZIndex;
                     item.ZIndex = childrenSorted.Count -
                         selectionSorted.Count +
                         j++;
-                }
-                else
+                } else
                 {
                     item.ZIndex = i++;
                 }
@@ -78,14 +76,13 @@ namespace SchemaCreator.Designer.UserControls
                                                               select item).ToList();
             int i = 0;
             int j = 0;
-            foreach (var item in childrenSorted)
+            foreach(var item in childrenSorted)
             {
-                if (selectionSorted.Contains(item))
+                if(selectionSorted.Contains(item))
                 {
                     int idx = item.ZIndex;
                     item.ZIndex = j++;
-                }
-                else
+                } else
                 {
                     item.ZIndex = selectionSorted.Count + i++;
                 }
@@ -112,18 +109,18 @@ namespace SchemaCreator.Designer.UserControls
 
             int count = Items.Count;
 
-            for (int i = 0; i < ordered.Count; i++)
+            for(int i = 0; i < ordered.Count; i++)
             {
                 int currentIndex = ordered[i].ZIndex;
                 int newIndex = Math.Max(i, currentIndex - 1);
-                if (currentIndex != newIndex)
+                if(currentIndex != newIndex)
                 {
                     ordered[i].ZIndex = newIndex;
                     var it = Items.Where(item => item.ZIndex == newIndex);
 
-                    foreach (var elm in it)
+                    foreach(var elm in it)
                     {
-                        if (elm != ordered[i])
+                        if(elm != ordered[i])
                         {
                             elm.ZIndex = currentIndex;
                             break;
@@ -141,17 +138,17 @@ namespace SchemaCreator.Designer.UserControls
 
             int count = Items.Count;
 
-            for (int i = 0; i < ordered.Count; i++)
+            for(int i = 0; i < ordered.Count; i++)
             {
                 int currentIndex = ordered[i].ZIndex;
                 int newIndex = Math.Min(count - 1 - i, currentIndex + 1);
-                if (currentIndex != newIndex)
+                if(currentIndex != newIndex)
                 {
                     ordered[i].ZIndex = newIndex;
-                    foreach (BaseDesignerItemViewModel elm in Items.Where(item => item.ZIndex
-                         == newIndex))
+                    foreach(BaseDesignerItemViewModel elm in Items.Where(item => item.ZIndex ==
+                        newIndex))
                     {
-                        if (elm != ordered[i])
+                        if(elm != ordered[i])
                         {
                             elm.ZIndex = currentIndex;
                             break;
@@ -184,7 +181,7 @@ namespace SchemaCreator.Designer.UserControls
                            }
                        )
                    );
-     
+
         public ObservableCollection<BaseDesignerItemViewModel> Items
         {
             get => _items;
@@ -201,7 +198,10 @@ namespace SchemaCreator.Designer.UserControls
             set => _itemToDraw = value;
         }
 
-        public IDesignerPanelSettings PanelSettings { get; }
+        public IDesignerPanelSettings PanelSettings
+        {
+            get;
+        }
 
         public ICommand RemoveAll => _removeAll ??
              (
@@ -226,10 +226,14 @@ namespace SchemaCreator.Designer.UserControls
                        }
                    )
                );
+
         public ObservableCollection<BaseDesignerItemViewModel> SelectedItem
         {
-            get { return _selectedItem; }
-            set { _selectedItem = value; RaisePropertyChanged(nameof(SelectedItem)); }
+            get => _selectedItem;
+            set
+            {
+                _selectedItem = value; RaisePropertyChanged(nameof(SelectedItem));
+            }
         }
 
         public SelectionService SelectionService => _selectionService ??

@@ -231,7 +231,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type s:SizeChrome}">
-                    <Grid SnapsToDevicePixels="True">
+                    <Grid>
                         <Path
                             Height="10"
                             Margin="-2,0,-2,-15"
@@ -242,7 +242,6 @@
                             StrokeThickness="1" />
                         <TextBlock
                             Margin="0,0,0,-18"
-                            Padding="3,0,3,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Bottom"
                             Background="White"

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,7 +15,7 @@ namespace SchemaCreator.UI.Base
         {
             get
             {
-                if (show == null) show = new RelayCommand(
+                if(show == null) show = new RelayCommand(
                     o =>
                     {
                         ExecuteCommand(CommandBefore, CommandParameter);
@@ -24,7 +26,9 @@ namespace SchemaCreator.UI.Base
             }
         }
 
-        public static DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter", typeof(object), typeof(CommandDialogBox));
+        public static DependencyProperty CommandParameterProperty = DependencyProperty.Register("CommandParameter",
+                                                                                                typeof(object),
+                                                                                                typeof(CommandDialogBox));
 
         public object CommandParameter
         {
@@ -32,14 +36,17 @@ namespace SchemaCreator.UI.Base
             set => SetValue(CommandParameterProperty, value);
         }
 
-        protected static void ExecuteCommand(ICommand command, object commandParameter)
+        protected static void ExecuteCommand(ICommand command,
+                                             object commandParameter)
         {
-            if (command != null)
-                if (command.CanExecute(commandParameter))
+            if(command != null)
+                if(command.CanExecute(commandParameter))
                     command.Execute(commandParameter);
         }
 
-        public static DependencyProperty CommandBeforeProperty = DependencyProperty.Register("CommandBefore", typeof(ICommand), typeof(CommandDialogBox));
+        public static DependencyProperty CommandBeforeProperty = DependencyProperty.Register("CommandBefore",
+                                                                                             typeof(ICommand),
+                                                                                             typeof(CommandDialogBox));
 
         public ICommand CommandBefore
         {
@@ -47,7 +54,9 @@ namespace SchemaCreator.UI.Base
             set => SetValue(CommandBeforeProperty, value);
         }
 
-        public static DependencyProperty CommandAfterProperty = DependencyProperty.Register("CommandAfter", typeof(ICommand), typeof(CommandDialogBox));
+        public static DependencyProperty CommandAfterProperty = DependencyProperty.Register("CommandAfter",
+                                                                                            typeof(ICommand),
+                                                                                            typeof(CommandDialogBox));
 
         public ICommand CommandAfter
         {
@@ -64,15 +73,19 @@ namespace SchemaCreator.UI.Base
 
         protected void OnPropertyChanged(string nazwaWłasności)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(nazwaWłasności));
+            if(PropertyChanged != null)
+                PropertyChanged(this,
+                                new PropertyChangedEventArgs(nazwaWłasności));
         }
 
         #endregion INotifyPropertyChanged
 
         protected Action<object> execute = null;
 
-        public string Caption { get; set; }// = null;
+        public string Caption
+        {
+            get; set;
+        }// = null;
 
         protected ICommand show;
 
@@ -80,7 +93,7 @@ namespace SchemaCreator.UI.Base
         {
             get
             {
-                if (show == null) show = new RelayCommand(execute);
+                if(show == null) show = new RelayCommand(execute);
                 return show;
             }
         }
@@ -88,39 +101,47 @@ namespace SchemaCreator.UI.Base
 
     public class SimpleMessageDialogBox : DialogBox
     {
-        public SimpleMessageDialogBox()
-        {
-            execute =
+        public SimpleMessageDialogBox() => execute =
                 o =>
                 {
                     MessageBox.Show((string)o, Caption);
                 };
-        }
     }
 
     public class NotificationDialogBox : CommandDialogBox
     {
-        public NotificationDialogBox()
-        {
-            execute =
+        public NotificationDialogBox() => execute =
                 o =>
                 {
-                    MessageBox.Show((string)o, Caption, MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show((string)o,
+                                    Caption,
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Information);
                 };
-        }
     }
 
     public class MessageDialogBox : CommandDialogBox
     {
-        public MessageBoxResult? LastResult { get; protected set; }
-        public MessageBoxButton Buttons { get; set; }// = MessageBoxButton.OK;
-        public MessageBoxImage Icon { get; set; }// = MessageBoxImage.None;
+        public MessageBoxResult? LastResult
+        {
+            get; protected set;
+        }
+
+        public MessageBoxButton Buttons
+        {
+            get; set;
+        }// = MessageBoxButton.OK;
+
+        public MessageBoxImage Icon
+        {
+            get; set;
+        }// = MessageBoxImage.None;
 
         public bool IsLastResultYes
         {
             get
             {
-                if (!LastResult.HasValue) return false;
+                if(!LastResult.HasValue) return false;
                 return LastResult.Value == MessageBoxResult.Yes;
             }
         }
@@ -129,7 +150,7 @@ namespace SchemaCreator.UI.Base
         {
             get
             {
-                if (!LastResult.HasValue) return false;
+                if(!LastResult.HasValue) return false;
                 return LastResult.Value == MessageBoxResult.No;
             }
         }
@@ -138,7 +159,7 @@ namespace SchemaCreator.UI.Base
         {
             get
             {
-                if (!LastResult.HasValue) return false;
+                if(!LastResult.HasValue) return false;
                 return LastResult.Value == MessageBoxResult.Cancel;
             }
         }
@@ -147,7 +168,7 @@ namespace SchemaCreator.UI.Base
         {
             get
             {
-                if (!LastResult.HasValue) return false;
+                if(!LastResult.HasValue) return false;
                 return LastResult.Value == MessageBoxResult.OK;
             }
         }
@@ -160,36 +181,44 @@ namespace SchemaCreator.UI.Base
             execute = o =>
             {
                 LastResult = MessageBox.Show((string)o, Caption, Buttons, Icon);
-                OnPropertyChanged("LastResult");
-                switch (LastResult)
+                OnPropertyChanged(nameof(LastResult));
+                switch(LastResult)
                 {
                     case MessageBoxResult.Yes:
-                        OnPropertyChanged("IsLastResultYes");
+                        OnPropertyChanged(nameof(IsLastResultYes));
                         ExecuteCommand(CommandYes, CommandParameter);
                         break;
 
                     case MessageBoxResult.No:
-                        OnPropertyChanged("IsLastResultNo");
+                        OnPropertyChanged(nameof(IsLastResultNo));
                         ExecuteCommand(CommandNo, CommandParameter);
                         break;
 
                     case MessageBoxResult.Cancel:
-                        OnPropertyChanged("IsLastResultCancel");
+                        OnPropertyChanged(nameof(IsLastResultCancel));
                         ExecuteCommand(CommandCancel, CommandParameter);
                         break;
 
                     case MessageBoxResult.OK:
-                        OnPropertyChanged("IsLastResultOK");
+                        OnPropertyChanged(nameof(IsLastResultOK));
                         ExecuteCommand(CommandOK, CommandParameter);
                         break;
                 }
             };
         }
 
-        public static DependencyProperty CommandYesProperty = DependencyProperty.Register("CommandYes", typeof(ICommand), typeof(MessageDialogBox));
-        public static DependencyProperty CommandNoProperty = DependencyProperty.Register("CommandNo", typeof(ICommand), typeof(MessageDialogBox));
-        public static DependencyProperty CommandCancelProperty = DependencyProperty.Register("CommandCancel", typeof(ICommand), typeof(MessageDialogBox));
-        public static DependencyProperty CommandOKProperty = DependencyProperty.Register("CommandOK", typeof(ICommand), typeof(MessageDialogBox));
+        public static DependencyProperty CommandYesProperty = DependencyProperty.Register("CommandYes",
+                                                                                          typeof(ICommand),
+                                                                                          typeof(MessageDialogBox));
+        public static DependencyProperty CommandNoProperty = DependencyProperty.Register("CommandNo",
+                                                                                         typeof(ICommand),
+                                                                                         typeof(MessageDialogBox));
+        public static DependencyProperty CommandCancelProperty = DependencyProperty.Register("CommandCancel",
+                                                                                             typeof(ICommand),
+                                                                                             typeof(MessageDialogBox));
+        public static DependencyProperty CommandOKProperty = DependencyProperty.Register("CommandOK",
+                                                                                         typeof(ICommand),
+                                                                                         typeof(MessageDialogBox));
 
         public ICommand CommandYes
         {
@@ -218,7 +247,9 @@ namespace SchemaCreator.UI.Base
 
     public class ConditionalMessageDialogBox : MessageDialogBox
     {
-        public static DependencyProperty IsDialogBypassedProperty = DependencyProperty.Register("IsDialogBypassed", typeof(bool), typeof(ConditionalMessageDialogBox));
+        public static DependencyProperty IsDialogBypassedProperty = DependencyProperty.Register("IsDialogBypassed",
+                                                                                                typeof(bool),
+                                                                                                typeof(ConditionalMessageDialogBox));
 
         public bool IsDialogBypassed
         {
@@ -226,7 +257,10 @@ namespace SchemaCreator.UI.Base
             set => SetValue(IsDialogBypassedProperty, value);
         }
 
-        public MessageBoxResult DialogBypassButton { get; set; }// = MessageBoxResult.None;
+        public MessageBoxResult DialogBypassButton
+        {
+            get; set;
+        }// = MessageBoxResult.None;
 
         public ConditionalMessageDialogBox()
         {
@@ -235,35 +269,37 @@ namespace SchemaCreator.UI.Base
             execute = o =>
             {
                 MessageBoxResult result;
-                if (!IsDialogBypassed)
+                if(!IsDialogBypassed)
                 {
-                    LastResult = MessageBox.Show((string)o, Caption, Buttons, Icon);
-                    OnPropertyChanged("LastResult");
+                    LastResult = MessageBox.Show((string)o,
+                                                 Caption,
+                                                 Buttons,
+                                                 Icon);
+                    OnPropertyChanged(nameof(LastResult));
                     result = LastResult.Value;
-                }
-                else
+                } else
                 {
                     result = DialogBypassButton;
                 }
-                switch (result)
+                switch(result)
                 {
                     case MessageBoxResult.Yes:
-                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultYes");
+                        if(!IsDialogBypassed) OnPropertyChanged(nameof(IsLastResultYes));
                         ExecuteCommand(CommandYes, CommandParameter);
                         break;
 
                     case MessageBoxResult.No:
-                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultNo");
+                        if(!IsDialogBypassed) OnPropertyChanged(nameof(IsLastResultNo));
                         ExecuteCommand(CommandNo, CommandParameter);
                         break;
 
                     case MessageBoxResult.Cancel:
-                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultCancel");
+                        if(!IsDialogBypassed) OnPropertyChanged(nameof(IsLastResultCancel));
                         ExecuteCommand(CommandCancel, CommandParameter);
                         break;
 
                     case MessageBoxResult.OK:
-                        if (!IsDialogBypassed) OnPropertyChanged("IsLastResultOK");
+                        if(!IsDialogBypassed) OnPropertyChanged(nameof(IsLastResultOK));
                         ExecuteCommand(CommandOK, CommandParameter);
                         break;
                 }
@@ -273,43 +309,61 @@ namespace SchemaCreator.UI.Base
 
     public abstract class FileDialogBox : CommandDialogBox
     {
-        public bool? FileDialogResult { get; protected set; }
-        public string FilePath { get; set; }
-        public string Filter { get; set; }
-        public int FilterIndex { get; set; }
-        public string DefaultExt { get; set; }
-
-        protected Microsoft.Win32.FileDialog fileDialog = null;
-
-        protected FileDialogBox()
+        public bool? FileDialogResult
         {
-            execute =
+            get; protected set;
+        }
+
+        public string FilePath
+        {
+            get; set;
+        }
+
+        public string Filter
+        {
+            get; set;
+        }
+
+        public int FilterIndex
+        {
+            get; set;
+        }
+
+        public string DefaultExt
+        {
+            get; set;
+        }
+
+        protected FileDialog fileDialog = null;
+
+        protected FileDialogBox() => execute =
                 o =>
                 {
                     fileDialog.Title = Caption;
                     fileDialog.Filter = Filter;
                     fileDialog.FilterIndex = FilterIndex;
                     fileDialog.DefaultExt = DefaultExt;
-                    string filePath = "";
-                    if (FilePath != null) filePath = FilePath; else FilePath = "";
-                    if (o != null) filePath = (string)o;
-                    if (!string.IsNullOrWhiteSpace(filePath))
+                    string filePath = string.Empty;
+                    if(FilePath != null) filePath = FilePath; else FilePath = string.Empty;
+                    if(o != null) filePath = (string)o;
+                    if(!string.IsNullOrWhiteSpace(filePath))
                     {
-                        fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName(filePath);
-                        fileDialog.FileName = System.IO.Path.GetFileName(filePath);
+                        fileDialog.InitialDirectory = Path.GetDirectoryName(filePath);
+                        fileDialog.FileName = Path.GetFileName(filePath);
                     }
                     FileDialogResult = fileDialog.ShowDialog();
-                    OnPropertyChanged("FileDialogResult");
-                    if (FileDialogResult.HasValue && FileDialogResult.Value)
+                    OnPropertyChanged(nameof(FileDialogResult));
+                    if(FileDialogResult.HasValue && FileDialogResult.Value)
                     {
                         FilePath = fileDialog.FileName;
-                        OnPropertyChanged("FilePath");
+                        OnPropertyChanged(nameof(FilePath));
                         ExecuteCommand(CommandFileOk, FilePath);
                     };
                 };
-        }
 
-        public static DependencyProperty CommandFileOkProperty = DependencyProperty.Register("CommandFileOk", typeof(ICommand), typeof(FileDialogBox));
+        public static DependencyProperty CommandFileOkProperty = DependencyProperty.Register("CommandFileOk",
+                                                                                             typeof(ICommand),
+                                                                                             typeof(FileDialogBox));
 
         public ICommand CommandFileOk
         {
@@ -320,40 +374,47 @@ namespace SchemaCreator.UI.Base
 
     public class OpenFileDialogBox : FileDialogBox
     {
-        public OpenFileDialogBox()
-        {
-            fileDialog = new Microsoft.Win32.OpenFileDialog();
-        }
+        public OpenFileDialogBox() => fileDialog =
+            new OpenFileDialog();
     }
 
     public class SaveFileDialogBox : FileDialogBox
     {
-        public SaveFileDialogBox()
-        {
-            fileDialog = new Microsoft.Win32.SaveFileDialog();
-        }
+        public SaveFileDialogBox() => fileDialog =
+            new SaveFileDialog();
     }
 
     public class FileSavedNotificationDialogBox : CommandDialogBox
     {
-        public FileSavedNotificationDialogBox()
-        {
-            execute =
+        public FileSavedNotificationDialogBox() => execute =
                 o =>
                 {
-                    MessageBox.Show("File " + (string)o + "Has been saved", Caption, MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("File " + (string)o + "Has been saved",
+                                    Caption,
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Information);
                 };
-        }
     }
 
-    [ContentProperty("WindowContent")]
+    [ContentProperty(nameof(WindowContent))]
     public class CustomContentDialogBox : CommandDialogBox
     {
         private bool? LastResult;
 
-        public double WindowWidth { get; set; }// = 640;
-        public double WindowHeight { get; set; }// = 480;
-        public object WindowContent { get; set; }// = null;
+        public double WindowWidth
+        {
+            get; set;
+        }// = 640;
+
+        public double WindowHeight
+        {
+            get; set;
+        }// = 480;
+
+        public object WindowContent
+        {
+            get; set;
+        }// = null;
 
         private static Window window = null;
 
@@ -365,17 +426,17 @@ namespace SchemaCreator.UI.Base
             execute =
                 o =>
                 {
-                    if (window == null)
+                    if(window == null)
                     {
                         window = new Window();
                         window.Width = WindowWidth;
                         window.Height = WindowHeight;
-                        if (Caption != null) window.Title = Caption;
+                        if(Caption != null) window.Title = Caption;
                         window.Content = WindowContent;
                         LastResult = window.ShowDialog();
-                        OnPropertyChanged("LastResult");
+                        OnPropertyChanged(nameof(LastResult));
                         window = null;
-                        switch (LastResult)
+                        switch(LastResult)
                         {
                             case true:
                                 ExecuteCommand(CommandTrue, CommandParameter);
@@ -393,15 +454,11 @@ namespace SchemaCreator.UI.Base
                 };
         }
 
-        public static bool? GetCustomContentDialogResult(DependencyObject d)
-        {
-            return (bool?)d.GetValue(DialogResultProperty);
-        }
+        public static bool? GetCustomContentDialogResult(DependencyObject d) => (bool?)d.GetValue(DialogResultProperty);
 
-        public static void SetCustomContentDialogResult(DependencyObject d, bool? value)
-        {
-            d.SetValue(DialogResultProperty, value);
-        }
+        public static void SetCustomContentDialogResult(DependencyObject d,
+                                                        bool? value) => d.SetValue(DialogResultProperty,
+                                                                                   value);
 
         public static readonly DependencyProperty DialogResultProperty =
             DependencyProperty.RegisterAttached(
@@ -410,19 +467,29 @@ namespace SchemaCreator.UI.Base
                 typeof(CustomContentDialogBox),
                 new PropertyMetadata(null, DialogResultChanged));
 
-        private static void DialogResultChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void DialogResultChanged(DependencyObject d,
+                                                DependencyPropertyChangedEventArgs e)
         {
-            bool? dialogResult = (bool?)e.NewValue;
-            if (d is Button)
+            var dialogResult = (bool?)e.NewValue;
+            if(d is Button)
             {
-                Button button = d as Button;
-                button.Click += (object sender, RoutedEventArgs _e) => { window.DialogResult = dialogResult; };
+                var button = d as Button;
+                button.Click += (object sender, RoutedEventArgs _e) =>
+                {
+                    window.DialogResult = dialogResult;
+                };
             }
         }
 
-        public static DependencyProperty CommandTrueProperty = DependencyProperty.Register("CommandTrue", typeof(ICommand), typeof(CustomContentDialogBox));
-        public static DependencyProperty CommandFalseProperty = DependencyProperty.Register("CommandFalse", typeof(ICommand), typeof(CustomContentDialogBox));
-        public static DependencyProperty CommandNullProperty = DependencyProperty.Register("CommandNull", typeof(ICommand), typeof(CustomContentDialogBox));
+        public static DependencyProperty CommandTrueProperty = DependencyProperty.Register("CommandTrue",
+                                                                                           typeof(ICommand),
+                                                                                           typeof(CustomContentDialogBox));
+        public static DependencyProperty CommandFalseProperty = DependencyProperty.Register("CommandFalse",
+                                                                                            typeof(ICommand),
+                                                                                            typeof(CustomContentDialogBox));
+        public static DependencyProperty CommandNullProperty = DependencyProperty.Register("CommandNull",
+                                                                                           typeof(ICommand),
+                                                                                           typeof(CustomContentDialogBox));
 
         public ICommand CommandTrue
         {

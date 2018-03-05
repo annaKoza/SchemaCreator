@@ -1,6 +1,5 @@
 ﻿using SchemaCreator.Designer.Adorners;
 using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -32,7 +31,7 @@ namespace SchemaCreator.Designer.Controls
 
         private void OnDragCompleted(object sender, DragCompletedEventArgs e)
         {
-            if (adorner == null)
+            if(adorner == null)
             {
                 return;
             }
@@ -56,14 +55,11 @@ namespace SchemaCreator.Designer.Controls
 
         public void OnDragStarted(object sender, DragStartedEventArgs e)
         {
-          
-        
-
-        _designerItem = DataContext as DesignerItem;
+            _designerItem = DataContext as DesignerItem;
 
             _canvas = VisualTreeHelper.GetParent(_designerItem) as Canvas;
 
-            if (_canvas != null)
+            if(_canvas != null)
             {
                 centerPoint = _designerItem.TranslatePoint(
                     new Point(_designerItem.Width *
@@ -78,20 +74,9 @@ namespace SchemaCreator.Designer.Controls
                 initialAngle = _designerItem.Angle;
             }
             AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(_canvas);
-            if (adornerLayer != null)
+            if(adornerLayer != null)
             {
                 adorner = new RotateAdorner(_designerItem);
-                ScaleTransform scaleTransform = null;
-                if (adorner.LayoutTransform is TransformGroup)
-                {
-                    var transformGroup = adorner.LayoutTransform as TransformGroup;
-                    scaleTransform = transformGroup.Children.OfType<ScaleTransform>().FirstOrDefault();
-                }
-                else
-                {
-                    scaleTransform = adorner.LayoutTransform as ScaleTransform;
-                }
-                
                 adornerLayer.Add(adorner);
             }
         }

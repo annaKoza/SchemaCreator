@@ -1,17 +1,14 @@
-﻿using SchemaCreator.Designer.Interfaces;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace SchemaCreator.Designer.Controls
 {
     public class DesignerItem : ListBoxItem
     {
-        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-        }
+        protected override void OnMouseRightButtonDown(MouseButtonEventArgs e) => e.Handled =
+            true;
+
         public static readonly DependencyProperty AngleProperty =
             DependencyProperty.Register
             ("Angle",
@@ -24,6 +21,5 @@ namespace SchemaCreator.Designer.Controls
             get => (double)GetValue(AngleProperty);
             set => SetValue(AngleProperty, value);
         }
-    
     }
 }

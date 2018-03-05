@@ -12,26 +12,20 @@ namespace SchemaCreator.UI.ViewModel
         public DesignerPanelViewModel()
         {
             DesignerViewModel = new DesignerViewModel();
-            Messenger.Default.Register<IBaseChooseAbleItem>(this, HandleBaseItemSelection);
+            Messenger.Default.Register<IBaseChooseAbleItem>(this,
+                                                            HandleBaseItemSelection);
         }
 
-        private void HandleBaseItemSelection(IBaseChooseAbleItem obj)
-        {
-            SelectItem(obj);
-        }
+        private void HandleBaseItemSelection(IBaseChooseAbleItem obj) => SelectItem(obj);
 
-        private void SelectItem(IBaseChooseAbleItem item)
-        {
-            DesignerViewModel.ItemToDraw = item;
-        }
+        private void SelectItem(IBaseChooseAbleItem item) => DesignerViewModel.ItemToDraw =
+            item;
 
-        Point designerOffset;
+        private Point designerOffset;
+
         public Point DesignerOffset
         {
-            get
-            {
-                return designerOffset;
-            }
+            get => designerOffset;
             set
             {
                 designerOffset = value;
@@ -40,6 +34,7 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private Transform _transform;
+
         public Transform Transform
         {
             get => _transform;
@@ -50,13 +45,15 @@ namespace SchemaCreator.UI.ViewModel
             }
         }
 
-
         private IDesignerViewModel _designerViewModel;
 
         public IDesignerViewModel DesignerViewModel
         {
             get => _designerViewModel;
-            set { _designerViewModel = value; RaisePropertyChanged(nameof(DesignerViewModel)); }
+            set
+            {
+                _designerViewModel = value; RaisePropertyChanged(nameof(DesignerViewModel));
+            }
         }
     }
 }

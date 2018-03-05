@@ -1,9 +1,6 @@
 ﻿using SchemaCreator.Designer.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SchemaCreator.Designer.Helpers;
+using SchemaCreator.Designer.UserControls;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -13,21 +10,32 @@ namespace SchemaCreator.Designer.Adorners
 {
     public class RotateAdorner : Adorner
     {
-
         private RotateChrome _chrome;
         private VisualCollection _visuals;
         private ContentControl _designerItem;
 
-        protected override int VisualChildrenCount
+        public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
-            get
+            var scaleFactor = GetCurrentScaleFactor();
+
+            if(_visuals != null)
             {
-                return _visuals.Count;
+                _chrome.LayoutTransform = scaleFactor.Inverse as Transform;
             }
+            return base.GetDesiredTransform(transform);
         }
 
-        public RotateAdorner(ContentControl designerItem)
-            : base(designerItem)
+        private Transform GetCurrentScaleFactor()
+        {
+            var p = AdornedElement.GetVisualParent<DesignerPanel>();
+            var dc = p.DataContext as DesignerViewModel;
+
+            return dc.PanelSettings.Transform;
+        }
+
+        protected override int VisualChildrenCount => _visuals.Count;
+
+        public RotateAdorner(ContentControl designerItem) : base(designerItem)
         {
             SnapsToDevicePixels = true;
             _designerItem = designerItem;
@@ -38,10 +46,7 @@ namespace SchemaCreator.Designer.Adorners
             };
         }
 
-        protected override Visual GetVisualChild(int index)
-        {
-            return _visuals[index];
-        }
+        protected override Visual GetVisualChild(int index) => _visuals[index];
 
         protected override Size ArrangeOverride(Size finalSize)
         {
@@ -50,4 +55,3 @@ namespace SchemaCreator.Designer.Adorners
         }
     }
 }
-

@@ -16,9 +16,7 @@ namespace SchemaCreator.UI.ViewModel
             }
         }
 
-        public ButtonRibbonViewModel(ViewModelBase viewModelForButtons)
-        {
-            ViewModelForButtons = viewModelForButtons;
-        }
+        public ButtonRibbonViewModel(ViewModelBase viewModelForButtons) => ViewModelForButtons =
+            viewModelForButtons;
     }
 }

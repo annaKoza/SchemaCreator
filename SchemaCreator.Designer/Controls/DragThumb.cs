@@ -1,5 +1,4 @@
-﻿
-using SchemaCreator.Designer.Helpers;
+﻿using SchemaCreator.Designer.Helpers;
 using SchemaCreator.Designer.UserControls;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace SchemaCreator.Designer.Controls
         private DesignerItem _designerItem;
         private IEnumerable<BaseDesignerItemViewModel> _selectedItems;
         private Size _gridSize;
-        
+
         static DragThumb() => DefaultStyleKeyProperty.OverrideMetadata(typeof(DragThumb),
                   new FrameworkPropertyMetadata(typeof(DragThumb)));
 
@@ -50,30 +49,31 @@ namespace SchemaCreator.Designer.Controls
 
         private void DragThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            if (!_designerItem.IsSelected) return;
+            if(!_designerItem.IsSelected) return;
             MoveItem(e);
             e.Handled = true;
         }
 
         private void MoveItem(DragDeltaEventArgs e)
         {
-            foreach (var designerItem in _selectedItems)
+            foreach(var designerItem in _selectedItems)
             {
                 var dragDelta = new Point(e.HorizontalChange, e.VerticalChange);
-                if (_rotateTransform != null)
+                if(_rotateTransform != null)
                 {
                     dragDelta = _rotateTransform.Transform(dragDelta);
                 }
 
-                if (_designer.SnapItemToGrid)
+                if(_designer.SnapItemToGrid)
                 {
-                    double xSnapPosition = designerItem.Left.NearestFactor(_gridSize.Width) + dragDelta.X.NearestFactor(_gridSize.Width);
-                    double ySnapPosition = designerItem.Top.NearestFactor(_gridSize.Width) + dragDelta.Y.NearestFactor(_gridSize.Height);
+                    double xSnapPosition = designerItem.Left.NearestFactor(_gridSize.Width) +
+                        dragDelta.X.NearestFactor(_gridSize.Width);
+                    double ySnapPosition = designerItem.Top.NearestFactor(_gridSize.Width) +
+                        dragDelta.Y.NearestFactor(_gridSize.Height);
 
                     designerItem.Left = xSnapPosition;
                     designerItem.Top = ySnapPosition;
-                }
-                else
+                } else
                 {
                     designerItem.Left += dragDelta.X;
                     designerItem.Top += dragDelta.Y;

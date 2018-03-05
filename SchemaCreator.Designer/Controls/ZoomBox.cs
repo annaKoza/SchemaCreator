@@ -10,16 +10,29 @@ namespace SchemaCreator.Designer.Controls
     public class ZoomBox : Control
     {
         public static readonly DependencyProperty DesignerGridProperty =
-            DependencyProperty.Register("DesignerGrid", typeof(Grid), typeof(ZoomBox), new PropertyMetadata(OnDesignerGridChanged));
+            DependencyProperty.Register("DesignerGrid",
+                                        typeof(Grid),
+                                        typeof(ZoomBox),
+                                        new PropertyMetadata(OnDesignerGridChanged));
 
         public static readonly DependencyProperty ParentPanelProperty =
-            DependencyProperty.Register("ParentPanel", typeof(Panel), typeof(ZoomBox), new PropertyMetadata(OnParentPanelChanged));
+            DependencyProperty.Register("ParentPanel",
+                                        typeof(Panel),
+                                        typeof(ZoomBox),
+                                        new PropertyMetadata(OnParentPanelChanged));
 
         public static readonly DependencyProperty ScrollViewerProperty =
-            DependencyProperty.Register("ScrollViewer", typeof(ScrollViewer), typeof(ZoomBox), new PropertyMetadata(OnScrollViewerChanged));
+            DependencyProperty.Register("ScrollViewer",
+                                        typeof(ScrollViewer),
+                                        typeof(ZoomBox),
+                                        new PropertyMetadata(OnScrollViewerChanged));
 
         public static readonly DependencyProperty SliderValueProperty =
-            DependencyProperty.Register("SliderValue", typeof(double), typeof(ZoomBox), new PropertyMetadata(100.0));
+            DependencyProperty.Register("SliderValue",
+                                        typeof(double),
+                                        typeof(ZoomBox),
+                                        new PropertyMetadata(100.0));
+
         private ScaleTransform _scaleTransform;
 
         private Canvas _zoomCanvas;
@@ -27,12 +40,12 @@ namespace SchemaCreator.Designer.Controls
         private Thumb _zoomThumb;
 
         private Point _centerOfViewPort = new Point();
-        static ZoomBox()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(ZoomBox), new FrameworkPropertyMetadata(typeof(ZoomBox)));
-        }
 
-        private void _zoomSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        static ZoomBox() => DefaultStyleKeyProperty.OverrideMetadata(typeof(ZoomBox),
+                                                                     new FrameworkPropertyMetadata(typeof(ZoomBox)));
+
+        private void _zoomSlider_ValueChanged(object sender,
+                                              RoutedPropertyChangedEventArgs<double> e)
         {
             double scale = e.NewValue / e.OldValue;
 
@@ -41,32 +54,55 @@ namespace SchemaCreator.Designer.Controls
 
             _centerOfViewPort.X = (ScrollViewer.ViewportWidth / 2);
             _centerOfViewPort.Y = (ScrollViewer.ViewportHeight / 2);
-            LastCenterPositionOnTarget = ScrollViewer.TranslatePoint(_centerOfViewPort, DesignerGrid);
+            LastCenterPositionOnTarget = ScrollViewer.TranslatePoint(_centerOfViewPort,
+                                                                     DesignerGrid);
             SliderValue = e.NewValue;
             e.Handled = true;
         }
 
         private void _zoomThumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            InvalidateScale(out double scale, out double xOffset, out double yOffset);
-            ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.HorizontalOffset + e.HorizontalChange / scale);
-            ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset + e.VerticalChange / scale);
+            InvalidateScale(out double scale,
+                            out double xOffset,
+                            out double yOffset);
+            ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.HorizontalOffset +
+                e.HorizontalChange /
+                scale);
+            ScrollViewer.ScrollToVerticalOffset(ScrollViewer.VerticalOffset +
+                e.VerticalChange /
+                scale);
         }
 
         private void DesignerCanvas_LayoutUpdated(object sender, EventArgs e)
         {
-            InvalidateScale(out double scale, out double xOffset, out double yOffset);
-            if (_zoomThumb.Width != ScrollViewer.ViewportWidth * scale)
-            _zoomThumb.Width = ScrollViewer.ViewportWidth * scale;
-            if (_zoomThumb.Height != ScrollViewer.ViewportHeight * scale)
+            InvalidateScale(out double scale,
+                            out double xOffset,
+                            out double yOffset);
+            if(_zoomThumb.Width != ScrollViewer.ViewportWidth * scale)
+                _zoomThumb.Width = ScrollViewer.ViewportWidth * scale;
+            if(_zoomThumb.Height != ScrollViewer.ViewportHeight * scale)
                 _zoomThumb.Height = ScrollViewer.ViewportHeight * scale;
-            if(Canvas.GetLeft(_zoomThumb) != xOffset + ScrollViewer.HorizontalOffset * scale)
-            Canvas.SetLeft(_zoomThumb, xOffset + ScrollViewer.HorizontalOffset * scale);
-            if (Canvas.GetTop(_zoomThumb) != yOffset + ScrollViewer.VerticalOffset * scale)
-                Canvas.SetTop(_zoomThumb, yOffset + ScrollViewer.VerticalOffset * scale);
+            if(Canvas.GetLeft(_zoomThumb) !=
+                xOffset +
+                ScrollViewer.HorizontalOffset *
+                scale)
+                Canvas.SetLeft(_zoomThumb,
+                               xOffset +
+                    ScrollViewer.HorizontalOffset *
+                    scale);
+            if(Canvas.GetTop(_zoomThumb) !=
+                yOffset +
+                ScrollViewer.VerticalOffset *
+                scale)
+                Canvas.SetTop(_zoomThumb,
+                              yOffset +
+                    ScrollViewer.VerticalOffset *
+                    scale);
         }
 
-        private void InvalidateScale(out double scale, out double xOffset, out double yOffset)
+        private void InvalidateScale(out double scale,
+                                     out double xOffset,
+                                     out double yOffset)
         {
             double width = DesignerGrid.ActualWidth * _scaleTransform.ScaleX;
             double height = DesignerGrid.ActualHeight * _scaleTransform.ScaleY;
@@ -83,11 +119,11 @@ namespace SchemaCreator.Designer.Controls
 
         private void OnDesignerGridChanged(Grid oldGrid, Grid newGrid)
         {
-            if (oldGrid != null)
+            if(oldGrid != null)
             {
                 oldGrid.LayoutUpdated -= DesignerCanvas_LayoutUpdated;
             }
-            if (newGrid != null)
+            if(newGrid != null)
             {
                 newGrid.LayoutUpdated += DesignerCanvas_LayoutUpdated;
 
@@ -96,43 +132,50 @@ namespace SchemaCreator.Designer.Controls
             }
         }
 
-        private static void OnDesignerGridChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnDesignerGridChanged(DependencyObject d,
+                                                  DependencyPropertyChangedEventArgs e)
         {
-            ZoomBox target = (ZoomBox)d;
-            Grid oldGrid = e.OldValue as Grid;
-            Grid newGrid = e.NewValue as Grid;
+            var target = (ZoomBox)d;
+            var oldGrid = e.OldValue as Grid;
+            var newGrid = e.NewValue as Grid;
             target.OnDesignerGridChanged(oldGrid, newGrid);
         }
-        private static void OnParentPanelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+
+        private static void OnParentPanelChanged(DependencyObject d,
+                                                 DependencyPropertyChangedEventArgs e)
         {
-            ZoomBox target = (ZoomBox)d;
-            ItemsControl oldControl = e.OldValue as ItemsControl;
-            ItemsControl newControl = e.NewValue as ItemsControl;
+            var target = (ZoomBox)d;
+            var oldControl = e.OldValue as ItemsControl;
+            var newControl = e.NewValue as ItemsControl;
             target.OnParentPanelChanged(oldControl, newControl);
         }
-        private void OnParentPanelChanged(ItemsControl oldPanel, ItemsControl newPanel)
+
+        private void OnParentPanelChanged(ItemsControl oldPanel,
+                                          ItemsControl newPanel)
         {
-            if (oldPanel != null)
+            if(oldPanel != null)
             {
                 oldPanel.PreviewMouseWheel -= ParentPanel_MouseWheel;
             }
-            if (newPanel != null)
+            if(newPanel != null)
             {
                 newPanel.PreviewMouseWheel += ParentPanel_MouseWheel;
-
             }
         }
-        private static void OnScrollViewerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+
+        private static void OnScrollViewerChanged(DependencyObject d,
+                                                  DependencyPropertyChangedEventArgs e)
         {
-            ZoomBox target = (ZoomBox)d;
-            ScrollViewer oldScrollViewer = e.OldValue as ScrollViewer;
-            ScrollViewer newScrollViewer = e.NewValue as ScrollViewer;
+            var target = (ZoomBox)d;
+            var oldScrollViewer = e.OldValue as ScrollViewer;
+            var newScrollViewer = e.NewValue as ScrollViewer;
             target.OnScrollViewerScrollChanged(oldScrollViewer, newScrollViewer);
         }
 
-        private void ParentPanel_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void ParentPanel_MouseWheel(object sender,
+                                            MouseWheelEventArgs e)
         {
-            if (_canResize)
+            if(_canResize)
             {
                 base.OnPreviewMouseWheel(e);
                 LastMousePositionOnTarget = Mouse.GetPosition(DesignerGrid);
@@ -140,56 +183,62 @@ namespace SchemaCreator.Designer.Controls
                 _zoomSlider.Value += e.Delta / 10;
 
                 e.Handled = true;
-            }
-            else
+            } else
             {
                 e.Handled = false;
             }
         }
 
-        Point? targetBefore;
-        Point? targetNow;
-        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        private Point? targetBefore;
+        private Point? targetNow;
+
+        private void ScrollViewer_ScrollChanged(object sender,
+                                                ScrollChangedEventArgs e)
         {
-            if (e.ExtentHeightChange == 0 || e.ExtentWidthChange == 0) return;
+            if(e.ExtentHeightChange == 0 || e.ExtentWidthChange == 0) return;
 
-             targetBefore = null;
-             targetNow = null;
+            targetBefore = null;
+            targetNow = null;
 
-            if (LastMousePositionOnTarget.HasValue)
+            if(LastMousePositionOnTarget.HasValue)
             {
                 targetBefore = LastMousePositionOnTarget;
                 targetNow = Mouse.GetPosition(DesignerGrid);
                 LastMousePositionOnTarget = null;
-            }
-            else
+            } else
             {
-                if (LastCenterPositionOnTarget.HasValue)
+                if(LastCenterPositionOnTarget.HasValue)
                 {
-                    var centerOfViewport = new Point(ScrollViewer.ViewportWidth / 2,
-                                                        ScrollViewer.ViewportHeight / 2);
+                    var centerOfViewport = new Point(ScrollViewer.ViewportWidth /
+                        2,
+                                                        ScrollViewer.ViewportHeight /
+                        2);
                     Point centerOfTargetNow =
-                            ScrollViewer.TranslatePoint(centerOfViewport, DesignerGrid);
+                            ScrollViewer.TranslatePoint(centerOfViewport,
+                                                        DesignerGrid);
 
                     targetBefore = LastCenterPositionOnTarget;
                     targetNow = centerOfTargetNow;
                 }
             }
 
-            if (targetBefore.HasValue)
+            if(targetBefore.HasValue)
             {
-                double dXInTargetPixels = targetNow.Value.X - targetBefore.Value.X;
-                double dYInTargetPixels = targetNow.Value.Y - targetBefore.Value.Y;
+                double dXInTargetPixels = targetNow.Value.X -
+                    targetBefore.Value.X;
+                double dYInTargetPixels = targetNow.Value.Y -
+                    targetBefore.Value.Y;
 
                 double multiplicatorX = e.ExtentWidth / DesignerGrid.ActualWidth;
-                double multiplicatorY = e.ExtentHeight / DesignerGrid.ActualHeight;
+                double multiplicatorY = e.ExtentHeight /
+                    DesignerGrid.ActualHeight;
 
-                double newOffsetX = ScrollViewer.HorizontalOffset
-                                    - (dXInTargetPixels * multiplicatorX);
-                double newOffsetY = ScrollViewer.VerticalOffset
-                                    - (dYInTargetPixels * multiplicatorY);
+                double newOffsetX = ScrollViewer.HorizontalOffset -
+                    (dXInTargetPixels * multiplicatorX);
+                double newOffsetY = ScrollViewer.VerticalOffset -
+                    (dYInTargetPixels * multiplicatorY);
 
-                if (double.IsNaN(newOffsetX) || double.IsNaN(newOffsetY)) return;
+                if(double.IsNaN(newOffsetX) || double.IsNaN(newOffsetY)) return;
 
                 ScrollViewer.ScrollToHorizontalOffset(newOffsetX);
                 ScrollViewer.ScrollToVerticalOffset(newOffsetY);
@@ -199,14 +248,25 @@ namespace SchemaCreator.Designer.Controls
 
         private bool _canResize => Keyboard.IsKeyDown(Key.LeftCtrl);
 
-        protected Point? LastCenterPositionOnTarget { get; set; }
-        protected Point? LastDragPoint { get; set; }
-        protected Point? LastMousePositionOnTarget { get; set; }
+        protected Point? LastCenterPositionOnTarget
+        {
+            get; set;
+        }
+
+        protected Point? LastDragPoint
+        {
+            get; set;
+        }
+
+        protected Point? LastMousePositionOnTarget
+        {
+            get; set;
+        }
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            if (ScrollViewer == null) return;
+            if(ScrollViewer == null) return;
 
             _zoomThumb = Template.FindName("PART_ZoomThumb", this) as Thumb;
             _zoomCanvas = Template.FindName("PART_ZoomCanvas", this) as Canvas;
@@ -218,13 +278,14 @@ namespace SchemaCreator.Designer.Controls
             _zoomSlider.Value = SliderValue;
         }
 
-        public void OnScrollViewerScrollChanged(ScrollViewer oldScrollViewer, ScrollViewer newScrollViewer)
+        public void OnScrollViewerScrollChanged(ScrollViewer oldScrollViewer,
+                                                ScrollViewer newScrollViewer)
         {
-            if (oldScrollViewer != null)
+            if(oldScrollViewer != null)
             {
                 oldScrollViewer.ScrollChanged -= ScrollViewer_ScrollChanged;
             }
-            if (newScrollViewer != null)
+            if(newScrollViewer != null)
             {
                 newScrollViewer.ScrollChanged += ScrollViewer_ScrollChanged;
             }
@@ -232,25 +293,26 @@ namespace SchemaCreator.Designer.Controls
 
         public Grid DesignerGrid
         {
-            get { return (Grid)GetValue(DesignerGridProperty); }
-            set { SetValue(DesignerGridProperty, value); }
+            get => (Grid)GetValue(DesignerGridProperty);
+            set => SetValue(DesignerGridProperty, value);
         }
+
         public Panel ParentPanel
         {
-            get { return (Panel)GetValue(ParentPanelProperty); }
-            set { SetValue(ParentPanelProperty, value); }
+            get => (Panel)GetValue(ParentPanelProperty);
+            set => SetValue(ParentPanelProperty, value);
         }
 
         public ScrollViewer ScrollViewer
         {
-            get { return (ScrollViewer)GetValue(ScrollViewerProperty); }
-            set { SetValue(ScrollViewerProperty, value); }
+            get => (ScrollViewer)GetValue(ScrollViewerProperty);
+            set => SetValue(ScrollViewerProperty, value);
         }
 
         public double SliderValue
         {
-            get { return (double)GetValue(SliderValueProperty); }
-            set { SetValue(SliderValueProperty, value); }
+            get => (double)GetValue(SliderValueProperty);
+            set => SetValue(SliderValueProperty, value);
         }
     }
 }

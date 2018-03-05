@@ -37,13 +37,29 @@ namespace SchemaCreator.UI.ViewModel
         public ObservableCollection<IDesignerItem> ToolItems
         {
             get => _toolItems;
-            set { _toolItems = value; RaisePropertyChanged(nameof(ToolItems)); }
+            set
+            {
+                _toolItems = value; RaisePropertyChanged(nameof(ToolItems));
+            }
         }
 
         public ToolBoxViewModel()
         {
-            DrawableItems = new ObservableCollection<IBaseChooseAbleItem>() { new SelectionViewModel(), new LineViewModel(), new PolyLineViewModel() };
-            ToolItems = new ObservableCollection<IDesignerItem>() { new RectangleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new CircleViewModel(), new RectangleViewModel() };
+            DrawableItems = new ObservableCollection<IBaseChooseAbleItem>()
+            {
+                new SelectionViewModel(),
+                new LineViewModel(),
+                new PolyLineViewModel()
+            };
+            ToolItems = new ObservableCollection<IDesignerItem>()
+            {
+                new RectangleViewModel(),
+                new CircleViewModel(),
+                new CircleViewModel(),
+                new CircleViewModel(),
+                new CircleViewModel(),
+                new RectangleViewModel()
+            };
         }
     }
 }

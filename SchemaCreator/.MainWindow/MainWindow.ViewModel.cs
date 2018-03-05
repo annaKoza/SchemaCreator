@@ -75,30 +75,62 @@ namespace SchemaCreator.UI.ViewModel
         }
 
         private ObservableCollection<MenuSection> _menu;
-        public ObservableCollection<MenuSection> Menu => _menu ?? (_menu = GetContextMenu());
+
+        public ObservableCollection<MenuSection> Menu => _menu ??
+            (_menu =
+                GetContextMenu());
 
         public ObservableCollection<MenuSection> GetContextMenu()
         {
-            var editSubmenu = new ObservableCollection<MenuSection>() {
-                new MenuSection() { MenuText = "one"},
+            var editSubmenu = new ObservableCollection<MenuSection>()
+            {
+                new MenuSection()
+                { MenuText = "one" },
                 new MenuSeparator(),
-                new MenuSection() { MenuText = "other"} };
-            var backgroundSubmenu = new ObservableCollection<MenuSection>() {
-                new MenuSection() { MenuText = "Add Background image", Command = OpenImage},
-                new MenuSection() { MenuText = "Remove Background image", Command = RemoveImage, IsEnabled=false} };
-            var menu = new ObservableCollection<MenuSection>() {
-                new MenuSection() { MenuText = "File" },
-                new MenuSection() { MenuText = "Edit", SubMenu = editSubmenu },
-                new MenuSection() { MenuText = "Background", SubMenu = backgroundSubmenu },};
+                new MenuSection()
+                { MenuText = "other" }
+            };
+            var backgroundSubmenu = new ObservableCollection<MenuSection>()
+            {
+                new MenuSection()
+                {
+                    MenuText = "Add Background image",
+                    Command =
+                OpenImage
+                },
+                new MenuSection()
+                {
+                    MenuText = "Remove Background image",
+                    Command =
+                RemoveImage,
+                    IsEnabled =
+                false
+                }
+            };
+            var menu = new ObservableCollection<MenuSection>()
+            {
+                new MenuSection()
+                { MenuText = "File" },
+                new MenuSection()
+                { MenuText = "Edit", SubMenu = editSubmenu },
+                new MenuSection()
+                {
+                    MenuText = nameof(Background),
+                    SubMenu =
+                backgroundSubmenu
+                },
+            };
             return menu;
         }
 
         private ICommand _openImage;
 
-        private ICommand OpenImage => _openImage ?? (_openImage = new RelayCommand(
+        private ICommand OpenImage => _openImage ??
+            (_openImage =
+                new RelayCommand(
             (obj) =>
             {
-                OpenFileDialogBox dialog = new OpenFileDialogBox()
+                var dialog = new OpenFileDialogBox()
                 {
                     Caption = "Open Background File",
                     DefaultExt = "jpg",
@@ -107,15 +139,21 @@ namespace SchemaCreator.UI.ViewModel
                 };
                 dialog.Show.Execute(null);
 
-                if (string.IsNullOrEmpty(dialog.FilePath)) return;
-                BackgroundViewModel = new BackgroundViewModel() { ImagePath = dialog.FilePath };
+                if(string.IsNullOrEmpty(dialog.FilePath)) return;
+                BackgroundViewModel = new BackgroundViewModel()
+                {
+                            ImagePath =
+                            dialog.FilePath
+                };
                 ButtonRibbonViewModel = new ButtonRibbonViewModel(BackgroundViewModel);
                 MenuViewModel.EnableItems("Remove Background image");
             }));
 
         private ICommand _removeImage;
 
-        private ICommand RemoveImage => _removeImage ?? (_removeImage = new RelayCommand(
+        private ICommand RemoveImage => _removeImage ??
+            (_removeImage =
+                new RelayCommand(
             (obj) =>
             {
                 BackgroundViewModel = null;
