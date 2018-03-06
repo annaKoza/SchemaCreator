@@ -13,33 +13,23 @@ namespace SchemaCreator.Designer.Adorners
     {
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
-            var scaleFactor = GetCurrentScaleFactor();
+            var matrix = transform as MatrixTransform;
 
-            if(_visuals != null)
-            {
-                _chrome.LayoutTransform = scaleFactor.Inverse as Transform;
-            }
+            if (_visuals == null || matrix == null) return base.GetDesiredTransform(transform);
+            var vec1 = new Vector(matrix.Matrix.M11, matrix.Matrix.M12).Length;
+            var vec2 = new Vector(matrix.Matrix.M21, matrix.Matrix.M22).Length;
+            _chrome.LayoutTransform = new ScaleTransform(1 / vec1, 1 / vec2);
             return base.GetDesiredTransform(transform);
         }
-
-        private Transform GetCurrentScaleFactor()
-        {
-            var p = AdornedElement.GetVisualParent<DesignerPanel>();
-            var dc = p.DataContext as DesignerViewModel;
-
-            return dc.PanelSettings.Transform;
-        }
-
+        
         private SizeChrome _chrome;
         private VisualCollection _visuals;
-        private ContentControl _designerItem;
 
         protected override int VisualChildrenCount => _visuals.Count;
 
         public SizeAdorner(ContentControl designerItem) : base(designerItem)
         {
             SnapsToDevicePixels = true;
-            _designerItem = designerItem;
             _chrome = new SizeChrome() { DataContext = designerItem };
             _visuals = new VisualCollection(this)
             {

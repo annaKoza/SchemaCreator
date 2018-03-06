@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace SchemaCreator.Designer.Controls
 {
@@ -20,11 +21,7 @@ namespace SchemaCreator.Designer.Controls
         private Canvas _canvas;
         private double _angle;
         private Point _transformOrigin;
-
-        static ResizeThumb()
-        {
-        }
-
+        
         public ResizeThumb()
         {
             DragDelta += ResizeThumb_DragDelta;
@@ -41,7 +38,7 @@ namespace SchemaCreator.Designer.Controls
                 return;
             }
 
-            AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(_canvas);
+            var adornerLayer = AdornerLayer.GetAdornerLayer(_canvas);
             adornerLayer?.Remove(adorner);
 
             adorner = null;
@@ -54,13 +51,11 @@ namespace SchemaCreator.Designer.Controls
                                              DragStartedEventArgs e)
         {
             _selectedDesignerItems =
-            ((_designerPanel.DataContext) as ISelectionPanel).SelectionService.SelectedItems.OfType<IDesignerItem>();
-            AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(_canvas);
-            if(adornerLayer != null)
-            {
-                adorner = new SizeAdorner(_designerItem);
-                adornerLayer.Add(adorner);
-            }
+            (_designerPanel.DataContext as ISelectionPanel)?.SelectionService.SelectedItems.OfType<IDesignerItem>();
+            var adornerLayer = AdornerLayer.GetAdornerLayer(_canvas);
+            if (adornerLayer == null) return;
+            adorner = new SizeAdorner(_designerItem);
+            adornerLayer.Add(adorner);
         }
 
         private DesignerViewModel vm;

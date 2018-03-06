@@ -73,7 +73,6 @@ namespace SchemaCreator.Designer.AttachedProperties
         {
             var itemsPresenter = (sender as Designer).GetVisualChild<ItemsPresenter>();
             _itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as Canvas;
-            var itemsControl = (sender as Designer).GetVisualChild<ItemsControl>();
             var dataContext = (sender as Designer).DataContext;
             _designerViewModel = dataContext as IDesignerViewModel ??
                 throw new ArgumentException("datacontext must implement IDesignerViewModel interface");

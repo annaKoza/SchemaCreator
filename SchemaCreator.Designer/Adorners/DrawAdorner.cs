@@ -39,23 +39,18 @@ namespace SchemaCreator.Designer.AttachedProperties
 
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
-            var scaleFactor = GetCurrentScaleFactor();
+            var matrix = transform as MatrixTransform;
 
-            if(_visuals != null)
-            {
-                _chrome.LayoutTransform = scaleFactor.Inverse as Transform;
-            }
-            InvalidateArrange();
+            if (_visuals == null || matrix == null) return base.GetDesiredTransform(transform);
+            vec1 = new Vector(matrix.Matrix.M11, matrix.Matrix.M12).Length;
+            vec2 = new Vector(matrix.Matrix.M21, matrix.Matrix.M22).Length;
+            _chrome.LayoutTransform = new ScaleTransform(1 / vec1, 1 / vec2);
             return base.GetDesiredTransform(transform);
         }
 
-        private Transform GetCurrentScaleFactor()
-        {
-            var p = AdornedElement.GetVisualParent<DesignerPanel>();
-            var dc = p.DataContext as DesignerViewModel;
+        private double vec1, vec2;
 
-            return dc.PanelSettings.Transform;
-        }
+
 
         protected override Size ArrangeOverride(Size finalSize)
         {
@@ -65,9 +60,9 @@ namespace SchemaCreator.Designer.AttachedProperties
 
             _chrome.Arrange(new Rect(rectangle.TopLeft, rectangle.Size));
             _chrome.Width = rectangle.Width *
-                (GetCurrentScaleFactor() as ScaleTransform).ScaleX;
+                vec1;
             _chrome.Height = rectangle.Height *
-                (GetCurrentScaleFactor() as ScaleTransform).ScaleY;
+               vec2;
 
             return finalSize;
         }
