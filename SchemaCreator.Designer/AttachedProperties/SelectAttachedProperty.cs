@@ -73,7 +73,7 @@ namespace SchemaCreator.Designer.AttachedProperties
             var designer = sender as Designer;
             _designerVewModel = designer.DataContext is IDesignerViewModel
                 ? designer.DataContext as IDesignerViewModel
-                : throw new ArgumentException("Designers datacontext must be IDesignerViewModel");
+                : throw new ArgumentException("Designers DataContext must be IDesignerViewModel");
             var itemsPresenter = designer.GetVisualChild<ItemsPresenter>();
             var itemsControl = designer.GetVisualChild<ItemsControl>();
             _itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as Canvas;

@@ -56,7 +56,7 @@ namespace SchemaCreator.Designer.AttachedProperties
                 var adornerLayer = AdornerLayer.GetAdornerLayer(_itemsPanel);
                 if(adornerLayer != null)
                 {
-                    var adorner = new DrawAdorner(_itemsPanel,
+                    var adorner = new DrawAdorner(_itemsPanel, 
                                                   _selectionStartPoint,
                                                   _designerViewModel,
                                                   _drawableInstance);
@@ -75,7 +75,7 @@ namespace SchemaCreator.Designer.AttachedProperties
             _itemsPanel = VisualTreeHelper.GetChild(itemsPresenter, 0) as Canvas;
             var dataContext = (sender as Designer).DataContext;
             _designerViewModel = dataContext as IDesignerViewModel ??
-                throw new ArgumentException("datacontext must implement IDesignerViewModel interface");
+                throw new ArgumentException("DataContext must implement IDesignerViewModel interface");
         }
 
         private static IDrawableItem _drawableInstance;

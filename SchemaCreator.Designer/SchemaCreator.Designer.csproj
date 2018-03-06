@@ -70,10 +70,11 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adorners\ResizeRotateAdorner.cs" />
-    <Compile Include="Adorners\RotateAdorner.cs" />
+    <Compile Include="Adorners\BaseAdorner.cs" />
+    <Compile Include="Adorners\ResizeRotate\ResizeRotateAdorner.cs" />
+    <Compile Include="Adorners\Rotate\RotateAdorner.cs" />
     <Compile Include="Adorners\SelectionAdorner.cs" />
-    <Compile Include="Adorners\SizeAdorner.cs" />
+    <Compile Include="Adorners\Size\SizeAdorner.cs" />
     <Compile Include="AttachedProperties\DragDropAttachedProperty.cs" />
     <Compile Include="Adorners\DrawAdorner.cs" />
     <Compile Include="AttachedProperties\DrawAttachedProperty.cs" />
@@ -86,10 +87,10 @@
     <Compile Include="Controls\DesignerItemDecorator.cs" />
     <Compile Include="Controls\DesignerPanel.cs" />
     <Compile Include="Controls\DragThumb.cs" />
-    <Compile Include="Controls\ResizeRotateChrome.cs" />
+    <Compile Include="Adorners\ResizeRotate\ResizeRotateChrome.cs" />
     <Compile Include="Controls\RotateThumb.cs" />
-    <Compile Include="Controls\RotateChrome.cs" />
-    <Compile Include="Controls\SizeChrome.cs" />
+    <Compile Include="Adorners\Rotate\RotateChrome.cs" />
+    <Compile Include="Adorners\Size\SizeChrome.cs" />
     <Compile Include="Controls\ZoomBox.cs" />
     <Compile Include="Converters\DoubleToPointConverter.cs" />
     <Compile Include="Converters\GeneralTransformToTransformConverter.cs" />

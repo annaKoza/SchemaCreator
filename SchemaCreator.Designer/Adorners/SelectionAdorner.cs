@@ -8,23 +8,19 @@ using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Adorners
 {
-    public class SelectionAdorner : Adorner
+    public class SelectionAdorner : BaseAdorner
     {
-        private Point? _startPoint;
-        private Point? _endPoint;
-        private ISelectionItem _selectionItem;
-        private ISelectionPanel _designerPanel;
-        private Canvas _designerCanvas;
-
-        public SelectionAdorner(Canvas panel,
-                                Point? dragStartPoint,
-                                ISelectionPanel designerPanel,
-                                ISelectionItem selectionItem) : base(panel)
+        Point? _endPoint;
+        public IDesignerViewModel DesignerPanel { get; set; }
+        public Point? SelectionStartPoint { get; set; }
+        public IBaseChooseAbleItem DrawableItem { get; set; }
+        public Canvas ItemsPanel { get; set; }
+        internal SelectionAdorner(Canvas itemsPanel, Point? selectionStartPoint, IDesignerViewModel designerPanel, IBaseChooseAbleItem drawableItem) : base(itemsPanel)
         {
-            _selectionItem = selectionItem;
-            _designerCanvas = panel;
-            _designerPanel = designerPanel;
-            _startPoint = dragStartPoint;
+            ItemsPanel = itemsPanel;
+            DrawableItem = drawableItem;
+            SelectionStartPoint = selectionStartPoint;
+            DesignerPanel = designerPanel;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -37,10 +33,8 @@ namespace SchemaCreator.Designer.Adorners
                 _endPoint = e.GetPosition(this);
                 UpdateSelection();
                 InvalidateVisual();
-            } else
-            {
-                if(IsMouseCaptured) ReleaseMouseCapture();
             }
+            else if(IsMouseCaptured) ReleaseMouseCapture();
 
             e.Handled = true;
         }
@@ -48,7 +42,7 @@ namespace SchemaCreator.Designer.Adorners
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             if(IsMouseCaptured) ReleaseMouseCapture();
-            var adornerLayer = AdornerLayer.GetAdornerLayer(_designerCanvas);
+            var adornerLayer = AdornerLayer.GetAdornerLayer(ItemsPanel);
             adornerLayer?.Remove(this);
 
             e.Handled = true;
@@ -62,26 +56,26 @@ namespace SchemaCreator.Designer.Adorners
                                          null,
                                          new Rect(RenderSize));
 
-            if(_startPoint.HasValue && _endPoint.HasValue)
-                _selectionItem.DrawAdorner(drawingContext,
-                                           _startPoint.Value,
+            if(SelectionStartPoint.HasValue && _endPoint.HasValue)
+                DrawableItem.DrawAdorner(drawingContext,
+                                           SelectionStartPoint.Value,
                                            _endPoint.Value);
         }
 
         private void UpdateSelection()
         {
-            _designerPanel.SelectionService.ClearSelection();
+            DesignerPanel.SelectionService.ClearSelection();
 
-            var rubberBand = new Rect(_startPoint.Value, _endPoint.Value);
-            foreach(Control item in _designerCanvas.Children)
+            var rubberBand = new Rect(SelectionStartPoint.Value, _endPoint.Value);
+            foreach(Control item in (ItemsPanel as Canvas).Children)
             {
                 var itemRect = VisualTreeHelper.GetDescendantBounds(item);
-                var itemBounds = item.TransformToAncestor(_designerCanvas)
+                var itemBounds = item.TransformToAncestor(ItemsPanel)
                     .TransformBounds(itemRect);
 
                 if(!rubberBand.Contains(itemBounds)) continue;
                 var di = (item as DesignerItem).DataContext as ISelectable;
-                _designerPanel.SelectionService.AddToSelection(di);
+                DesignerPanel.SelectionService.AddToSelection(di);
             }
         }
     }

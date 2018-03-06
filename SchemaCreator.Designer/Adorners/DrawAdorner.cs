@@ -1,7 +1,6 @@
-﻿using SchemaCreator.Designer.Controls;
-using SchemaCreator.Designer.Helpers;
+﻿using SchemaCreator.Designer.Adorners;
+using SchemaCreator.Designer.Controls;
 using SchemaCreator.Designer.Interfaces;
-using SchemaCreator.Designer.UserControls;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,65 +10,38 @@ using System.Windows.Media;
 
 namespace SchemaCreator.Designer.AttachedProperties
 {
-    internal class DrawAdorner : Adorner
+    internal class DrawAdorner : BaseAdorner
     {
-        private SizeChrome _chrome;
-        private Canvas _itemsPanel;
-        private Point? _selectionStartPoint;
-        private IDesignerViewModel _designerPanel;
-        private VisualCollection _visuals;
         private Point? _endPoint;
-        private IDrawableItem _drawableInstance;
-
-        public DrawAdorner(Canvas itemsPanel,
-                           Point? selectionStartPoint,
-                           IDesignerViewModel designerPanel,
-                           IDrawableItem drawableItem) : base(itemsPanel)
+        
+        internal DrawAdorner(Canvas itemsPanel, Point? selectionStartPoint, IDesignerViewModel designerPanel, IDrawableItem drawableItem) : base(itemsPanel, new SizeChrome() { DataContext=drawableItem })
         {
-            _chrome = new SizeChrome();
-            _itemsPanel = itemsPanel;
-            _drawableInstance = drawableItem;
-            _selectionStartPoint = selectionStartPoint;
-            _designerPanel = designerPanel;
-            _visuals = new VisualCollection(this)
-            {
-               _chrome
-            };
+            ItemsPanel = itemsPanel;
+            DrawableItem = drawableItem;
+            DesignerPanel = designerPanel;
+            SelectionStartPoint = selectionStartPoint;
         }
-
-        public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
-        {
-            var matrix = transform as MatrixTransform;
-
-            if (_visuals == null || matrix == null) return base.GetDesiredTransform(transform);
-            vec1 = new Vector(matrix.Matrix.M11, matrix.Matrix.M12).Length;
-            vec2 = new Vector(matrix.Matrix.M21, matrix.Matrix.M22).Length;
-            _chrome.LayoutTransform = new ScaleTransform(1 / vec1, 1 / vec2);
-            return base.GetDesiredTransform(transform);
-        }
-
-        private double vec1, vec2;
-
-
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            var rectangle = new Rect(_selectionStartPoint.Value,
+            var rectangle = new Rect(SelectionStartPoint.Value,
                                      _endPoint ??
-                _selectionStartPoint.Value);
+                SelectionStartPoint.Value);
 
-            _chrome.Arrange(new Rect(rectangle.TopLeft, rectangle.Size));
-            _chrome.Width = rectangle.Width *
-                vec1;
-            _chrome.Height = rectangle.Height *
-               vec2;
+            Chrome.Arrange(new Rect(rectangle.TopLeft, rectangle.Size));
+            Chrome.Width = rectangle.Width * XScaleVectorLength;
+            Chrome.Height = rectangle.Height * YScaleVectorLength;
 
             return finalSize;
         }
 
-        protected override Visual GetVisualChild(int index) => _visuals[index];
+        protected override Visual GetVisualChild(int index) => VisualsToRender[index];
 
-        protected override int VisualChildrenCount => _visuals.Count;
+        protected override int VisualChildrenCount => VisualsToRender.Count;
+        public Point? SelectionStartPoint { get; set; }
+        public IDesignerViewModel DesignerPanel { get; set; }
+        public IDrawableItem DrawableItem { get; set; }
+        public Canvas ItemsPanel { get; set; }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -81,19 +53,17 @@ namespace SchemaCreator.Designer.AttachedProperties
 
                 if(Keyboard.IsKeyDown(Key.LeftShift))
                 {
-                    if(Math.Abs(currentPosition.X - _selectionStartPoint.Value.X) <
+                    if(Math.Abs(currentPosition.X - SelectionStartPoint.Value.X) <
                         Math.Abs(currentPosition.Y -
-                            _selectionStartPoint.Value.Y))
-                        currentPosition.X = _selectionStartPoint.Value.X; else
-                        currentPosition.Y = _selectionStartPoint.Value.Y;
+                            SelectionStartPoint.Value.Y))
+                        currentPosition.X = SelectionStartPoint.Value.X; else
+                        currentPosition.Y = SelectionStartPoint.Value.Y;
                 }
 
                 _endPoint = currentPosition;
                 InvalidateVisual();
-            } else
-            {
-                if(IsMouseCaptured) ReleaseMouseCapture();
             }
+            else if(IsMouseCaptured) ReleaseMouseCapture();
 
             e.Handled = true;
         }
@@ -101,38 +71,38 @@ namespace SchemaCreator.Designer.AttachedProperties
         protected override void OnPreviewMouseUp(MouseButtonEventArgs e)
         {
             if(IsMouseCaptured) ReleaseMouseCapture();
-            var adornerLayer = AdornerLayer.GetAdornerLayer(_itemsPanel);
+            var adornerLayer = AdornerLayer.GetAdornerLayer(ItemsPanel);
             adornerLayer?.Remove(this);
 
-            if(_drawableInstance == null) return;
+            if(DrawableItem == null) return;
 
-            _drawableInstance.Y2 = _endPoint.Value.Y;
-            _drawableInstance.X2 = _endPoint.Value.X;
+            DrawableItem.Y2 = _endPoint.Value.Y;
+            DrawableItem.X2 = _endPoint.Value.X;
 
-            _drawableInstance.Left = Math.Min(_drawableInstance.X1,
-                                              _drawableInstance.X2);
-            _drawableInstance.Top = Math.Min(_drawableInstance.Y1,
-                                             _drawableInstance.Y2);
+            DrawableItem.Left = Math.Min(DrawableItem.X1,
+                                              DrawableItem.X2);
+            DrawableItem.Top = Math.Min(DrawableItem.Y1,
+                                             DrawableItem.Y2);
 
-            var width = Math.Abs(_drawableInstance.X1 - _drawableInstance.X2);
-            var height = Math.Abs(_drawableInstance.Y1 - _drawableInstance.Y2);
+            var width = Math.Abs(DrawableItem.X1 - DrawableItem.X2);
+            var height = Math.Abs(DrawableItem.Y1 - DrawableItem.Y2);
 
             CreateDrawableInstance(width, height);
-            _designerPanel.AddItem(_drawableInstance);
-            _designerPanel.SelectionService.SelectItem(_drawableInstance);
+            DesignerPanel.AddItem(DrawableItem);
+            DesignerPanel.SelectionService.SelectItem(DrawableItem);
 
             e.Handled = true;
         }
 
         private void CreateDrawableInstance(double width, double height)
         {
-            _drawableInstance.Parent = _designerPanel;
-            _drawableInstance.Width = width;
-            _drawableInstance.Height = height;
-            _drawableInstance.MinWidth = 10;
-            _drawableInstance.MinHeight = 10;
-            _drawableInstance.ZIndex = _designerPanel.Items.Count;
-            _drawableInstance.TransformOrigin = new Point(0.5, 0.5);
+            DrawableItem.Parent = DesignerPanel;
+            DrawableItem.Width = width;
+            DrawableItem.Height = height;
+            DrawableItem.MinWidth = 10;
+            DrawableItem.MinHeight = 10;
+            DrawableItem.ZIndex = DesignerPanel.Items.Count;
+            DrawableItem.TransformOrigin = new Point(0.5, 0.5);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -143,15 +113,15 @@ namespace SchemaCreator.Designer.AttachedProperties
                                          null,
                                          new Rect(RenderSize));
 
-            if(_selectionStartPoint.HasValue && _endPoint.HasValue)
+            if(SelectionStartPoint.HasValue && _endPoint.HasValue)
             {
-                _drawableInstance.DrawAdorner(drawingContext,
-                                              _selectionStartPoint.Value,
+                DrawableItem.DrawAdorner(drawingContext,
+                                              SelectionStartPoint.Value,
                                               _endPoint.Value);
                 drawingContext.DrawRectangle(Brushes.Transparent,
                                              new Pen(new SolidColorBrush(Colors.White),
                                                      0.1),
-                                             new Rect(_selectionStartPoint.Value,
+                                             new Rect(SelectionStartPoint.Value,
                                                       _endPoint.Value));
             }
         }
