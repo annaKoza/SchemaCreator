@@ -18,7 +18,7 @@ namespace SchemaCreator.Designer.Adorners
         public override GeneralTransform GetDesiredTransform(GeneralTransform transform)
         {
             var matrix = transform as MatrixTransform;
-            if (VisualsToRender == null || matrix == null) return base.GetDesiredTransform(transform);
+            if (VisualsToRender == null || matrix == null || Chrome == null) return base.GetDesiredTransform(transform);
             XScaleVectorLength = new Vector(matrix.Matrix.M11, matrix.Matrix.M12).Length;
             YScaleVectorLength = new Vector(matrix.Matrix.M21, matrix.Matrix.M22).Length;
             Chrome.LayoutTransform = new ScaleTransform(1 / XScaleVectorLength, 1 / YScaleVectorLength);

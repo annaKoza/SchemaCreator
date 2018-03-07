@@ -12,33 +12,48 @@ namespace SchemaCreator.Designer.Controls
             set => SetValue(SnapGridOffsetProperty, value);
         }
 
+        private const double defaultTileSize = 10.0;
+        private const int maxOffsetCheck = 10;
         public static readonly DependencyProperty SnapGridOffsetProperty =
             DependencyProperty.Register("SnapGridOffset",
                                         typeof(Point),
                                         typeof(DesignerCanvas),
-                                        new FrameworkPropertyMetadata(new Point(5,
-                                                                                5),
+                                        new FrameworkPropertyMetadata(new Point(1,
+                                                                                1),
                                                                       FrameworkPropertyMetadataOptions.AffectsRender,
                                                                       new PropertyChangedCallback(OnIsSnapGidOffsetChanged)));
 
         private void SetOffset(Point point)
         {
-            mod = point.Y;
-            if(mod < _pointZero)
+            offset = point.Y;
+            if (offset == _pointZero)
             {
-                if(mod >= 75)
-                    _divider = 64; else if(mod < 75 && mod >= 50)
-                    _divider = 32; else
-                    _divider = 16;
-            } else if(mod > _pointZero)
+                _divider = (int)(ActualHeight / defaultTileSize);
+            }
+
+            else if (offset < _pointZero)
             {
-                for(int i = 1; i <= _maxOffset / _pointZero; i++)
+                var last = _pointZero;
+                for (int i = 1; i < maxOffsetCheck; i++)
                 {
-                    if(_pointZero * i <= mod && mod < _pointZero * (i + 1))
-                        _divider = _pointZero * i;
+                    if (offset > (_pointZero / i) && offset < last)
+                    {
+                        _divider = (int)(ActualHeight / (defaultTileSize * i));
+                        last = (_pointZero / i);
+                    }
                 }
-            } else if(mod == _pointZero)
-                _divider = 128;
+            }
+            else if (offset > _pointZero)
+            {
+                for (int i = 1; i < maxOffsetCheck; i++)
+                {
+                    var last = _pointZero;
+                    if (offset > _pointZero * (i + 2))
+                    {
+                        _divider = (int)(ActualHeight / (defaultTileSize / i));
+                    }
+                }
+            }
         }
 
         private static void OnIsSnapGidOffsetChanged(DependencyObject d,
@@ -61,11 +76,10 @@ namespace SchemaCreator.Designer.Controls
 
         private Pen darkPen;
         private Pen lightPen;
-
-        private int _maxOffset = 500;
+        
         private int _pointZero = 100;
-        private int _divider = 128;
-        private double mod;
+        private int _divider;
+        private double offset;
 
         static DesignerCanvas() => DefaultStyleKeyProperty.OverrideMetadata(
         typeof(DesignerCanvas),
@@ -75,6 +89,8 @@ namespace SchemaCreator.Designer.Controls
         {
             lightPen = new Pen(new SolidColorBrush(Colors.Red), 0.5);
             darkPen = new Pen(new SolidColorBrush(Colors.Green), 0.7);
+            SnapsToDevicePixels = false;
+            UseLayoutRounding = false;
         }
 
         private static void OnIsSnapGidVisibleChanged(DependencyObject d,
@@ -89,17 +105,17 @@ namespace SchemaCreator.Designer.Controls
 
         private void SetGridColor(Color lightColor, Color darkColor)
         {
-            lightPen = new Pen(new SolidColorBrush(lightColor), 0.5 / mod / 100);
-            darkPen = new Pen(new SolidColorBrush(darkColor), 1 / mod / 100);
+            lightPen = new Pen(new SolidColorBrush(lightColor), 0.5 / offset / 100);
+            darkPen = new Pen(new SolidColorBrush(darkColor), 1 / offset / 100);
         }
 
         protected override void OnRender(DrawingContext dc)
         {
             lightPen = new Pen(new SolidColorBrush(Colors.Red),
                                0.5 /
-                (mod / 100));
+                (this.offset / 100));
             darkPen = new Pen(new SolidColorBrush(Colors.Green),
-                              1 / (mod / 100));
+                              1 / (this.offset / 100));
 
             var offset = ActualHeight / _divider;
 
@@ -108,8 +124,8 @@ namespace SchemaCreator.Designer.Controls
             int alternate;
 
             //Draw the horizontal lines
-            var x = new Point(0, 0.5);
-            var y = new Point(ActualWidth, 0.5);
+            var x = new Point(0, 0);
+            var y = new Point(ActualWidth, 0);
 
             for(int i = 0; i <= rows / offset; i++)
             {
@@ -120,8 +136,8 @@ namespace SchemaCreator.Designer.Controls
             }
 
             //Draw the vertical lines
-            x = new Point(0.5, 0);
-            y = new Point(0.5, ActualHeight);
+            x = new Point(0, 0);
+            y = new Point(0, ActualHeight);
 
             for(int i = 0; i <= columns / offset; i++)
             {

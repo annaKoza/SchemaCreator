@@ -172,7 +172,7 @@
                                         IsMoveToPointEnabled="False"
                                         IsSnapToTickEnabled="True"
                                         LargeChange="25"
-                                        Maximum="500"
+                                        Maximum="1200"
                                         Minimum="25"
                                         SmallChange="1"
                                         Value="100" />
