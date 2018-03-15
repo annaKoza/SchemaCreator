@@ -1,9 +1,68 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace SchemaCreator.Designer.Controls
 {
+    public class Range
+    {
+        public Range(int leftSideValue, int rightSideValue)
+        {
+            LeftSideValue = leftSideValue;
+            RightSideValue = rightSideValue;
+        }
+
+        public int LeftSideValue { get; }
+        public int RightSideValue { get; }
+        public bool IsValueInRange(int value)
+        {
+            if (value >= LeftSideValue && value <= RightSideValue) return true;
+            return false;
+        }
+    }
+    public class Ranges
+    {
+        public Ranges(int startPoint, int endPoint, int intervalsInRange)
+        {
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            IntervalsInRange = intervalsInRange;
+        }
+
+        public int startPoint { get; set; } = int.MinValue;
+        public int endPoint { get; set; } = int.MaxValue;
+        public int IntervalsInRange { get; set; }
+
+        public int GetRangeNumberOfValue(int value, List<Range> ranges)
+        {
+            var number = 1;
+            for (int i = 0; i < ranges.Count; i++)
+            {
+                if (ranges[i].IsValueInRange(value))
+                    return number;
+                else number++;
+            }
+            return 0;
+        }
+        public List<Range> GetRangeList()
+        {
+            var list = new List<Range>();
+            var points = endPoint - startPoint;
+            var rest = points % IntervalsInRange;
+            var interval = points / IntervalsInRange;
+            int point = startPoint;
+            for (int i = 0; i < IntervalsInRange; i++)
+            {
+                if (i == IntervalsInRange - 1) list.Add(new Range(point, point + interval + rest));
+                else list.Add(new Range(point, point + interval-1));
+                point = point + interval;
+                
+            }
+            return list;
+        }
+    
+    }
     public class DesignerCanvas : Canvas
     {
         public Point SnapGridOffset
@@ -26,34 +85,9 @@ namespace SchemaCreator.Designer.Controls
         private void SetOffset(Point point)
         {
             offset = point.Y;
-            if (offset == _pointZero)
-            {
-                _divider = (int)(ActualHeight / defaultTileSize);
-            }
+            _divider = (int)(ActualHeight / defaultTileSize * r.GetRangeNumberOfValue((int)offset, ranges));
 
-            else if (offset < _pointZero)
-            {
-                var last = _pointZero;
-                for (int i = 1; i < maxOffsetCheck; i++)
-                {
-                    if (offset > (_pointZero / i) && offset < last)
-                    {
-                        _divider = (int)(ActualHeight / (defaultTileSize * i));
-                        last = (_pointZero / i);
-                    }
-                }
-            }
-            else if (offset > _pointZero)
-            {
-                for (int i = 1; i < maxOffsetCheck; i++)
-                {
-                    var last = _pointZero;
-                    if (offset > _pointZero * (i + 2))
-                    {
-                        _divider = (int)(ActualHeight / (defaultTileSize / i));
-                    }
-                }
-            }
+          
         }
 
         private static void OnIsSnapGidOffsetChanged(DependencyObject d,
@@ -84,13 +118,16 @@ namespace SchemaCreator.Designer.Controls
         static DesignerCanvas() => DefaultStyleKeyProperty.OverrideMetadata(
         typeof(DesignerCanvas),
         new FrameworkPropertyMetadata(typeof(DesignerCanvas)));
-
+        Ranges r;
+        List<Range> ranges;
         public DesignerCanvas()
         {
             lightPen = new Pen(new SolidColorBrush(Colors.Red), 0.5);
             darkPen = new Pen(new SolidColorBrush(Colors.Green), 0.7);
             SnapsToDevicePixels = false;
             UseLayoutRounding = false;
+            r = new Ranges(25, 1200, 10);
+            ranges =  r.GetRangeList();
         }
 
         private static void OnIsSnapGidVisibleChanged(DependencyObject d,
@@ -149,8 +186,7 @@ namespace SchemaCreator.Designer.Controls
         }
 
         public Size GetSnapGridTileSize() => new Size(ActualHeight / _divider,
-                                                      ActualHeight /
-            _divider);
+                                                      ActualHeight / _divider);
 
         public bool IsSnapGidVisible
         {
